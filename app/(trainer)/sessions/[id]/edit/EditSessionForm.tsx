@@ -45,13 +45,15 @@ const emptyItem = (): ItemEditorItem => ({
 
 function dbRowToItem(row: DBHomeworkItem): ItemEditorItem {
   const hasSteps = row.steps !== null && row.steps.length > 0;
+
   return {
+    id: row.id,
     title: row.title,
     description: row.description ?? "",
     link_url: row.link_url ?? "",
     dog_note: row.dog_note ?? "",
     mode: hasSteps ? "steps" : "description",
-    steps: hasSteps ? row.steps! : [""],
+    steps: hasSteps && row.steps ? row.steps : [""],
   };
 }
 
@@ -141,7 +143,7 @@ export function EditSessionForm({
 
     const { error: sessionError } = await supabase
       .from("sessions")
-      .update({ summary })
+      .update({ summary: summary.trim() })
       .eq("id", session.id);
 
     if (sessionError) {
@@ -150,23 +152,64 @@ export function EditSessionForm({
       return;
     }
 
-    const { error: deleteError } = await supabase
-      .from("homework_items")
-      .delete()
-      .eq("session_id", session.id);
+    const filledItems = items.filter((item) => item.title.trim().length > 0);
 
-    if (deleteError) {
-      setError(deleteError.message);
-      setLoading(false);
-      return;
+    const existingIds = filledItems
+      .map((item) => item.id)
+      .filter((id): id is string => Boolean(id));
+
+    const initialIds = initialItems.map((item) => item.id);
+    const idsToDelete = initialIds.filter((id) => !existingIds.includes(id));
+
+    if (idsToDelete.length > 0) {
+      const { error: deleteError } = await supabase
+        .from("homework_items")
+        .delete()
+        .in("id", idsToDelete);
+
+      if (deleteError) {
+        setError(deleteError.message);
+        setLoading(false);
+        return;
+      }
     }
 
-    const filledItems = items.filter((item) => item.title.trim());
-    if (filledItems.length > 0) {
+    const itemsToUpdate = filledItems.filter(
+      (item): item is ItemEditorItem & { id: string } => Boolean(item.id),
+    );
+
+    for (const item of itemsToUpdate) {
+      const { error: updateError } = await supabase
+        .from("homework_items")
+        .update({
+          title: item.title.trim(),
+          description:
+            item.mode === "description"
+              ? item.description?.trim() || null
+              : null,
+          link_url: item.link_url?.trim() || null,
+          dog_note: item.dog_note?.trim() || null,
+          steps:
+            item.mode === "steps"
+              ? item.steps.filter((step) => step.trim().length > 0)
+              : null,
+        })
+        .eq("id", item.id);
+
+      if (updateError) {
+        setError(updateError.message);
+        setLoading(false);
+        return;
+      }
+    }
+
+    const itemsToInsert = filledItems.filter((item) => !item.id);
+
+    if (itemsToInsert.length > 0) {
       const { error: insertError } = await supabase
         .from("homework_items")
         .insert(
-          filledItems.map((item) => ({
+          itemsToInsert.map((item) => ({
             session_id: session.id,
             title: item.title.trim(),
             description:
@@ -177,7 +220,7 @@ export function EditSessionForm({
             dog_note: item.dog_note?.trim() || null,
             steps:
               item.mode === "steps"
-                ? item.steps.filter((s) => s.trim().length > 0)
+                ? item.steps.filter((step) => step.trim().length > 0)
                 : null,
           })),
         );
@@ -190,6 +233,7 @@ export function EditSessionForm({
     }
 
     router.push(`/clients/${session.client_id}`);
+    router.refresh();
   };
 
   // ── Render ─────────────────────────────────────────────────────────────────
@@ -257,7 +301,7 @@ export function EditSessionForm({
 
             {items.map((item, index) => (
               <HomeworkItemEditor
-                key={index}
+                key={item.id ?? `new-${index}`}
                 item={item}
                 index={index}
                 itemsCount={items.length}
@@ -327,10 +371,7 @@ export function EditSessionForm({
           ) : (
             <>
               {!canSave && (
-                <p
-                  role="status"
-                  className="text-xs text-hint text-center"
-                >
+                <p role="status" className="text-xs text-hint text-center">
                   Add a session summary and a title for each homework item to
                   continue.
                 </p>

@@ -6,12 +6,13 @@
 // fields simultaneously (new flow).
 
 export type ItemEditorItem = {
+  id?: string;
   title: string;
   description: string;
   link_url: string;
   dog_note: string;
+  mode: "description" | "steps";
   steps: string[];
-  mode?: "description" | "steps";
 };
 
 type Props = {

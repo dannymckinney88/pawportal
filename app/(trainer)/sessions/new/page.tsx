@@ -30,6 +30,7 @@ const emptyItem = (): ItemEditorItem => ({
   description: "",
   link_url: "",
   dog_note: "",
+  mode: "description",
   steps: [""],
 });
 
@@ -139,6 +140,8 @@ function SessionFormInner() {
       description: template.description ?? "",
       link_url: template.link_url ?? "",
       dog_note: template.dog_note ?? "",
+      mode:
+        template.steps && template.steps.length > 0 ? "steps" : "description",
       steps:
         template.steps && template.steps.length > 0 ? template.steps : [""],
     };
