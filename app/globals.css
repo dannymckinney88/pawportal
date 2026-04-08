@@ -1,1 +1,62 @@
 @import "tailwindcss";
+
+@theme inline {
+  /* ── Semantic color tokens ───────────────────────────────────────────────── *
+   * These reference Tailwind's built-in palette variables so swapping the
+   * palette in future is a one-line change per token.
+   * Usage: bg-background, text-foreground, border-border, etc.
+   * ─────────────────────────────────────────────────────────────────────────── */
+
+  /* Page shells */
+  --color-background: var(--color-gray-50);
+  --color-foreground: var(--color-gray-900);
+  --color-text: var(--color-gray-600);
+  --color-label: var(--color-gray-700);
+
+  /* Cards / surfaces */
+  --color-card: oklch(100% 0 0);
+  --color-card-foreground: var(--color-gray-900);
+
+  /* Muted surfaces and secondary text */
+  --color-muted: var(--color-gray-100);
+  --color-muted-foreground: var(--color-gray-500);
+
+  /* Borders — border for inputs/cards, border-subtle for dividers */
+  --color-border: var(--color-gray-200);
+  --color-border-subtle: var(--color-gray-100);
+
+  /* Hint / placeholder text */
+  --color-hint: var(--color-gray-400);
+
+  /* Primary — blue-600 */
+  --color-primary: var(--color-blue-600);
+  --color-primary-foreground: oklch(100% 0 0);
+  --color-primary-hover: var(--color-blue-700);
+  --color-primary-subtle: var(--color-blue-50);
+  --color-primary-subtle-foreground: var(--color-blue-600);
+
+  /* Secondary — neutral gray (secondary buttons, toggles) */
+  --color-secondary: var(--color-gray-100);
+  --color-secondary-foreground: var(--color-gray-700);
+  --color-secondary-hover: var(--color-gray-200);
+
+  /* Accent — blue-50 tint (client info banner, subtle highlights) */
+  --color-accent: var(--color-blue-50);
+  --color-accent-foreground: var(--color-blue-700);
+
+  /* Success */
+  --color-success: var(--color-green-100);
+  --color-success-foreground: var(--color-green-700);
+
+  /* Danger */
+  --color-danger: var(--color-red-500);
+  --color-danger-foreground: oklch(100% 0 0);
+  --color-danger-hover: var(--color-red-600);
+  --color-danger-subtle: var(--color-red-50);
+  --color-danger-subtle-foreground: var(--color-red-700);
+  --color-danger-border: var(--color-red-200);
+
+  /* Warning (save confirmation prompts) */
+  --color-warning-subtle: var(--color-yellow-50);
+  --color-warning-border: var(--color-yellow-200);
+}

@@ -195,26 +195,26 @@ export function EditSessionForm({
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-lg mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <a
             href={`/clients/${session.client_id}`}
-            className="text-gray-400 hover:text-gray-600 text-sm"
+            className="text-hint hover:text-muted-foreground text-sm"
           >
             ← Back
           </a>
-          <h1 className="text-xl font-bold text-gray-900">
+          <h1 className="text-xl font-bold text-foreground">
             Edit Session {session.session_number}
           </h1>
         </div>
 
         <ClientInfoBanner dogName={dog.dog_name} ownerName={dog.owner_name} />
 
-        <p className="text-xs text-gray-400 mb-2">
+        <p className="text-xs text-hint mb-2">
           Fields marked{" "}
-          <span className="text-red-500" aria-hidden="true">
+          <span className="text-danger" aria-hidden="true">
             *
           </span>
           <span className="sr-only">with an asterisk</span> are required.
@@ -222,17 +222,17 @@ export function EditSessionForm({
 
         <div className="flex flex-col gap-6">
           {/* Session Summary */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm flex flex-col gap-3">
-            <h2 className="text-base font-semibold text-gray-900">
+          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-3">
+            <h2 className="text-base font-semibold text-foreground">
               Session Summary
             </h2>
             <div className="flex flex-col gap-1">
               <label
                 htmlFor="summary"
-                className="text-sm font-medium text-gray-700"
+                className="text-sm font-medium text-label"
               >
                 What did you cover?{" "}
-                <span className="text-red-500" aria-hidden="true">
+                <span className="text-danger" aria-hidden="true">
                   *
                 </span>
               </label>
@@ -243,17 +243,17 @@ export function EditSessionForm({
                 rows={4}
                 aria-required="true"
                 aria-describedby="summary-hint"
-                className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500 resize-none"
+                className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary resize-none"
               />
-              <p id="summary-hint" className="text-xs text-gray-400">
+              <p id="summary-hint" className="text-xs text-hint">
                 This appears on the client&apos;s recap page.
               </p>
             </div>
           </div>
 
           {/* Homework Items */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-            <h2 className="text-base font-semibold text-gray-900">Homework</h2>
+          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
+            <h2 className="text-base font-semibold text-foreground">Homework</h2>
 
             {items.map((item, index) => (
               <HomeworkItemEditor
@@ -275,14 +275,14 @@ export function EditSessionForm({
             <button
               type="button"
               onClick={addItem}
-              className="w-full border border-dashed border-blue-300 text-blue-600 rounded-xl py-3 text-sm font-medium hover:bg-blue-50 min-h-11"
+              className="w-full border border-dashed border-primary/50 text-primary rounded-xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-11"
             >
               + Add homework item
             </button>
           </div>
 
           {error && (
-            <p role="alert" className="text-red-500 text-sm">
+            <p role="alert" className="text-danger text-sm">
               {error}
             </p>
           )}
@@ -292,16 +292,16 @@ export function EditSessionForm({
             <div
               role="alertdialog"
               aria-labelledby="confirm-save-heading"
-              className="bg-yellow-50 border border-yellow-200 rounded-2xl p-4 flex flex-col gap-3"
+              className="bg-warning-subtle border border-warning-border rounded-2xl p-4 flex flex-col gap-3"
             >
               <div>
                 <p
                   id="confirm-save-heading"
-                  className="text-sm font-semibold text-gray-900"
+                  className="text-sm font-semibold text-foreground"
                 >
                   Save changes to Session {session.session_number}?
                 </p>
-                <p className="text-xs text-gray-500 mt-1">
+                <p className="text-xs text-muted-foreground mt-1">
                   This will update the client&apos;s recap page immediately.
                 </p>
               </div>
@@ -310,7 +310,7 @@ export function EditSessionForm({
                   type="button"
                   onClick={handleSave}
                   disabled={loading}
-                  className="flex-1 bg-blue-600 text-white rounded-lg py-3 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 min-h-11"
+                  className="flex-1 bg-primary text-primary-foreground rounded-lg py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50 min-h-11"
                 >
                   {loading ? "Saving..." : "Yes, save changes"}
                 </button>
@@ -318,7 +318,7 @@ export function EditSessionForm({
                   type="button"
                   onClick={() => setConfirming(false)}
                   disabled={loading}
-                  className="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-3 text-sm font-medium hover:bg-gray-50 disabled:opacity-50 min-h-11"
+                  className="flex-1 bg-card border border-border text-secondary-foreground rounded-lg py-3 text-sm font-medium hover:bg-background disabled:opacity-50 min-h-11"
                 >
                   Cancel
                 </button>
@@ -329,7 +329,7 @@ export function EditSessionForm({
               {!canSave && (
                 <p
                   role="status"
-                  className="text-xs text-gray-400 text-center -mb-2"
+                  className="text-xs text-hint text-center -mb-2"
                 >
                   Add a session summary and a title for each homework item to
                   continue.
@@ -340,7 +340,7 @@ export function EditSessionForm({
                 onClick={() => setConfirming(true)}
                 disabled={!canSave}
                 aria-disabled={!canSave}
-                className="w-full bg-blue-600 text-white rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-h-11"
+                className="w-full bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed min-h-11"
               >
                 Save Changes
               </button>

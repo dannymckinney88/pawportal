@@ -64,10 +64,7 @@ export function TemplatesClient({
 
   // ── Draft helpers ──────────────────────────────────────────────────────────
 
-  const updateDraft = (
-    field: keyof Omit<Draft, "steps">,
-    value: string,
-  ) => {
+  const updateDraft = (field: keyof Omit<Draft, "steps">, value: string) => {
     setDraft((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -140,9 +137,7 @@ export function TemplatesClient({
         setSaving(false);
         return;
       }
-      setTemplates((prev) =>
-        prev.map((t) => (t.id === editingId ? data : t)),
-      );
+      setTemplates((prev) => prev.map((t) => (t.id === editingId ? data : t)));
       setEditingId(null);
     } else {
       const { data, error: err } = await supabase
@@ -193,14 +188,16 @@ export function TemplatesClient({
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Templates</h1>
-          <p className="text-sm text-gray-500">Reusable homework items</p>
+          <h1 className="text-2xl font-bold text-foreground">Templates</h1>
+          <p className="text-sm text-muted-foreground">
+            Reusable homework items
+          </p>
         </div>
         {!isFormOpen && (
           <button
             type="button"
             onClick={startCreate}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 min-h-11"
+            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-hover min-h-11"
           >
             + New Template
           </button>
@@ -209,14 +206,14 @@ export function TemplatesClient({
 
       {/* Create / Edit form */}
       {isFormOpen && (
-        <div className="bg-white rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-          <h2 className="text-base font-semibold text-gray-900">
+        <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
+          <h2 className="text-base font-semibold text-foreground">
             {editingId ? "Edit Template" : "New Template"}
           </h2>
 
-          <p className="text-xs text-gray-400 -mt-1">
+          <p className="text-xs text-hint -mt-1">
             Fields marked{" "}
-            <span className="text-red-500" aria-hidden="true">
+            <span className="text-danger" aria-hidden="true">
               *
             </span>
             <span className="sr-only">with an asterisk</span> are required.
@@ -229,7 +226,7 @@ export function TemplatesClient({
               className="text-sm font-medium text-gray-700"
             >
               Title{" "}
-              <span className="text-red-500" aria-hidden="true">
+              <span className="text-danger" aria-hidden="true">
                 *
               </span>
             </label>
@@ -240,7 +237,7 @@ export function TemplatesClient({
               onChange={(e) => updateDraft("title", e.target.value)}
               aria-required="true"
               placeholder="Loose-leash walking"
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
@@ -251,7 +248,7 @@ export function TemplatesClient({
               className="text-sm font-medium text-gray-700"
             >
               Description{" "}
-              <span className="text-gray-400 font-normal">(optional)</span>
+              <span className="text-hint font-normal">(optional)</span>
             </label>
             <textarea
               id="tpl-description"
@@ -259,7 +256,7 @@ export function TemplatesClient({
               onChange={(e) => updateDraft("description", e.target.value)}
               rows={3}
               placeholder="General notes or context for this exercise..."
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500 resize-none"
+              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary resize-none"
             />
           </div>
 
@@ -267,12 +264,12 @@ export function TemplatesClient({
           <div className="flex flex-col gap-2">
             <p className="text-sm font-medium text-gray-700">
               Steps{" "}
-              <span className="text-gray-400 font-normal">(optional)</span>
+              <span className="text-hint font-normal">(optional)</span>
             </p>
             {draft.steps.map((step, i) => (
               <div key={i} className="flex items-center gap-2">
                 <span
-                  className="text-xs font-semibold text-gray-400 w-6 shrink-0 text-center"
+                  className="text-xs font-semibold text-hint w-6 shrink-0 text-center"
                   aria-hidden="true"
                 >
                   {i + 1}.
@@ -283,7 +280,7 @@ export function TemplatesClient({
                   onChange={(e) => updateStep(i, e.target.value)}
                   aria-label={`Step ${i + 1}`}
                   placeholder={`Step ${i + 1}`}
-                  className="flex-1 border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+                  className="flex-1 border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
                 />
                 {draft.steps.length > 1 && (
                   <button
@@ -300,7 +297,7 @@ export function TemplatesClient({
             <button
               type="button"
               onClick={addStep}
-              className="w-full border border-dashed border-gray-300 text-gray-500 rounded-lg py-2 text-sm hover:bg-gray-50 min-h-11"
+              className="w-full border border-dashed border-border text-muted-foreground rounded-lg py-2 text-sm hover:bg-background min-h-11"
             >
               + Add step
             </button>
@@ -313,7 +310,7 @@ export function TemplatesClient({
               className="text-sm font-medium text-gray-700"
             >
               Resource link{" "}
-              <span className="text-gray-400 font-normal">(optional)</span>
+              <span className="text-hint font-normal">(optional)</span>
             </label>
             <input
               id="tpl-link"
@@ -321,7 +318,7 @@ export function TemplatesClient({
               value={draft.link_url}
               onChange={(e) => updateDraft("link_url", e.target.value)}
               placeholder="https://..."
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
@@ -332,7 +329,7 @@ export function TemplatesClient({
               className="text-sm font-medium text-gray-700"
             >
               Dog-specific note{" "}
-              <span className="text-gray-400 font-normal">(optional)</span>
+              <span className="text-hint font-normal">(optional)</span>
             </label>
             <input
               id="tpl-dog-note"
@@ -341,16 +338,16 @@ export function TemplatesClient({
               onChange={(e) => updateDraft("dog_note", e.target.value)}
               aria-describedby="tpl-dog-note-hint"
               placeholder="Personalized tip shown to the owner..."
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
-            <p id="tpl-dog-note-hint" className="text-xs text-gray-400">
+            <p id="tpl-dog-note-hint" className="text-xs text-hint">
               This is pre-filled as a suggestion — trainers customize it per dog
               when adding this template to a session.
             </p>
           </div>
 
           {error && (
-            <p role="alert" className="text-red-500 text-sm">
+            <p role="alert" className="text-danger text-sm">
               {error}
             </p>
           )}
@@ -361,7 +358,7 @@ export function TemplatesClient({
               onClick={handleSave}
               disabled={saving || !draft.title.trim()}
               aria-disabled={saving || !draft.title.trim()}
-              className="flex-1 bg-blue-600 text-white rounded-lg py-3 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-h-11"
+              className="flex-1 bg-primary text-primary-foreground rounded-lg py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed min-h-11"
             >
               {saving
                 ? "Saving..."
@@ -373,7 +370,7 @@ export function TemplatesClient({
               type="button"
               onClick={cancelForm}
               disabled={saving}
-              className="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-3 text-sm font-medium hover:bg-gray-50 disabled:opacity-50 min-h-11"
+              className="flex-1 bg-card border border-border text-secondary-foreground rounded-lg py-3 text-sm font-medium hover:bg-background disabled:opacity-50 min-h-11"
             >
               Cancel
             </button>
@@ -383,13 +380,13 @@ export function TemplatesClient({
 
       {/* Template list */}
       {templates.length === 0 && !isFormOpen ? (
-        <div className="bg-white rounded-2xl p-12 text-center shadow-sm">
+        <div className="bg-card rounded-2xl p-12 text-center shadow-sm">
           <p className="text-4xl mb-4">🐾</p>
-          <p className="text-gray-400 text-sm">No templates yet</p>
+          <p className="text-muted-foreground text-sm">No templates yet</p>
           <button
             type="button"
             onClick={startCreate}
-            className="mt-4 text-blue-600 text-sm hover:underline"
+            className="mt-4 text-primary text-sm hover:underline"
           >
             Create your first template
           </button>
@@ -402,24 +399,27 @@ export function TemplatesClient({
               template.steps?.filter((s) => s.trim().length > 0) ?? [];
 
             return (
-              <div key={template.id} className="bg-white rounded-2xl p-4 shadow-sm">
+              <div
+                key={template.id}
+                className="bg-card rounded-2xl p-4 shadow-sm"
+              >
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-900 text-sm">
+                    <p className="font-semibold text-foreground text-sm">
                       {template.title}
                     </p>
                     <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                       {filteredSteps.length > 0 && (
-                        <span className="text-xs bg-blue-50 text-blue-600 rounded-full px-2 py-0.5">
+                        <span className="text-xs bg-primary-subtle text-primary-subtle-foreground rounded-full px-2 py-0.5">
                           {filteredSteps.length}{" "}
                           {filteredSteps.length === 1 ? "step" : "steps"}
                         </span>
                       )}
                       {template.link_url && (
-                        <span className="text-xs text-gray-400">🔗 link</span>
+                        <span className="text-xs text-hint">🔗 link</span>
                       )}
                       {template.dog_note && (
-                        <span className="text-xs text-gray-400">🐾 note</span>
+                        <span className="text-xs text-hint">🐾 note</span>
                       )}
                     </div>
                   </div>
@@ -428,7 +428,7 @@ export function TemplatesClient({
                       type="button"
                       onClick={() => startEdit(template)}
                       disabled={isFormOpen}
-                      className="text-sm text-gray-500 hover:text-gray-700 min-h-11 px-2 disabled:opacity-40"
+                      className="text-sm text-muted-foreground hover:text-foreground min-h-11 px-2 disabled:opacity-40"
                     >
                       Edit
                     </button>
@@ -436,7 +436,7 @@ export function TemplatesClient({
                       type="button"
                       onClick={() => setConfirmDeleteId(template.id)}
                       disabled={isFormOpen || isConfirmingDelete}
-                      className="text-sm text-red-500 hover:text-red-700 min-h-11 px-2 disabled:opacity-40"
+                      className="text-sm text-danger hover:text-red-700 min-h-11 px-2 disabled:opacity-40"
                     >
                       Delete
                     </button>
@@ -454,19 +454,19 @@ export function TemplatesClient({
                   <div
                     role="alertdialog"
                     aria-labelledby={`delete-tpl-${template.id}`}
-                    className="mt-3 bg-red-50 border border-red-200 rounded-xl p-3 flex flex-col gap-2"
+                    className="mt-3 bg-danger-subtle border border-danger-border rounded-xl p-3 flex flex-col gap-2"
                   >
                     <p
                       id={`delete-tpl-${template.id}`}
-                      className="text-sm font-semibold text-gray-900"
+                      className="text-sm font-semibold text-foreground"
                     >
                       Delete &quot;{template.title}&quot;?
                     </p>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       This cannot be undone.
                     </p>
                     {error && (
-                      <p role="alert" className="text-xs text-red-500">
+                      <p role="alert" className="text-xs text-danger">
                         {error}
                       </p>
                     )}
@@ -475,7 +475,7 @@ export function TemplatesClient({
                         type="button"
                         onClick={() => handleDelete(template.id)}
                         disabled={deleting}
-                        className="flex-1 bg-red-500 text-white rounded-lg py-2 text-sm font-medium hover:bg-red-600 disabled:opacity-50 min-h-11"
+                        className="flex-1 bg-danger text-danger-foreground rounded-lg py-2 text-sm font-medium hover:bg-danger-hover disabled:opacity-50 min-h-11"
                       >
                         {deleting ? "Deleting..." : "Yes, delete"}
                       </button>
@@ -483,7 +483,7 @@ export function TemplatesClient({
                         type="button"
                         onClick={() => setConfirmDeleteId(null)}
                         disabled={deleting}
-                        className="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50 min-h-11"
+                        className="flex-1 bg-card border border-border text-secondary-foreground rounded-lg py-2 text-sm font-medium hover:bg-background disabled:opacity-50 min-h-11"
                       >
                         Cancel
                       </button>

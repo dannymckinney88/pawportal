@@ -42,13 +42,13 @@ export function HomeworkCard({
 
   return (
     <div
-      className={`bg-white rounded-2xl p-4 shadow-sm mb-3 transition-opacity ${
+      className={`bg-card rounded-2xl p-4 shadow-sm mb-3 transition-opacity ${
         checked ? "opacity-60" : ""
       }`}
     >
       {/* Title */}
       <p
-        className={`text-base font-semibold text-gray-900 mb-2 ${
+        className={`text-base font-semibold text-foreground mb-2 ${
           checked ? "line-through" : ""
         }`}
       >
@@ -56,31 +56,29 @@ export function HomeworkCard({
       </p>
 
       {/* Divider */}
-      <div className="border-t border-gray-100 my-2" />
+      <div className="border-t border-border-subtle my-2" />
 
       {/* Description */}
       {description && description.trim().length > 0 && (
-        <p className="text-sm text-gray-600 leading-relaxed mb-3">
-          {description}
-        </p>
+        <p className="text-sm text-text leading-relaxed mb-3">{description}</p>
       )}
 
       {/* Steps */}
       {hasSteps && (
         <div className={description?.trim() ? "mt-3" : ""}>
-          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
+          <p className="text-xs font-medium text-hint uppercase tracking-wide mb-2">
             Steps
           </p>
           <ol>
             {filteredSteps.map((step, i) => (
               <li
                 key={i}
-                className="flex items-start gap-3 py-2 border-b border-gray-50 last:border-0"
+                className="flex items-start gap-3 py-2 border-b border-border-subtle last:border-0"
               >
-                <span className="text-xs font-bold text-blue-600 bg-blue-50 rounded-full w-6 h-6 flex items-center justify-center shrink-0 mt-0.5">
+                <span className="text-xs font-bold text-primary-subtle-foreground bg-primary-subtle rounded-full w-6 h-6 flex items-center justify-center shrink-0 mt-0.5">
                   {i + 1}
                 </span>
-                <span className="text-sm text-gray-700">{step}</span>
+                <span className="text-sm text-label">{step}</span>
               </li>
             ))}
           </ol>
@@ -93,7 +91,7 @@ export function HomeworkCard({
           href={link_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 block text-sm text-blue-600 font-medium hover:underline"
+          className="mt-3 block text-sm text-primary font-medium hover:underline"
         >
           ▶ Watch video
         </a>
@@ -101,16 +99,16 @@ export function HomeworkCard({
 
       {/* Dog note */}
       {dog_note && (
-        <div className="mt-3 pt-3 border-t border-gray-100 flex items-start gap-2">
+        <div className="mt-3 pt-3 border-t border-border-subtle flex items-start gap-2">
           <span className="shrink-0" aria-hidden="true">
             🐾
           </span>
-          <p className="text-sm text-blue-700 italic">{dog_note}</p>
+          <p className="text-sm text-accent-foreground italic">{dog_note}</p>
         </div>
       )}
 
       {/* Completion toggle */}
-      <div className="mt-3 pt-3 border-t border-gray-100">
+      <div className="mt-3 pt-3 border-t border-border-subtle">
         <button
           type="button"
           onClick={toggle}
@@ -122,7 +120,7 @@ export function HomeworkCard({
         >
           <span
             className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors shrink-0 ${
-              checked ? "bg-blue-600 border-blue-600" : "border-gray-300"
+              checked ? "bg-primary border-primary" : "border-border"
             }`}
           >
             {checked && (
@@ -145,8 +143,8 @@ export function HomeworkCard({
           <span
             className={
               checked
-                ? "text-sm text-green-600 font-medium"
-                : "text-sm text-gray-500"
+                ? "text-sm text-success-foreground font-medium"
+                : "text-sm text-muted-foreground"
             }
           >
             {checked ? "Done ✓" : "Mark as done"}

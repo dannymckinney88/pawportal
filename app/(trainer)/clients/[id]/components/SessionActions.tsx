@@ -43,19 +43,19 @@ export function SessionActions({
       <div
         role="alertdialog"
         aria-labelledby={`delete-confirm-${sessionId}`}
-        className="mt-3 bg-red-50 border border-red-200 rounded-xl p-3 flex flex-col gap-2"
+        className="mt-3 bg-danger-subtle border border-danger-border rounded-xl p-3 flex flex-col gap-2"
       >
         <p
           id={`delete-confirm-${sessionId}`}
-          className="text-sm font-semibold text-gray-900"
+          className="text-sm font-semibold text-foreground"
         >
           Delete Session {sessionNumber}?
         </p>
-        <p className="text-xs text-gray-500">
+        <p className="text-xs text-muted-foreground">
           This cannot be undone. The client&apos;s recap link will stop working.
         </p>
         {error && (
-          <p role="alert" className="text-xs text-red-500">
+          <p role="alert" className="text-xs text-danger">
             {error}
           </p>
         )}
@@ -64,7 +64,7 @@ export function SessionActions({
             type="button"
             onClick={handleDelete}
             disabled={deleting}
-            className="flex-1 bg-red-500 text-white rounded-lg py-2 text-sm font-medium hover:bg-red-600 disabled:opacity-50 min-h-11"
+            className="flex-1 bg-danger text-danger-foreground rounded-lg py-2 text-sm font-medium hover:bg-danger-hover disabled:opacity-50 min-h-11"
           >
             {deleting ? "Deleting..." : "Yes, delete"}
           </button>
@@ -72,7 +72,7 @@ export function SessionActions({
             type="button"
             onClick={() => setConfirming(false)}
             disabled={deleting}
-            className="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-2 text-sm font-medium hover:bg-gray-50 disabled:opacity-50 min-h-11"
+            className="flex-1 bg-card border border-border text-secondary-foreground rounded-lg py-2 text-sm font-medium hover:bg-background disabled:opacity-50 min-h-11"
           >
             Cancel
           </button>
@@ -85,14 +85,14 @@ export function SessionActions({
     <div className="mt-3 flex gap-2">
       <a
         href={`/sessions/${sessionId}/edit`}
-        className="flex-1 text-center bg-gray-100 text-gray-700 rounded-lg py-2 text-sm font-medium hover:bg-gray-200 min-h-11 flex items-center justify-center"
+        className="flex-1 text-center bg-secondary text-secondary-foreground rounded-lg py-2 text-sm font-medium hover:bg-secondary-hover min-h-11 flex items-center justify-center"
       >
         Edit
       </a>
       <button
         type="button"
         onClick={() => setConfirming(true)}
-        className="flex-1 text-center bg-white border border-red-200 text-red-500 rounded-lg py-2 text-sm font-medium hover:bg-red-50 min-h-11"
+        className="flex-1 text-center bg-card border border-danger-border text-danger rounded-lg py-2 text-sm font-medium hover:bg-danger-subtle min-h-11"
       >
         Delete
       </button>

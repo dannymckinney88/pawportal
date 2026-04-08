@@ -122,7 +122,7 @@ export default async function Page({
   });
 
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="bg-background min-h-screen">
       <div className="max-w-lg mx-auto px-4 py-8 flex flex-col gap-5">
         <ClientHero dogName={dog.dog_name} dogPhotoUrl={dog.dog_photo_url} />
 

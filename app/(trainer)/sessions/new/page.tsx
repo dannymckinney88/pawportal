@@ -220,24 +220,24 @@ function SessionFormInner() {
 
   if (!clientId) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-gray-500 text-sm">No client selected.</p>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <p className="text-muted-foreground text-sm">No client selected.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-lg mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center gap-3 mb-6">
           <a
             href={`/clients/${clientId}`}
-            className="text-gray-400 hover:text-gray-600 text-sm"
+            className="text-hint hover:text-muted-foreground text-sm"
           >
             ← Back
           </a>
-          <h1 className="text-xl font-bold text-gray-900">New Session</h1>
+          <h1 className="text-xl font-bold text-foreground">New Session</h1>
         </div>
 
         {client && (
@@ -247,9 +247,9 @@ function SessionFormInner() {
           />
         )}
 
-        <p className="text-xs text-gray-400 mb-2">
+        <p className="text-xs text-hint mb-2">
           Fields marked{" "}
-          <span className="text-red-500" aria-hidden="true">
+          <span className="text-danger" aria-hidden="true">
             *
           </span>
           <span className="sr-only">with an asterisk</span> are required.
@@ -257,17 +257,17 @@ function SessionFormInner() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {/* Session Summary */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm flex flex-col gap-3">
-            <h2 className="text-base font-semibold text-gray-900">
+          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-3">
+            <h2 className="text-base font-semibold text-foreground">
               Session Summary
             </h2>
             <div className="flex flex-col gap-1">
               <label
                 htmlFor="summary"
-                className="text-sm font-medium text-gray-700"
+                className="text-sm font-medium text-label"
               >
                 What did you cover today?{" "}
-                <span className="text-red-500" aria-hidden="true">
+                <span className="text-danger" aria-hidden="true">
                   *
                 </span>
               </label>
@@ -279,9 +279,9 @@ function SessionFormInner() {
                 aria-required="true"
                 aria-describedby="summary-hint"
                 placeholder="We worked on loose-leash walking and sit-stay. Buddy did great with focus exercises..."
-                className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500 resize-none"
+                className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary resize-none"
               />
-              <p id="summary-hint" className="text-xs text-gray-400">
+              <p id="summary-hint" className="text-xs text-hint">
                 Briefly describe what you worked on. This appears on the
                 client&apos;s recap page.
               </p>
@@ -289,13 +289,13 @@ function SessionFormInner() {
           </div>
 
           {/* Homework Items */}
-          <div className="bg-white rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-            <h2 className="text-base font-semibold text-gray-900">Homework</h2>
+          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
+            <h2 className="text-base font-semibold text-foreground">Homework</h2>
 
             <button
               type="button"
               onClick={() => setSheetOpen(true)}
-              className="w-full border border-dashed border-blue-300 text-blue-600 rounded-2xl py-3 text-sm font-medium hover:bg-blue-50 min-h-[44px]"
+              className="w-full border border-dashed border-primary/50 text-primary rounded-2xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-[44px]"
             >
               ＋ Add from template
             </button>
@@ -319,20 +319,20 @@ function SessionFormInner() {
             <button
               type="button"
               onClick={addItem}
-              className="w-full border border-dashed border-blue-300 text-blue-600 rounded-xl py-3 text-sm font-medium hover:bg-blue-50 min-h-11"
+              className="w-full border border-dashed border-primary/50 text-primary rounded-xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-11"
             >
               + Add homework item
             </button>
           </div>
 
           {error && (
-            <p role="alert" className="text-red-500 text-sm">
+            <p role="alert" className="text-danger text-sm">
               {error}
             </p>
           )}
 
           {!canSave && !loading && (
-            <p role="status" className="text-xs text-gray-400 text-center -mb-2">
+            <p role="status" className="text-xs text-hint text-center -mb-2">
               Add a session summary to continue. Each homework item needs a
               title.
             </p>
@@ -342,7 +342,7 @@ function SessionFormInner() {
             type="submit"
             disabled={!canSave || loading}
             aria-disabled={!canSave || loading}
-            className="w-full bg-blue-600 text-white rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed min-h-11"
+            className="w-full bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed min-h-11"
           >
             {loading ? "Saving session..." : "Save Session"}
           </button>
@@ -361,7 +361,7 @@ function SessionFormInner() {
 
 export default function NewSessionPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <SessionFormInner />
     </Suspense>
   );

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function NewClientPage() {
   const [ownerName, setOwnerName] = useState("");
@@ -76,36 +77,39 @@ export default function NewClientPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="max-w-lg mx-auto px-4 py-8">
         <div className="flex items-center gap-3 mb-8">
           <a
             href="/dashboard"
-            className="text-gray-400 hover:text-gray-600 text-sm"
+            className="text-hint hover:text-muted-foreground text-sm"
           >
             ← Back
           </a>
-          <h1 className="text-xl font-bold text-gray-900">Add Client</h1>
+          <h1 className="text-xl font-bold text-foreground">Add Client</h1>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-2xl p-6 shadow-sm flex flex-col gap-5"
+          className="bg-card rounded-2xl p-6 shadow-sm flex flex-col gap-5"
         >
           {/* Dog Photo */}
           <div className="flex flex-col items-center gap-3">
-            <div className="w-24 h-24 rounded-full bg-blue-50 flex items-center justify-center overflow-hidden">
+            <div className="w-24 h-24 rounded-full bg-accent flex items-center justify-center overflow-hidden">
               {preview ? (
-                <img
+                // blob URL from createObjectURL — Next.js Image does not support blob URLs
+                <Image
                   src={preview}
                   alt="Dog preview"
+                  width={96}
+                  height={96}
                   className="w-full h-full object-cover"
                 />
               ) : (
                 <span className="text-4xl">🐾</span>
               )}
             </div>
-            <label className="cursor-pointer text-sm text-blue-600 font-medium">
+            <label className="cursor-pointer text-sm text-primary font-medium">
               Upload dog photo
               <input
                 type="file"
@@ -118,11 +122,8 @@ export default function NewClientPage() {
 
           {/* Dog Name */}
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="dogName"
-              className="text-sm font-medium text-gray-700"
-            >
-              Dog&apos;s name <span className="text-red-500">*</span>
+            <label htmlFor="dogName" className="text-sm font-medium text-label">
+              Dog&apos;s name <span className="text-danger">*</span>
             </label>
             <input
               id="dogName"
@@ -131,7 +132,7 @@ export default function NewClientPage() {
               onChange={(e) => setDogName(e.target.value)}
               required
               placeholder="Buddy"
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
@@ -139,9 +140,9 @@ export default function NewClientPage() {
           <div className="flex flex-col gap-1">
             <label
               htmlFor="ownerName"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-label"
             >
-              Owner&apos;s name <span className="text-red-500">*</span>
+              Owner&apos;s name <span className="text-danger">*</span>
             </label>
             <input
               id="ownerName"
@@ -150,16 +151,13 @@ export default function NewClientPage() {
               onChange={(e) => setOwnerName(e.target.value)}
               required
               placeholder="Jane Smith"
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
           {/* Phone */}
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="phone"
-              className="text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="phone" className="text-sm font-medium text-label">
               Owner&apos;s phone
             </label>
             <input
@@ -168,12 +166,12 @@ export default function NewClientPage() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="(602) 555-0123"
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
           {error && (
-            <p role="alert" className="text-red-500 text-sm">
+            <p role="alert" className="text-danger text-sm">
               {error}
             </p>
           )}
@@ -181,7 +179,7 @@ export default function NewClientPage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+            className="bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50"
           >
             {loading ? "Saving..." : "Save Client"}
           </button>

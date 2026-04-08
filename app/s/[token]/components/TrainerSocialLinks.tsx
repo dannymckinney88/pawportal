@@ -39,7 +39,7 @@ export function TrainerSocialLinks({ instagramUrl, tiktokUrl }: Props) {
           href={instagramUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600"
+          className="flex items-center gap-1.5 text-sm text-hint hover:text-muted-foreground"
         >
           <InstagramIcon />
           Instagram
@@ -51,7 +51,7 @@ export function TrainerSocialLinks({ instagramUrl, tiktokUrl }: Props) {
           href={tiktokUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600"
+          className="flex items-center gap-1.5 text-sm text-hint hover:text-muted-foreground"
         >
           <TikTokIcon />
           TikTok

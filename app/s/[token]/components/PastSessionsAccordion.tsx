@@ -19,8 +19,8 @@ export function PastSessionsAccordion({
 
   return (
     <section aria-label="Past sessions">
-      <h2 className="text-xl font-bold text-gray-900 mb-3">Past Sessions</h2>
-      <div className="bg-white rounded-2xl shadow-sm divide-y divide-gray-100 overflow-hidden">
+      <h2 className="text-xl font-bold text-foreground mb-3">Past Sessions</h2>
+      <div className="bg-card rounded-2xl shadow-sm divide-y divide-border-subtle overflow-hidden">
         {sessions.map((session) => {
           const isOpen = openId === session.id;
           const date = new Date(session.created_at).toLocaleDateString(
@@ -35,9 +35,9 @@ export function PastSessionsAccordion({
                 onClick={() => setOpenId(isOpen ? null : session.id)}
                 aria-expanded={isOpen}
                 aria-controls={`past-session-${session.id}`}
-                className="w-full flex items-center justify-between px-4 py-3 text-left min-h-11 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-50"
+                className="w-full flex items-center justify-between px-4 py-3 text-left min-h-11 hover:bg-background focus:outline-none focus-visible:bg-background"
               >
-                <span className="text-sm font-semibold text-gray-900">
+                <span className="text-sm font-semibold text-foreground">
                   {date}
                 </span>
                 <svg
@@ -46,7 +46,7 @@ export function PastSessionsAccordion({
                   stroke="currentColor"
                   strokeWidth="2"
                   aria-hidden="true"
-                  className={`w-4 h-4 text-gray-400 shrink-0 transition-transform duration-200 ${
+                  className={`w-4 h-4 text-hint shrink-0 transition-transform duration-200 ${
                     isOpen ? "rotate-180" : ""
                   }`}
                 >
@@ -61,9 +61,12 @@ export function PastSessionsAccordion({
                       {session.homework_items.map((item, i) => (
                         <li
                           key={i}
-                          className="text-sm text-gray-600 flex gap-2 items-start"
+                          className="text-sm text-text flex gap-2 items-start"
                         >
-                          <span aria-hidden="true" className="text-gray-300 shrink-0">
+                          <span
+                            aria-hidden="true"
+                            className="text-border shrink-0"
+                          >
                             •
                           </span>
                           {item.title}
@@ -71,7 +74,7 @@ export function PastSessionsAccordion({
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-sm text-gray-400">No homework items</p>
+                    <p className="text-sm text-hint">No homework items</p>
                   )}
                 </div>
               )}

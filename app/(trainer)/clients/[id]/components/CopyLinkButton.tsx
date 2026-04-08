@@ -27,13 +27,17 @@ export function CopyLinkButton({ sessionToken }: { sessionToken: string }) {
       onClick={handleCopy}
       className={`text-sm font-medium px-3 py-1.5 rounded-lg border min-h-[44px] transition-colors ${
         state === "copied"
-          ? "border-green-200 text-green-600 bg-green-50"
+          ? "border-success-foreground/30 text-success-foreground bg-success"
           : state === "failed"
-            ? "border-red-200 text-red-500"
-            : "border-gray-200 text-gray-600 hover:bg-gray-50"
+            ? "border-danger-border text-danger"
+            : "border-border text-muted-foreground hover:bg-background"
       }`}
     >
-      {state === "copied" ? "Copied! ✓" : state === "failed" ? "Failed" : "Copy link"}
+      {state === "copied"
+        ? "Copied! ✓"
+        : state === "failed"
+          ? "Failed"
+          : "Copy link"}
     </button>
   );
 }

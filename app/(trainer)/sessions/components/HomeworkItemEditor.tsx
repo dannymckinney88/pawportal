@@ -50,7 +50,7 @@ export function HomeworkItemEditor({
   const showSteps = !showModeToggle || item.mode === "steps";
 
   return (
-    <div className="flex flex-col gap-3 border border-gray-100 rounded-xl p-4">
+    <div className="flex flex-col gap-3 border border-border-subtle rounded-xl p-4">
       {/* Item header */}
       <div className="flex items-center justify-between">
         <p className="text-sm font-medium text-gray-700">Item {index + 1}</p>
@@ -59,7 +59,7 @@ export function HomeworkItemEditor({
             type="button"
             onClick={onRemove}
             aria-label={`Remove homework item ${index + 1}`}
-            className="text-red-500 text-sm hover:text-red-700 min-h-11 min-w-11 flex items-center justify-center"
+            className="text-danger text-sm hover:text-red-700 min-h-11 min-w-11 flex items-center justify-center"
           >
             Remove
           </button>
@@ -73,7 +73,7 @@ export function HomeworkItemEditor({
           className="text-sm font-medium text-gray-700"
         >
           Title{" "}
-          <span className="text-red-500" aria-hidden="true">
+          <span className="text-danger" aria-hidden="true">
             *
           </span>
         </label>
@@ -85,9 +85,9 @@ export function HomeworkItemEditor({
           aria-required="true"
           aria-describedby={`title-hint-${index}`}
           placeholder="Loose-leash walking"
-          className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+          className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
         />
-        <p id={`title-hint-${index}`} className="text-xs text-gray-400">
+        <p id={`title-hint-${index}`} className="text-xs text-hint">
           A short name for this exercise or skill.
         </p>
       </div>
@@ -95,15 +95,15 @@ export function HomeworkItemEditor({
       {/* Mode toggle — edit form only */}
       {showModeToggle && (
         <div role="group" aria-label={`Content type for item ${index + 1}`}>
-          <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+          <div className="flex gap-1 bg-muted rounded-lg p-1 w-fit">
             <button
               type="button"
               onClick={() => onSetMode?.("description")}
               aria-pressed={item.mode === "description"}
               className={`px-4 py-2 rounded-md text-sm font-medium min-h-11 transition-colors ${
                 item.mode === "description"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Description
@@ -114,8 +114,8 @@ export function HomeworkItemEditor({
               aria-pressed={item.mode === "steps"}
               className={`px-4 py-2 rounded-md text-sm font-medium min-h-11 transition-colors ${
                 item.mode === "steps"
-                  ? "bg-blue-600 text-white"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "bg-primary text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               Steps
@@ -133,7 +133,7 @@ export function HomeworkItemEditor({
           >
             Description{" "}
             {!showModeToggle && (
-              <span className="text-gray-400 font-normal">(optional)</span>
+              <span className="text-hint font-normal">(optional)</span>
             )}
           </label>
           <textarea
@@ -142,7 +142,7 @@ export function HomeworkItemEditor({
             onChange={(e) => onUpdate("description", e.target.value)}
             rows={3}
             placeholder="General notes or context for this exercise..."
-            className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500 resize-none"
+            className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary resize-none"
           />
         </div>
       )}
@@ -153,13 +153,13 @@ export function HomeworkItemEditor({
           <p className="text-sm font-medium text-gray-700">
             Steps{" "}
             {!showModeToggle && (
-              <span className="text-gray-400 font-normal">(optional)</span>
+              <span className="text-hint font-normal">(optional)</span>
             )}
           </p>
           {item.steps.map((step, stepIndex) => (
             <div key={stepIndex} className="flex items-center gap-2">
               <span
-                className="text-xs font-semibold text-gray-400 w-6 shrink-0 text-center"
+                className="text-xs font-semibold text-hint w-6 shrink-0 text-center"
                 aria-hidden="true"
               >
                 {stepIndex + 1}.
@@ -170,7 +170,7 @@ export function HomeworkItemEditor({
                 onChange={(e) => onUpdateStep(stepIndex, e.target.value)}
                 aria-label={`Item ${index + 1}, step ${stepIndex + 1}`}
                 placeholder={`Step ${stepIndex + 1}`}
-                className="flex-1 border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+                className="flex-1 border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
               />
               {item.steps.length > 1 && (
                 <button
@@ -187,7 +187,7 @@ export function HomeworkItemEditor({
           <button
             type="button"
             onClick={onAddStep}
-            className="w-full border border-dashed border-gray-300 text-gray-500 rounded-lg py-2 text-sm hover:bg-gray-50 min-h-11"
+            className="w-full border border-dashed border-border text-muted-foreground rounded-lg py-2 text-sm hover:bg-background min-h-11"
           >
             + Add step
           </button>
@@ -201,7 +201,7 @@ export function HomeworkItemEditor({
           className="text-sm font-medium text-gray-700"
         >
           Resource link{" "}
-          <span className="text-gray-400 font-normal">(optional)</span>
+          <span className="text-hint font-normal">(optional)</span>
         </label>
         <input
           id={`link-${index}`}
@@ -210,9 +210,9 @@ export function HomeworkItemEditor({
           onChange={(e) => onUpdate("link_url", e.target.value)}
           aria-describedby={`link-hint-${index}`}
           placeholder="https://..."
-          className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+          className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
         />
-        <p id={`link-hint-${index}`} className="text-xs text-gray-400">
+        <p id={`link-hint-${index}`} className="text-xs text-hint">
           A YouTube video, article, or any helpful URL for this exercise.
         </p>
       </div>
@@ -224,7 +224,7 @@ export function HomeworkItemEditor({
           className="text-sm font-medium text-gray-700"
         >
           Note for {dogName ?? "this dog"}{" "}
-          <span className="text-gray-400 font-normal">(optional)</span>
+          <span className="text-hint font-normal">(optional)</span>
         </label>
         <input
           id={`dog_note-${index}`}
@@ -233,9 +233,9 @@ export function HomeworkItemEditor({
           onChange={(e) => onUpdate("dog_note", e.target.value)}
           aria-describedby={`dog-note-hint-${index}`}
           placeholder="Buddy tends to pull when he sees other dogs — use high-value treats"
-          className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+          className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
         />
-        <p id={`dog-note-hint-${index}`} className="text-xs text-gray-400">
+        <p id={`dog-note-hint-${index}`} className="text-xs text-hint">
           Personalized tip shown to the owner about their specific dog.
         </p>
       </div>

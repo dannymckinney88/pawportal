@@ -25,11 +25,11 @@ export function ClientHero({ dogName, dogPhotoUrl }: Props) {
   }
 
   return (
-    <div className="w-full aspect-4/3 rounded-2xl bg-gray-100 flex flex-col items-center justify-center gap-3">
+    <div className="w-full aspect-4/3 rounded-2xl bg-muted flex flex-col items-center justify-center gap-3">
       <span className="text-5xl" aria-hidden="true">
         🐾
       </span>
-      <p className="text-2xl font-bold text-gray-900">Hey, {dogName}!</p>
+      <p className="text-2xl font-bold text-foreground">Hey, {dogName}!</p>
     </div>
   );
 }

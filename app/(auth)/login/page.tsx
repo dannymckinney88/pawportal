@@ -32,16 +32,16 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="bg-white p-8 rounded-2xl shadow-sm w-full max-w-md">
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">PawPortal</h1>
-        <p className="text-gray-500 mb-6">Sign in to your trainer account</p>
+    <div className="min-h-screen flex items-center justify-center bg-background">
+      <div className="bg-card p-8 rounded-2xl shadow-sm w-full max-w-md">
+        <h1 className="text-2xl font-bold text-foreground mb-2">PawPortal</h1>
+        <p className="text-muted-foreground mb-6">Sign in to your trainer account</p>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <label
               htmlFor="email"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-label"
             >
               Email
             </label>
@@ -52,14 +52,14 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
           <div className="flex flex-col gap-1">
             <label
               htmlFor="password"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-label"
             >
               Password
             </label>
@@ -70,12 +70,12 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
           {error && (
-            <p role="alert" className="text-red-500 text-sm">
+            <p role="alert" className="text-danger text-sm">
               {error}
             </p>
           )}
@@ -83,7 +83,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white rounded-lg px-4 py-3 text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+            className="bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>

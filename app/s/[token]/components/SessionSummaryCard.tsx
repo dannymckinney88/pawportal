@@ -12,14 +12,14 @@ export function SessionSummaryCard({
   return (
     <section
       aria-label="Session summary"
-      className="bg-white rounded-2xl p-4 shadow-sm"
+      className="bg-card rounded-2xl p-4 shadow-sm"
     >
-      <p className="font-semibold text-gray-900">{sessionDate}</p>
+      <p className="font-semibold text-foreground">{sessionDate}</p>
 
-      {summary && <p className="text-sm text-gray-600 mt-1">{summary}</p>}
+      {summary && <p className="text-sm text-text mt-1">{summary}</p>}
 
       {trainerName && (
-        <p className="text-xs text-gray-400 mt-3">— {trainerName}</p>
+        <p className="text-xs text-hint mt-3">— {trainerName}</p>
       )}
     </section>
   );

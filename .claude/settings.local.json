@@ -4,7 +4,8 @@
       "mcp__ide__getDiagnostics",
       "Bash(find /c/code/pawportal/app -type f \\\\\\( -name \"*.tsx\" -o -name \"*.ts\" \\\\\\) -exec wc -l {} +)",
       "Bash(find:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(ls C:/code/pawportal/*.config.*)"
     ]
   }
 }
