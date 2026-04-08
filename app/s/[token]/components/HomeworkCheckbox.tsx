@@ -27,13 +27,6 @@ export const HomeworkCard = ({
   const [isSaving, setIsSaving] = useState(false);
 
   const toggle = async () => {
-    console.log("[HomeworkCard] toggle clicked", {
-      id,
-      sessionToken,
-      checked,
-      isSaving,
-    });
-
     if (isSaving) return;
 
     const next = !checked;
@@ -55,12 +48,6 @@ export const HomeworkCard = ({
       );
 
       const result = await response.json().catch(() => null);
-
-      console.log("[HomeworkCard] toggle response", {
-        status: response.status,
-        ok: response.ok,
-        result,
-      });
 
       if (!response.ok) {
         throw new Error(result?.error ?? "Failed to update homework item");
