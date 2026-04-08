@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SessionActions } from "./SessionActions";
+import { CopyLinkButton } from "./CopyLinkButton";
 
 export default async function ClientPage({
   params,
@@ -111,7 +112,7 @@ export default async function ClientPage({
                     {session.summary}
                   </p>
                 )}
-                <div className="mt-3">
+                <div className="mt-3 flex items-center gap-3">
                   <a
                     href={`/s/${session.token}`}
                     target="_blank"
@@ -119,6 +120,7 @@ export default async function ClientPage({
                   >
                     View client page →
                   </a>
+                  <CopyLinkButton sessionToken={session.token} />
                 </div>
                 <SessionActions
                   sessionId={session.id}
@@ -144,3 +146,4 @@ export default async function ClientPage({
     </div>
   );
 }
+
