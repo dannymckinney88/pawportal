@@ -23,6 +23,7 @@ export default async function DashboardPage() {
   const { data: clients } = await supabase
     .from("clients")
     .select("id, dog_name, owner_name, dog_photo_url, created_at")
+    .is("archived_at", null)
     .order("created_at", { ascending: false });
 
   const clientRows = (clients as ClientRow[] | null) ?? [];

@@ -9,6 +9,7 @@ import { SessionActions } from "./components/SessionActions";
 import { SessionProgressMeta } from "./components/SessionProgressMeta";
 import { SessionStatusBadge } from "./components/SessionStatusBadge";
 import { UpdateDogImage } from "./components/UpdateDogImage";
+import { ArchiveClientButton } from "./components/ArchiveClientButton";
 import type { ClientSessionRow, ClientSessionWithMeta } from "./types";
 
 export default async function ClientPage({
@@ -210,6 +211,18 @@ export default async function ClientPage({
               </a>
             </div>
           )}
+        </div>
+
+        <div className="mt-8 rounded-2xl border border-danger-border bg-card p-5 shadow-sm">
+          <p className="text-sm font-medium text-foreground">Client settings</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Archive this client to remove them from your active dashboard while
+            keeping session history.
+          </p>
+
+          <div className="mt-4">
+            <ArchiveClientButton clientId={client.id} />
+          </div>
         </div>
       </div>
     </div>

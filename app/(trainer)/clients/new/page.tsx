@@ -43,7 +43,7 @@ export default function NewClientPage() {
       const fileExt = photo.name.split(".").pop();
       const fileName = `${user.id}-${Date.now()}.${fileExt}`;
       const { error: uploadError } = await supabase.storage
-        .from("dog-photos")
+        .from("dog_photos")
         .upload(fileName, photo);
 
       if (uploadError) {
@@ -53,7 +53,7 @@ export default function NewClientPage() {
       }
 
       const { data: urlData } = supabase.storage
-        .from("dog-photos")
+        .from("dog_photos")
         .getPublicUrl(fileName);
 
       dog_photo_url = urlData.publicUrl;
