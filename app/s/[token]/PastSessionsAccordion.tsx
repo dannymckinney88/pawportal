@@ -4,7 +4,9 @@ import { useState } from "react";
 
 type PastSessionRow = {
   id: string;
+  session_date: string;
   created_at: string;
+  notes: string | null;
   homework_items: { title: string }[];
 };
 

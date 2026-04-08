@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -35,7 +35,7 @@ const emptyItem = (): HomeworkItem => ({
   steps: [""],
 });
 
-export default function NewSessionPage() {
+function SessionFormInner() {
   const searchParams = useSearchParams();
   const clientId = searchParams.get("clientId");
   const router = useRouter();
@@ -596,5 +596,13 @@ export default function NewSessionPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function NewSessionPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50" />}>
+      <SessionFormInner />
+    </Suspense>
   );
 }
