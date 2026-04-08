@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export const DashboardHeader = () => {
   return (
     <div className="mb-6 flex items-center justify-between border-b border-border pb-6">
@@ -6,12 +8,12 @@ export const DashboardHeader = () => {
         <p className="mt-1 text-sm text-muted-foreground">Your clients</p>
       </div>
 
-      <a
+      <Link
         href="/clients/new"
         className="flex min-h-11 items-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
       >
         + Add Client
-      </a>
+      </Link>
     </div>
   );
 };
