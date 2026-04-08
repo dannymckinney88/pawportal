@@ -4,7 +4,6 @@ import { useState } from "react";
 
 type PastSessionRow = {
   id: string;
-  session_number: number;
   created_at: string;
   homework_items: { title: string }[];
 };
@@ -36,12 +35,9 @@ export function PastSessionsAccordion({
                 aria-controls={`past-session-${session.id}`}
                 className="w-full flex items-center justify-between px-4 py-3 text-left min-h-11 hover:bg-gray-50 focus:outline-none focus-visible:bg-gray-50"
               >
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-semibold text-gray-900">
-                    Session {session.session_number}
-                  </span>
-                  <span className="text-xs text-gray-400">{date}</span>
-                </div>
+                <span className="text-sm font-semibold text-gray-900">
+                  {date}
+                </span>
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"
@@ -57,15 +53,15 @@ export function PastSessionsAccordion({
               </button>
 
               {isOpen && (
-                <div
-                  id={`past-session-${session.id}`}
-                  className="px-4 pb-4"
-                >
+                <div id={`past-session-${session.id}`} className="px-4 pb-4">
                   {session.homework_items.length > 0 ? (
                     <ul className="flex flex-col gap-1">
                       {session.homework_items.map((item, i) => (
-                        <li key={i} className="text-sm text-gray-600 flex gap-2">
-                          <span aria-hidden="true" className="text-gray-300">
+                        <li
+                          key={i}
+                          className="text-sm text-gray-600 flex gap-2 items-start"
+                        >
+                          <span aria-hidden="true" className="text-gray-300 shrink-0">
                             •
                           </span>
                           {item.title}

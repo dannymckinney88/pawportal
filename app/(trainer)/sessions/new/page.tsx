@@ -9,7 +9,6 @@ type HomeworkItem = {
   description: string;
   link_url: string;
   dog_note: string;
-  mode: "description" | "steps";
   steps: string[];
 };
 
@@ -24,7 +23,6 @@ const emptyItem = (): HomeworkItem => ({
   description: "",
   link_url: "",
   dog_note: "",
-  mode: "description",
   steps: [""],
 });
 
@@ -64,12 +62,6 @@ export default function NewSessionPage() {
   ) => {
     setItems((prev) =>
       prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
-    );
-  };
-
-  const setItemMode = (index: number, mode: HomeworkItem["mode"]) => {
-    setItems((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, mode } : item)),
     );
   };
 
@@ -153,14 +145,11 @@ export default function NewSessionPage() {
         filledItems.map((item) => ({
           session_id: session.id,
           title: item.title.trim(),
-          description:
-            item.mode === "description"
-              ? item.description?.trim() || null
-              : null,
-          link_url: item.link_url?.trim() || null,
-          dog_note: item.dog_note?.trim() || null,
+          description: item.description.trim() || null,
+          link_url: item.link_url.trim() || null,
+          dog_note: item.dog_note.trim() || null,
           steps:
-            item.mode === "steps"
+            item.steps.filter((s) => s.trim().length > 0).length > 0
               ? item.steps.filter((s) => s.trim().length > 0)
               : null,
         })),
@@ -302,105 +291,72 @@ export default function NewSessionPage() {
                   </p>
                 </div>
 
-                {/* Description / Steps toggle */}
-                <div
-                  role="group"
-                  aria-label={`Content type for item ${index + 1}`}
-                >
-                  <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
-                    <button
-                      type="button"
-                      onClick={() => setItemMode(index, "description")}
-                      aria-pressed={item.mode === "description"}
-                      className={`px-4 py-2 rounded-md text-sm font-medium min-h-11 transition-colors ${
-                        item.mode === "description"
-                          ? "bg-blue-600 text-white"
-                          : "text-gray-500 hover:text-gray-700"
-                      }`}
-                    >
-                      Description
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setItemMode(index, "steps")}
-                      aria-pressed={item.mode === "steps"}
-                      className={`px-4 py-2 rounded-md text-sm font-medium min-h-11 transition-colors ${
-                        item.mode === "steps"
-                          ? "bg-blue-600 text-white"
-                          : "text-gray-500 hover:text-gray-700"
-                      }`}
-                    >
-                      Steps
-                    </button>
-                  </div>
+                {/* Description */}
+                <div className="flex flex-col gap-1">
+                  <label
+                    htmlFor={`description-${index}`}
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Description{" "}
+                    <span className="text-gray-400 font-normal">(optional)</span>
+                  </label>
+                  <textarea
+                    id={`description-${index}`}
+                    value={item.description}
+                    onChange={(e) =>
+                      updateItem(index, "description", e.target.value)
+                    }
+                    rows={3}
+                    placeholder="General notes or context for this exercise..."
+                    className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500 resize-none"
+                  />
                 </div>
 
-                {/* Description mode */}
-                {item.mode === "description" && (
-                  <div className="flex flex-col gap-1">
-                    <label
-                      htmlFor={`description-${index}`}
-                      className="text-sm font-medium text-gray-700"
-                    >
-                      Description
-                    </label>
-                    <textarea
-                      id={`description-${index}`}
-                      value={item.description}
-                      onChange={(e) =>
-                        updateItem(index, "description", e.target.value)
-                      }
-                      rows={3}
-                      placeholder="Practice 5 minutes per day in the backyard before meals..."
-                      className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500 resize-none"
-                    />
-                  </div>
-                )}
-
-                {/* Steps mode */}
-                {item.mode === "steps" && (
-                  <div className="flex flex-col gap-2">
-                    <p className="text-sm font-medium text-gray-700">Steps</p>
-                    {item.steps.map((step, stepIndex) => (
-                      <div key={stepIndex} className="flex items-center gap-2">
-                        <span
-                          className="text-xs font-semibold text-gray-400 w-6 shrink-0 text-center"
-                          aria-hidden="true"
+                {/* Steps */}
+                <div className="flex flex-col gap-2">
+                  <p className="text-sm font-medium text-gray-700">
+                    Steps{" "}
+                    <span className="text-gray-400 font-normal">(optional)</span>
+                  </p>
+                  {item.steps.map((step, stepIndex) => (
+                    <div key={stepIndex} className="flex items-center gap-2">
+                      <span
+                        className="text-xs font-semibold text-gray-400 w-6 shrink-0 text-center"
+                        aria-hidden="true"
+                      >
+                        {stepIndex + 1}.
+                      </span>
+                      <input
+                        id={`step-${index}-${stepIndex}`}
+                        type="text"
+                        value={step}
+                        onChange={(e) =>
+                          updateStep(index, stepIndex, e.target.value)
+                        }
+                        aria-label={`Item ${index + 1}, step ${stepIndex + 1}`}
+                        placeholder={`Step ${stepIndex + 1}`}
+                        className="flex-1 border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
+                      />
+                      {item.steps.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeStep(index, stepIndex)}
+                          aria-label={`Remove step ${stepIndex + 1} from item ${index + 1}`}
+                          className="text-red-400 hover:text-red-600 min-h-11 min-w-11 flex items-center justify-center shrink-0"
                         >
-                          {stepIndex + 1}.
-                        </span>
-                        <input
-                          id={`step-${index}-${stepIndex}`}
-                          type="text"
-                          value={step}
-                          onChange={(e) =>
-                            updateStep(index, stepIndex, e.target.value)
-                          }
-                          aria-label={`Item ${index + 1}, step ${stepIndex + 1}`}
-                          placeholder={`Step ${stepIndex + 1}`}
-                          className="flex-1 border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
-                        />
-                        {item.steps.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removeStep(index, stepIndex)}
-                            aria-label={`Remove step ${stepIndex + 1} from item ${index + 1}`}
-                            className="text-red-400 hover:text-red-600 min-h-11 min-w-11 flex items-center justify-center shrink-0"
-                          >
-                            ✕
-                          </button>
-                        )}
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => addStep(index)}
-                      className="w-full border border-dashed border-gray-300 text-gray-500 rounded-lg py-2 text-sm hover:bg-gray-50 min-h-11"
-                    >
-                      + Add step
-                    </button>
-                  </div>
-                )}
+                          ✕
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    onClick={() => addStep(index)}
+                    className="w-full border border-dashed border-gray-300 text-gray-500 rounded-lg py-2 text-sm hover:bg-gray-50 min-h-11"
+                  >
+                    + Add step
+                  </button>
+                </div>
 
                 {/* Link */}
                 <div className="flex flex-col gap-1">

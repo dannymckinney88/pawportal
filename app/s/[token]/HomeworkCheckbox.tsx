@@ -3,56 +3,156 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
-export function HomeworkCheckbox({
-  id,
-  initialCompleted,
-  title,
-}: {
+type HomeworkCardProps = {
   id: string;
-  initialCompleted: boolean;
   title: string;
-}) {
-  const [completed, setCompleted] = useState(initialCompleted);
+  description: string | null;
+  link_url: string | null;
+  dog_note: string | null;
+  steps: string[] | null;
+  initialChecked: boolean;
+};
+
+export function HomeworkCard({
+  id,
+  title,
+  description,
+  link_url,
+  dog_note,
+  steps,
+  initialChecked,
+}: HomeworkCardProps) {
+  const [checked, setChecked] = useState(initialChecked);
 
   const toggle = () => {
-    const next = !completed;
-    setCompleted(next);
+    const next = !checked;
+    setChecked(next);
     const supabase = createClient();
-    supabase.from("homework_items").update({ completed: next }).eq("id", id);
+    supabase
+      .from("homework_items")
+      .update({
+        is_checked: next,
+        checked_at: next ? new Date().toISOString() : null,
+      })
+      .eq("id", id);
   };
 
+  const filteredSteps = steps?.filter((s) => s.trim().length > 0) ?? [];
+  const hasSteps = filteredSteps.length > 0;
+
   return (
-    <button
-      type="button"
-      onClick={toggle}
-      aria-label={
-        completed ? `Mark "${title}" incomplete` : `Mark "${title}" complete`
-      }
-      aria-pressed={completed}
-      className="min-h-11 min-w-11 flex items-center justify-center shrink-0"
+    <div
+      className={`bg-white rounded-2xl p-4 shadow-sm mb-3 transition-opacity ${
+        checked ? "opacity-60" : ""
+      }`}
     >
-      <span
-        className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors ${
-          completed ? "bg-blue-600 border-blue-600" : "border-gray-300"
+      {/* Title */}
+      <p
+        className={`text-base font-semibold text-gray-900 mb-2 ${
+          checked ? "line-through" : ""
         }`}
       >
-        {completed && (
-          <svg
-            viewBox="0 0 12 12"
-            fill="none"
-            className="w-3 h-3"
-            aria-hidden="true"
+        {title}
+      </p>
+
+      {/* Divider */}
+      <div className="border-t border-gray-100 my-2" />
+
+      {/* Description */}
+      {description && description.trim().length > 0 && (
+        <p className="text-sm text-gray-600 leading-relaxed mb-3">
+          {description}
+        </p>
+      )}
+
+      {/* Steps */}
+      {hasSteps && (
+        <div className={description?.trim() ? "mt-3" : ""}>
+          <p className="text-xs font-medium text-gray-400 uppercase tracking-wide mb-2">
+            Steps
+          </p>
+          <ol>
+            {filteredSteps.map((step, i) => (
+              <li
+                key={i}
+                className="flex items-start gap-3 py-2 border-b border-gray-50 last:border-0"
+              >
+                <span className="text-xs font-bold text-blue-600 bg-blue-50 rounded-full w-6 h-6 flex items-center justify-center shrink-0 mt-0.5">
+                  {i + 1}
+                </span>
+                <span className="text-sm text-gray-700">{step}</span>
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+
+      {/* Video link */}
+      {link_url && (
+        <a
+          href={link_url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="mt-3 block text-sm text-blue-600 font-medium hover:underline"
+        >
+          ▶ Watch video
+        </a>
+      )}
+
+      {/* Dog note */}
+      {dog_note && (
+        <div className="mt-3 pt-3 border-t border-gray-100 flex items-start gap-2">
+          <span className="shrink-0" aria-hidden="true">
+            🐾
+          </span>
+          <p className="text-sm text-blue-700 italic">{dog_note}</p>
+        </div>
+      )}
+
+      {/* Completion toggle */}
+      <div className="mt-3 pt-3 border-t border-gray-100">
+        <button
+          type="button"
+          onClick={toggle}
+          aria-pressed={checked}
+          aria-label={
+            checked ? `Mark "${title}" incomplete` : `Mark "${title}" complete`
+          }
+          className="flex items-center gap-2 min-h-11 w-full"
+        >
+          <span
+            className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors shrink-0 ${
+              checked ? "bg-blue-600 border-blue-600" : "border-gray-300"
+            }`}
           >
-            <polyline
-              points="2 6 5 9 10 3"
-              stroke="white"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
-      </span>
-    </button>
+            {checked && (
+              <svg
+                viewBox="0 0 12 12"
+                fill="none"
+                className="w-3 h-3"
+                aria-hidden="true"
+              >
+                <polyline
+                  points="2 6 5 9 10 3"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
+          </span>
+          <span
+            className={
+              checked
+                ? "text-sm text-green-600 font-medium"
+                : "text-sm text-gray-500"
+            }
+          >
+            {checked ? "Done ✓" : "Mark as done"}
+          </span>
+        </button>
+      </div>
+    </div>
   );
 }
