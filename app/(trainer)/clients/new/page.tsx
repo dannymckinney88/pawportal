@@ -79,7 +79,7 @@ export default function NewClientPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-lg mx-auto px-4 py-8">
-        <div className="flex items-center gap-3 mb-8">
+        <div className="flex items-center gap-3 mb-6">
           <a
             href="/dashboard"
             className="text-hint hover:text-muted-foreground text-sm"
@@ -91,10 +91,10 @@ export default function NewClientPage() {
 
         <form
           onSubmit={handleSubmit}
-          className="bg-card rounded-2xl p-6 shadow-sm flex flex-col gap-5"
+          className="bg-card rounded-2xl p-6 shadow-sm flex flex-col gap-6"
         >
           {/* Dog Photo */}
-          <div className="flex flex-col items-center gap-3">
+          <div className="flex flex-col items-center gap-3 pb-5 border-b border-border">
             <div className="w-24 h-24 rounded-full bg-accent flex items-center justify-center overflow-hidden">
               {preview ? (
                 // blob URL from createObjectURL — Next.js Image does not support blob URLs
@@ -179,7 +179,7 @@ export default function NewClientPage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50"
+            className="w-full bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50"
           >
             {loading ? "Saving..." : "Save Client"}
           </button>

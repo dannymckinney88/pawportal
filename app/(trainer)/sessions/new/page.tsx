@@ -247,7 +247,7 @@ function SessionFormInner() {
           />
         )}
 
-        <p className="text-xs text-hint mb-2">
+        <p className="text-xs text-hint mb-4">
           Fields marked{" "}
           <span className="text-danger" aria-hidden="true">
             *
@@ -257,8 +257,8 @@ function SessionFormInner() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {/* Session Summary */}
-          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-3">
-            <h2 className="text-base font-semibold text-foreground">
+          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
+            <h2 className="text-lg font-semibold text-foreground">
               Session Summary
             </h2>
             <div className="flex flex-col gap-1">
@@ -290,12 +290,12 @@ function SessionFormInner() {
 
           {/* Homework Items */}
           <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-            <h2 className="text-base font-semibold text-foreground">Homework</h2>
+            <h2 className="text-lg font-semibold text-foreground">Homework</h2>
 
             <button
               type="button"
               onClick={() => setSheetOpen(true)}
-              className="w-full border border-dashed border-primary/50 text-primary rounded-2xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-[44px]"
+              className="w-full border border-dashed border-primary/50 text-primary rounded-xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-[44px]"
             >
               ＋ Add from template
             </button>
@@ -332,7 +332,7 @@ function SessionFormInner() {
           )}
 
           {!canSave && !loading && (
-            <p role="status" className="text-xs text-hint text-center -mb-2">
+            <p role="status" className="text-xs text-hint text-center">
               Add a session summary to continue. Each homework item needs a
               title.
             </p>
