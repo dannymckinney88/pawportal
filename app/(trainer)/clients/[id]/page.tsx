@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { SessionActions } from "./components/SessionActions";
 import { CopyLinkButton } from "./components/CopyLinkButton";
+import { UpdateDogImage } from "./components/UpdateDogImage";
 import Image from "next/image";
 
 export default async function ClientPage({
@@ -43,25 +44,32 @@ export default async function ClientPage({
         </a>
 
         {/* Client Header */}
+        {/* Client Header */}
         <div className="bg-card rounded-2xl p-6 shadow-sm mt-4 flex items-center gap-5">
-          {client.dog_photo_url ? (
-            <Image
-              src={client.dog_photo_url}
-              alt={client.dog_name}
-              width={80}
-              height={80}
-              className="w-20 h-20 rounded-full object-cover"
-            />
-          ) : (
-            <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center text-3xl">
-              🐾
-            </div>
-          )}
+          <div className="flex flex-col items-center gap-3 shrink-0">
+            {client.dog_photo_url ? (
+              <Image
+                src={client.dog_photo_url}
+                alt={client.dog_name}
+                width={80}
+                height={80}
+                className="w-20 h-20 rounded-full object-cover"
+              />
+            ) : (
+              <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center text-3xl">
+                🐾
+              </div>
+            )}
+
+            <UpdateDogImage clientId={client.id} />
+          </div>
+
           <div>
             <h1 className="text-2xl font-bold text-foreground">
               {client.dog_name}
             </h1>
             <p className="text-muted-foreground">{client.owner_name}</p>
+
             {client.phone && (
               <p className="text-hint text-sm mt-1">{client.phone}</p>
             )}

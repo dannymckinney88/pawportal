@@ -25,7 +25,7 @@ export function CopyLinkButton({ sessionToken }: { sessionToken: string }) {
     <button
       type="button"
       onClick={handleCopy}
-      className={`text-sm font-medium px-3 py-1.5 rounded-lg border min-h-[44px] transition-colors ${
+      className={`text-sm font-medium px-3 py-1.5 rounded-lg border min-h-11 transition-colors ${
         state === "copied"
           ? "border-success-foreground/30 text-success-foreground bg-success"
           : state === "failed"
