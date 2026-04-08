@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { SessionActions } from "./SessionActions";
-import { CopyLinkButton } from "./CopyLinkButton";
+import { SessionActions } from "./components/SessionActions";
+import { CopyLinkButton } from "./components/CopyLinkButton";
 
 export default async function ClientPage({
   params,
@@ -146,4 +146,3 @@ export default async function ClientPage({
     </div>
   );
 }
-

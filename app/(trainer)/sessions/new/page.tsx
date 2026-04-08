@@ -3,14 +3,12 @@
 import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-
-type HomeworkItem = {
-  title: string;
-  description: string;
-  link_url: string;
-  dog_note: string;
-  steps: string[];
-};
+import { ClientInfoBanner } from "../components/ClientInfoBanner";
+import {
+  HomeworkItemEditor,
+  type ItemEditorItem,
+} from "../components/HomeworkItemEditor";
+import { TemplatePickerSheet } from "./components/TemplatePickerSheet";
 
 type Client = {
   id: string;
@@ -27,7 +25,7 @@ type Template = {
   dog_note: string | null;
 };
 
-const emptyItem = (): HomeworkItem => ({
+const emptyItem = (): ItemEditorItem => ({
   title: "",
   description: "",
   link_url: "",
@@ -43,17 +41,16 @@ function SessionFormInner() {
 
   const [client, setClient] = useState<Client | null>(null);
   const [summary, setSummary] = useState("");
-  const [items, setItems] = useState<HomeworkItem[]>([emptyItem()]);
+  const [items, setItems] = useState<ItemEditorItem[]>([emptyItem()]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Template picker state
   const [templates, setTemplates] = useState<Template[]>([]);
   const [sheetOpen, setSheetOpen] = useState(false);
 
   // A blank item (no title, description, link, note, or steps) is a draft
-  // placeholder — the submit handler already filters these out. Only block
-  // save if an item has *some* content entered but is missing its title.
+  // placeholder — the submit handler filters these out. Only block save if an
+  // item has *some* content entered but is missing its title.
   const canSave =
     summary.trim().length > 0 &&
     items.every(
@@ -95,7 +92,7 @@ function SessionFormInner() {
 
   const updateItem = (
     index: number,
-    field: keyof Pick<HomeworkItem, "title" | "description" | "link_url" | "dog_note">,
+    field: "title" | "description" | "link_url" | "dog_note",
     value: string,
   ) => {
     setItems((prev) =>
@@ -137,7 +134,7 @@ function SessionFormInner() {
     setItems((prev) => prev.filter((_, i) => i !== index));
 
   const applyTemplate = (template: Template) => {
-    const filled: HomeworkItem = {
+    const filled: ItemEditorItem = {
       title: template.title,
       description: template.description ?? "",
       link_url: template.link_url ?? "",
@@ -169,7 +166,6 @@ function SessionFormInner() {
       return;
     }
 
-    // Count existing sessions to determine session_number
     const { count } = await supabase
       .from("sessions")
       .select("id", { count: "exact", head: true })
@@ -244,15 +240,11 @@ function SessionFormInner() {
           <h1 className="text-xl font-bold text-gray-900">New Session</h1>
         </div>
 
-        {/* Client Info */}
         {client && (
-          <div className="bg-blue-50 rounded-2xl px-4 py-3 mb-6 flex items-center gap-3">
-            <span className="text-2xl">🐾</span>
-            <div>
-              <p className="font-semibold text-gray-900">{client.dog_name}</p>
-              <p className="text-sm text-gray-500">{client.owner_name}</p>
-            </div>
-          </div>
+          <ClientInfoBanner
+            dogName={client.dog_name}
+            ownerName={client.owner_name}
+          />
         )}
 
         <p className="text-xs text-gray-400 mb-2">
@@ -300,7 +292,6 @@ function SessionFormInner() {
           <div className="bg-white rounded-2xl p-5 shadow-sm flex flex-col gap-4">
             <h2 className="text-base font-semibold text-gray-900">Homework</h2>
 
-            {/* Add from template */}
             <button
               type="button"
               onClick={() => setSheetOpen(true)}
@@ -310,174 +301,19 @@ function SessionFormInner() {
             </button>
 
             {items.map((item, index) => (
-              <div
+              <HomeworkItemEditor
                 key={index}
-                className="flex flex-col gap-3 border border-gray-100 rounded-xl p-4"
-              >
-                {/* Item header */}
-                <div className="flex items-center justify-between">
-                  <p className="text-sm font-medium text-gray-700">
-                    Item {index + 1}
-                  </p>
-                  {items.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeItem(index)}
-                      aria-label={`Remove homework item ${index + 1}`}
-                      className="text-red-500 text-sm hover:text-red-700 min-h-11 min-w-11 flex items-center justify-center"
-                    >
-                      Remove
-                    </button>
-                  )}
-                </div>
-
-                {/* Title */}
-                <div className="flex flex-col gap-1">
-                  <label
-                    htmlFor={`title-${index}`}
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Title{" "}
-                    <span className="text-red-500" aria-hidden="true">
-                      *
-                    </span>
-                  </label>
-                  <input
-                    id={`title-${index}`}
-                    type="text"
-                    value={item.title}
-                    onChange={(e) => updateItem(index, "title", e.target.value)}
-                    aria-required="true"
-                    aria-describedby={`title-hint-${index}`}
-                    placeholder="Loose-leash walking"
-                    className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
-                  />
-                  <p id={`title-hint-${index}`} className="text-xs text-gray-400">
-                    A short name for this exercise or skill.
-                  </p>
-                </div>
-
-                {/* Description */}
-                <div className="flex flex-col gap-1">
-                  <label
-                    htmlFor={`description-${index}`}
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Description{" "}
-                    <span className="text-gray-400 font-normal">(optional)</span>
-                  </label>
-                  <textarea
-                    id={`description-${index}`}
-                    value={item.description}
-                    onChange={(e) =>
-                      updateItem(index, "description", e.target.value)
-                    }
-                    rows={3}
-                    placeholder="General notes or context for this exercise..."
-                    className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500 resize-none"
-                  />
-                </div>
-
-                {/* Steps */}
-                <div className="flex flex-col gap-2">
-                  <p className="text-sm font-medium text-gray-700">
-                    Steps{" "}
-                    <span className="text-gray-400 font-normal">(optional)</span>
-                  </p>
-                  {item.steps.map((step, stepIndex) => (
-                    <div key={stepIndex} className="flex items-center gap-2">
-                      <span
-                        className="text-xs font-semibold text-gray-400 w-6 shrink-0 text-center"
-                        aria-hidden="true"
-                      >
-                        {stepIndex + 1}.
-                      </span>
-                      <input
-                        id={`step-${index}-${stepIndex}`}
-                        type="text"
-                        value={step}
-                        onChange={(e) =>
-                          updateStep(index, stepIndex, e.target.value)
-                        }
-                        aria-label={`Item ${index + 1}, step ${stepIndex + 1}`}
-                        placeholder={`Step ${stepIndex + 1}`}
-                        className="flex-1 border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
-                      />
-                      {item.steps.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeStep(index, stepIndex)}
-                          aria-label={`Remove step ${stepIndex + 1} from item ${index + 1}`}
-                          className="text-red-400 hover:text-red-600 min-h-11 min-w-11 flex items-center justify-center shrink-0"
-                        >
-                          ✕
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => addStep(index)}
-                    className="w-full border border-dashed border-gray-300 text-gray-500 rounded-lg py-2 text-sm hover:bg-gray-50 min-h-11"
-                  >
-                    + Add step
-                  </button>
-                </div>
-
-                {/* Link */}
-                <div className="flex flex-col gap-1">
-                  <label
-                    htmlFor={`link-${index}`}
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Resource link{" "}
-                    <span className="text-gray-400 font-normal">(optional)</span>
-                  </label>
-                  <input
-                    id={`link-${index}`}
-                    type="text"
-                    value={item.link_url}
-                    onChange={(e) =>
-                      updateItem(index, "link_url", e.target.value)
-                    }
-                    aria-describedby={`link-hint-${index}`}
-                    placeholder="https://..."
-                    className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
-                  />
-                  <p id={`link-hint-${index}`} className="text-xs text-gray-400">
-                    A YouTube video, article, or any helpful URL for this
-                    exercise.
-                  </p>
-                </div>
-
-                {/* Dog-specific note */}
-                <div className="flex flex-col gap-1">
-                  <label
-                    htmlFor={`dog_note-${index}`}
-                    className="text-sm font-medium text-gray-700"
-                  >
-                    Note for {client?.dog_name ?? "this dog"}{" "}
-                    <span className="text-gray-400 font-normal">(optional)</span>
-                  </label>
-                  <input
-                    id={`dog_note-${index}`}
-                    type="text"
-                    value={item.dog_note}
-                    onChange={(e) =>
-                      updateItem(index, "dog_note", e.target.value)
-                    }
-                    aria-describedby={`dog-note-hint-${index}`}
-                    placeholder="Buddy tends to pull when he sees other dogs — use high-value treats"
-                    className="border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-blue-500"
-                  />
-                  <p
-                    id={`dog-note-hint-${index}`}
-                    className="text-xs text-gray-400"
-                  >
-                    Personalized tip shown to the owner about their specific dog.
-                  </p>
-                </div>
-              </div>
+                item={item}
+                index={index}
+                itemsCount={items.length}
+                dogName={client?.dog_name}
+                showModeToggle={false}
+                onUpdate={(field, value) => updateItem(index, field, value)}
+                onRemove={() => removeItem(index)}
+                onUpdateStep={(si, value) => updateStep(index, si, value)}
+                onAddStep={() => addStep(index)}
+                onRemoveStep={(si) => removeStep(index, si)}
+              />
             ))}
 
             <button
@@ -501,6 +337,7 @@ function SessionFormInner() {
               title.
             </p>
           )}
+
           <button
             type="submit"
             disabled={!canSave || loading}
@@ -512,89 +349,12 @@ function SessionFormInner() {
         </form>
       </div>
 
-      {/* Template picker bottom sheet — always mounted for transition */}
-      {/* Backdrop */}
-      <div
-        aria-hidden="true"
-        onClick={() => setSheetOpen(false)}
-        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
-          sheetOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
+      <TemplatePickerSheet
+        open={sheetOpen}
+        onClose={() => setSheetOpen(false)}
+        templates={templates}
+        onApply={applyTemplate}
       />
-
-      {/* Sheet */}
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-label="Add from template"
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-white rounded-t-2xl max-h-[70vh] flex flex-col transition-transform duration-300 ease-out ${
-          sheetOpen ? "translate-y-0" : "translate-y-full"
-        }`}
-      >
-        {/* Handle */}
-        <div className="w-10 h-1 bg-gray-300 rounded-full mx-auto mt-3 mb-2 shrink-0" />
-
-        {/* Header */}
-        <div className="px-4 py-3 flex items-center justify-between shrink-0">
-          <p className="text-base font-semibold text-gray-900">Add from Template</p>
-          <button
-            type="button"
-            onClick={() => setSheetOpen(false)}
-            aria-label="Close template picker"
-            className="min-h-[44px] min-w-[44px] flex items-center justify-center text-gray-400 hover:text-gray-600"
-          >
-            ✕
-          </button>
-        </div>
-
-        {/* Scrollable list */}
-        <div className="overflow-y-auto flex-1 px-4 pb-8">
-          {templates.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-sm text-gray-400">No templates saved yet</p>
-              <a
-                href="/templates"
-                className="mt-2 inline-block text-blue-600 text-sm"
-              >
-                Create your first template
-              </a>
-            </div>
-          ) : (
-            templates.map((template) => {
-              const filteredSteps =
-                template.steps?.filter((s) => s.trim().length > 0) ?? [];
-              return (
-                <button
-                  key={template.id}
-                  type="button"
-                  onClick={() => applyTemplate(template)}
-                  className="w-full bg-gray-50 rounded-xl p-3 mb-2 min-h-[56px] flex flex-col justify-center text-left active:bg-blue-50"
-                >
-                  <span className="font-medium text-gray-900 text-sm">
-                    {template.title}
-                  </span>
-                  {(filteredSteps.length > 0 || template.link_url || template.dog_note) && (
-                    <span className="flex items-center gap-1.5 mt-1 flex-wrap">
-                      {filteredSteps.length > 0 && (
-                        <span className="text-xs bg-blue-50 text-blue-600 rounded-full px-2 py-0.5">
-                          {filteredSteps.length}{" "}
-                          {filteredSteps.length === 1 ? "step" : "steps"}
-                        </span>
-                      )}
-                      {template.link_url && (
-                        <span className="text-xs text-gray-400">🔗</span>
-                      )}
-                      {template.dog_note && (
-                        <span className="text-xs text-gray-400">🐾</span>
-                      )}
-                    </span>
-                  )}
-                </button>
-              );
-            })
-          )}
-        </div>
-      </div>
     </div>
   );
 }
