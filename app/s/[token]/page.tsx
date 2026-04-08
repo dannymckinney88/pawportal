@@ -123,7 +123,7 @@ export default async function Page({
 
   return (
     <div className="bg-background min-h-screen">
-      <div className="max-w-lg mx-auto px-4 py-8 flex flex-col gap-5">
+      <div className="max-w-lg mx-auto px-4 py-8 flex flex-col gap-6">
         <ClientHero dogName={dog.dog_name} dogPhotoUrl={dog.dog_photo_url} />
 
         <SessionSummaryCard
@@ -134,7 +134,7 @@ export default async function Page({
 
         {homeworkItems.length > 0 && (
           <section aria-label="Homework">
-            <h2 className="text-xl font-bold text-gray-900 mb-3">
+            <h2 className="text-xl font-bold text-foreground mb-4">
               Your Homework 📋
             </h2>
 
@@ -157,7 +157,7 @@ export default async function Page({
           <PastSessionsAccordion sessions={pastSessions} />
         )}
 
-        <footer className="mt-3 pb-8 flex flex-col gap-4">
+        <footer className="mt-10 pt-6 pb-8 border-t border-border flex flex-col gap-4">
           <ReviewCard googleReviewUrl={trainer?.google_review_url} />
 
           <TrainerSocialLinks

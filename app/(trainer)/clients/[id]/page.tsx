@@ -38,12 +38,11 @@ export default async function ClientPage({
         {/* Back */}
         <a
           href="/dashboard"
-          className="text-hint hover:text-muted-foreground text-sm"
+          className="inline-block py-1 text-hint hover:text-muted-foreground text-sm"
         >
           ← Back
         </a>
 
-        {/* Client Header */}
         {/* Client Header */}
         <div className="bg-card rounded-2xl p-6 shadow-sm mt-4 flex items-center gap-5">
           <div className="flex flex-col items-center gap-3 shrink-0">
@@ -68,7 +67,9 @@ export default async function ClientPage({
             <h1 className="text-2xl font-bold text-foreground">
               {client.dog_name}
             </h1>
-            <p className="text-muted-foreground">{client.owner_name}</p>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {client.owner_name}
+            </p>
 
             {client.phone && (
               <p className="text-hint text-sm mt-1">{client.phone}</p>
@@ -76,20 +77,20 @@ export default async function ClientPage({
           </div>
         </div>
 
-        {/* New Session Button */}
-        <div className="mt-6 flex justify-between items-center">
+        {/* Sessions Section Header */}
+        <div className="mt-8 pb-3 border-b border-border flex justify-between items-center">
           <h2 className="text-lg font-semibold text-foreground">Sessions</h2>
 
           <a
             href={`/sessions/new?clientId=${client.id}`}
-            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-hover"
+            className="flex items-center min-h-[44px] bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-hover"
           >
             + New Session
           </a>
         </div>
 
         {/* Session List */}
-        <div className="mt-4 flex flex-col gap-3">
+        <div className="mt-4 flex flex-col gap-4">
           {sessions && sessions.length > 0 ? (
             sessions.map((session) => (
               <div
@@ -98,10 +99,10 @@ export default async function ClientPage({
               >
                 <div className="flex justify-between items-start">
                   <div>
-                    <p className="font-semibold text-foreground">
+                    <p className="text-base font-semibold text-foreground">
                       Session {session.session_number}
                     </p>
-                    <p className="text-muted-foreground text-sm mt-1">
+                    <p className="text-sm text-muted-foreground mt-0.5">
                       {new Date(session.created_at).toLocaleDateString(
                         "en-US",
                         {
@@ -123,7 +124,7 @@ export default async function ClientPage({
                     {session.summary}
                   </p>
                 )}
-                <div className="mt-3 flex items-center gap-3">
+                <div className="mt-4 flex items-center gap-3">
                   <a
                     href={`/s/${session.token}`}
                     target="_blank"
@@ -133,20 +134,24 @@ export default async function ClientPage({
                   </a>
                   <CopyLinkButton sessionToken={session.token} />
                 </div>
-                <SessionActions
-                  sessionId={session.id}
-                  sessionNumber={session.session_number}
-                  clientId={id}
-                />
+                <div className="mt-4 pt-4 border-t border-border">
+                  <SessionActions
+                    sessionId={session.id}
+                    sessionNumber={session.session_number}
+                    clientId={id}
+                  />
+                </div>
               </div>
             ))
           ) : (
-            <div className="bg-card rounded-2xl p-10 text-center shadow-sm">
-              <p className="text-hint text-sm">No sessions yet</p>
+            <div className="bg-card rounded-2xl py-14 px-8 text-center shadow-sm">
+              <p className="text-sm text-muted-foreground mb-4">
+                No sessions yet
+              </p>
 
               <a
                 href={`/sessions/new?clientId=${client.id}`}
-                className="mt-3 inline-block text-primary text-sm hover:underline"
+                className="inline-flex items-center min-h-[44px] bg-primary text-primary-foreground px-6 py-2 rounded-lg text-sm font-medium hover:bg-primary-hover"
               >
                 Create first session
               </a>
