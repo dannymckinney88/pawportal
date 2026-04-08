@@ -9,8 +9,6 @@ import {
   type ItemEditorItem,
 } from "../../components/HomeworkItemEditor";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 type DBHomeworkItem = {
   id: string;
   title: string;
@@ -32,32 +30,26 @@ type Dog = {
   owner_name: string;
 };
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
 const emptyItem = (): ItemEditorItem => ({
   title: "",
   description: "",
   link_url: "",
   dog_note: "",
-  mode: "description",
+
   steps: [""],
 });
 
 function dbRowToItem(row: DBHomeworkItem): ItemEditorItem {
-  const hasSteps = row.steps !== null && row.steps.length > 0;
-
   return {
     id: row.id,
     title: row.title,
     description: row.description ?? "",
     link_url: row.link_url ?? "",
     dog_note: row.dog_note ?? "",
-    mode: hasSteps ? "steps" : "description",
-    steps: hasSteps && row.steps ? row.steps : [""],
+
+    steps: row.steps && row.steps.length > 0 ? row.steps : [""],
   };
 }
-
-// ─── Component ────────────────────────────────────────────────────────────────
 
 export function EditSessionForm({
   session,
@@ -83,8 +75,6 @@ export function EditSessionForm({
     summary.trim().length > 0 &&
     items.every((item) => item.title.trim().length > 0);
 
-  // ── Item handlers ──────────────────────────────────────────────────────────
-
   const updateItem = (
     index: number,
     field: "title" | "description" | "link_url" | "dog_note",
@@ -92,12 +82,6 @@ export function EditSessionForm({
   ) => {
     setItems((prev) =>
       prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
-    );
-  };
-
-  const setItemMode = (index: number, mode: "description" | "steps") => {
-    setItems((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, mode } : item)),
     );
   };
 
@@ -133,8 +117,6 @@ export function EditSessionForm({
 
   const removeItem = (index: number) =>
     setItems((prev) => prev.filter((_, i) => i !== index));
-
-  // ── Submit ─────────────────────────────────────────────────────────────────
 
   const handleSave = async () => {
     setLoading(true);
@@ -179,20 +161,16 @@ export function EditSessionForm({
     );
 
     for (const item of itemsToUpdate) {
+      const cleanedSteps = item.steps.filter((step) => step.trim().length > 0);
+
       const { error: updateError } = await supabase
         .from("homework_items")
         .update({
           title: item.title.trim(),
-          description:
-            item.mode === "description"
-              ? item.description?.trim() || null
-              : null,
+          description: item.description?.trim() || null,
           link_url: item.link_url?.trim() || null,
           dog_note: item.dog_note?.trim() || null,
-          steps:
-            item.mode === "steps"
-              ? item.steps.filter((step) => step.trim().length > 0)
-              : null,
+          steps: cleanedSteps.length > 0 ? cleanedSteps : null,
         })
         .eq("id", item.id);
 
@@ -209,20 +187,20 @@ export function EditSessionForm({
       const { error: insertError } = await supabase
         .from("homework_items")
         .insert(
-          itemsToInsert.map((item) => ({
-            session_id: session.id,
-            title: item.title.trim(),
-            description:
-              item.mode === "description"
-                ? item.description?.trim() || null
-                : null,
-            link_url: item.link_url?.trim() || null,
-            dog_note: item.dog_note?.trim() || null,
-            steps:
-              item.mode === "steps"
-                ? item.steps.filter((step) => step.trim().length > 0)
-                : null,
-          })),
+          itemsToInsert.map((item) => {
+            const cleanedSteps = item.steps.filter(
+              (step) => step.trim().length > 0,
+            );
+
+            return {
+              session_id: session.id,
+              title: item.title.trim(),
+              description: item.description?.trim() || null,
+              link_url: item.link_url?.trim() || null,
+              dog_note: item.dog_note?.trim() || null,
+              steps: cleanedSteps.length > 0 ? cleanedSteps : null,
+            };
+          }),
         );
 
       if (insertError) {
@@ -235,8 +213,6 @@ export function EditSessionForm({
     router.push(`/clients/${session.client_id}`);
     router.refresh();
   };
-
-  // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
     <div className="min-h-screen bg-background">
@@ -306,10 +282,8 @@ export function EditSessionForm({
                 index={index}
                 itemsCount={items.length}
                 dogName={dog.dog_name}
-                showModeToggle={true}
                 onUpdate={(field, value) => updateItem(index, field, value)}
                 onRemove={() => removeItem(index)}
-                onSetMode={(mode) => setItemMode(index, mode)}
                 onUpdateStep={(si, value) => updateStep(index, si, value)}
                 onAddStep={() => addStep(index)}
                 onRemoveStep={(si) => removeStep(index, si)}

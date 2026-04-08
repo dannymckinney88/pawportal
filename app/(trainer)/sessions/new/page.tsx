@@ -30,7 +30,6 @@ const emptyItem = (): ItemEditorItem => ({
   description: "",
   link_url: "",
   dog_note: "",
-  mode: "description",
   steps: [""],
 });
 
@@ -140,8 +139,6 @@ function SessionFormInner() {
       description: template.description ?? "",
       link_url: template.link_url ?? "",
       dog_note: template.dog_note ?? "",
-      mode:
-        template.steps && template.steps.length > 0 ? "steps" : "description",
       steps:
         template.steps && template.steps.length > 0 ? template.steps : [""],
     };
@@ -298,7 +295,7 @@ function SessionFormInner() {
             <button
               type="button"
               onClick={() => setSheetOpen(true)}
-              className="w-full border border-dashed border-primary/50 text-primary rounded-xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-[44px]"
+              className="w-full border border-dashed border-primary/50 text-primary rounded-xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-11"
             >
               ＋ Add from template
             </button>
@@ -310,7 +307,6 @@ function SessionFormInner() {
                 index={index}
                 itemsCount={items.length}
                 dogName={client?.dog_name}
-                showModeToggle={false}
                 onUpdate={(field, value) => updateItem(index, field, value)}
                 onRemove={() => removeItem(index)}
                 onUpdateStep={(si, value) => updateStep(index, si, value)}
