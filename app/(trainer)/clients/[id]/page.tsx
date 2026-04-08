@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import { SessionActions } from "./SessionActions";
 
 export default async function ClientPage({
   params,
@@ -110,7 +111,7 @@ export default async function ClientPage({
                     {session.summary}
                   </p>
                 )}
-                <div className="mt-3 flex gap-2">
+                <div className="mt-3">
                   <a
                     href={`/s/${session.token}`}
                     target="_blank"
@@ -119,6 +120,11 @@ export default async function ClientPage({
                     View client page →
                   </a>
                 </div>
+                <SessionActions
+                  sessionId={session.id}
+                  sessionNumber={session.session_number}
+                  clientId={id}
+                />
               </div>
             ))
           ) : (

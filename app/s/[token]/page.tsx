@@ -27,7 +27,6 @@ type HomeworkItemRow = {
   dog_note: string | null;
   steps: string[] | null;
   completed: boolean;
-  order_index: number;
 };
 
 type PastSessionRow = {
@@ -110,10 +109,9 @@ export default async function SessionPage({
     supabase
       .from("homework_items")
       .select(
-        "id, title, description, link_url, dog_note, steps, completed, order_index",
+        "id, title, description, link_url, dog_note, steps, completed",
       )
       .eq("session_id", session.id)
-      .order("order_index")
       .returns<HomeworkItemRow[]>(),
 
     supabase
