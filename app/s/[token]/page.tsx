@@ -1,54 +1,19 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import { HomeworkCard } from "./components/HomeworkCheckbox";
 import { PastSessionsAccordion } from "./components/PastSessionsAccordion";
 import { ClientHero } from "./components/ClientHero";
 import { SessionSummaryCard } from "./components/SessionSummaryCard";
 import { ReviewCard } from "./components/ReviewCard";
 import { TrainerSocialLinks } from "./components/TrainerSocialLinks";
 import { SessionViewTracker } from "./components/SessionViewTracker";
-
-type Dog = {
-  dog_name: string;
-  dog_photo_url: string | null;
-  owner_name: string;
-};
-
-type Trainer = {
-  name: string | null;
-  instagram_url: string | null;
-  tiktok_url: string | null;
-  google_review_url: string | null;
-};
-
-type HomeworkItemRow = {
-  id: string;
-  title: string;
-  description: string | null;
-  link_url: string | null;
-  dog_note: string | null;
-  steps: string[] | null;
-  is_checked: boolean;
-};
-
-type PastSessionRow = {
-  id: string;
-  session_date: string;
-  created_at: string;
-  notes: string | null;
-  homework_items: { title: string }[];
-};
-
-type SessionRow = {
-  id: string;
-  summary: string | null;
-  created_at: string;
-  client_id: string;
-  trainer_id: string;
-  first_viewed_at: string | null;
-  last_viewed_at: string | null;
-  view_count: number;
-};
+import { HomeworkSection } from "./components/HomeworkSection";
+import type {
+  Dog,
+  Trainer,
+  HomeworkItemRow,
+  PastSessionRow,
+  SessionRow,
+} from "./types";
 
 export default async function Page({
   params,
@@ -111,12 +76,6 @@ export default async function Page({
 
   const pastSessions = (pastRes.data as PastSessionRow[] | null) ?? [];
 
-  console.log("[SessionPage] homework_items fetch:", {
-    error: hwRes.error?.message ?? null,
-    count: homeworkItems.length,
-    items: homeworkItems,
-  });
-
   if (!dog) return notFound();
 
   const sessionDate = new Date(session.created_at).toLocaleDateString("en-US", {
@@ -126,9 +85,10 @@ export default async function Page({
   });
 
   return (
-    <div className="bg-background min-h-screen">
-      <div className="max-w-lg mx-auto px-4 py-8 flex flex-col gap-6">
+    <div className="min-h-screen bg-background">
+      <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-8">
         <SessionViewTracker token={token} />
+
         <ClientHero dogName={dog.dog_name} dogPhotoUrl={dog.dog_photo_url} />
 
         <SessionSummaryCard
@@ -138,32 +98,14 @@ export default async function Page({
         />
 
         {homeworkItems.length > 0 && (
-          <section aria-label="Homework">
-            <h2 className="text-xl font-bold text-foreground mb-4">
-              Your Homework 📋
-            </h2>
-
-            {homeworkItems.map((item) => (
-              <HomeworkCard
-                key={item.id}
-                id={item.id}
-                sessionToken={token}
-                title={item.title}
-                description={item.description}
-                link_url={item.link_url}
-                dog_note={item.dog_note}
-                steps={item.steps}
-                initialChecked={item.is_checked}
-              />
-            ))}
-          </section>
+          <HomeworkSection sessionToken={token} items={homeworkItems} />
         )}
 
         {pastSessions.length > 0 && (
           <PastSessionsAccordion sessions={pastSessions} />
         )}
 
-        <footer className="mt-10 pt-6 pb-8 border-t border-border flex flex-col gap-4">
+        <footer className="mt-10 flex flex-col gap-4 border-t border-border pt-6 pb-8">
           <ReviewCard googleReviewUrl={trainer?.google_review_url} />
 
           <TrainerSocialLinks

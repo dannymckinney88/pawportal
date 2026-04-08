@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type HomeworkCardProps = {
   id: string;
@@ -11,8 +11,12 @@ type HomeworkCardProps = {
   dog_note: string | null;
   steps: string[] | null;
   initialChecked: boolean;
+  onCheckedChange?: (homeworkId: string, isChecked: boolean) => void;
 };
 
+/**
+ * Homework card
+ */
 export const HomeworkCard = ({
   id,
   sessionToken,
@@ -22,15 +26,21 @@ export const HomeworkCard = ({
   dog_note,
   steps,
   initialChecked,
+  onCheckedChange,
 }: HomeworkCardProps) => {
   const [checked, setChecked] = useState(initialChecked);
   const [isSaving, setIsSaving] = useState(false);
+
+  useEffect(() => {
+    setChecked(initialChecked);
+  }, [initialChecked]);
 
   const toggle = async () => {
     if (isSaving) return;
 
     const next = !checked;
     setChecked(next);
+    onCheckedChange?.(id, next);
     setIsSaving(true);
 
     try {
@@ -55,6 +65,7 @@ export const HomeworkCard = ({
     } catch (error) {
       console.error("[HomeworkCard] toggle failed", error);
       setChecked(!next);
+      onCheckedChange?.(id, !next);
     } finally {
       setIsSaving(false);
     }
@@ -65,13 +76,13 @@ export const HomeworkCard = ({
 
   return (
     <div
-      className={`mb-3 rounded-2xl bg-card p-4 shadow-sm transition-opacity ${
-        checked ? "opacity-60" : ""
+      className={`mb-3 rounded-2xl border p-4 shadow-sm transition-all ${
+        checked ? "border-border bg-success/40" : "border-border bg-card"
       }`}
     >
       <p
-        className={`mb-2 text-base font-semibold text-foreground ${
-          checked ? "line-through" : ""
+        className={`mb-2 text-base font-semibold ${
+          checked ? "text-success-foreground" : "text-foreground"
         }`}
       >
         {title}
