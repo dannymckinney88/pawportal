@@ -19,6 +19,7 @@ type ClientEngagementCardProps = {
     homeworkTotal: number;
     homeworkCompleted: number;
   } | null;
+  needsFollowUp: boolean;
 };
 
 export const ClientEngagementCard = ({
@@ -27,6 +28,7 @@ export const ClientEngagementCard = ({
   ownerName,
   dogPhotoUrl,
   latestSession,
+  needsFollowUp,
 }: ClientEngagementCardProps) => {
   const status = latestSession
     ? getSessionEngagementStatus({
@@ -39,7 +41,7 @@ export const ClientEngagementCard = ({
   return (
     <a
       href={`/clients/${clientId}`}
-      className="bg-card rounded-2xl p-4 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all flex gap-4"
+      className="flex gap-4 rounded-2xl bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
     >
       {dogPhotoUrl ? (
         <Image
@@ -47,23 +49,35 @@ export const ClientEngagementCard = ({
           alt={dogName}
           width={56}
           height={56}
-          className="w-14 h-14 rounded-full object-cover shrink-0"
+          className="h-14 w-14 shrink-0 rounded-full object-cover"
         />
       ) : (
-        <div className="w-14 h-14 rounded-full bg-accent flex items-center justify-center text-2xl shrink-0">
+        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent text-2xl">
           🐾
         </div>
       )}
 
       <div className="min-w-0 flex-1">
-        <p className="text-base font-semibold text-foreground truncate">
-          {dogName}
-        </p>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <p className="truncate text-base font-semibold text-foreground">
+              {dogName}
+            </p>
 
-        <p className="text-sm text-muted-foreground truncate">{ownerName}</p>
+            <p className="truncate text-sm text-muted-foreground">
+              {ownerName}
+            </p>
+          </div>
+
+          {needsFollowUp && (
+            <span className="shrink-0 rounded-full border border-warning-border bg-warning-subtle px-2.5 py-1 text-xs font-medium text-label">
+              Needs follow-up
+            </span>
+          )}
+        </div>
 
         {latestSession ? (
-          <div className="mt-2 flex flex-col gap-1">
+          <div className="mt-3 flex flex-col gap-1">
             <p className="text-sm text-label">
               Latest: Session {latestSession.sessionNumber}
             </p>
@@ -74,6 +88,19 @@ export const ClientEngagementCard = ({
               {latestSession.homeworkCompleted}/{latestSession.homeworkTotal}{" "}
               done
             </p>
+
+            {latestSession.lastViewedAt && (
+              <p className="text-sm text-muted-foreground">
+                Last viewed{" "}
+                {new Date(latestSession.lastViewedAt).toLocaleDateString(
+                  "en-US",
+                  {
+                    month: "short",
+                    day: "numeric",
+                  },
+                )}
+              </p>
+            )}
           </div>
         ) : (
           <p className="mt-2 text-sm text-muted-foreground">No sessions yet</p>
