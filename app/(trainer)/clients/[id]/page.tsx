@@ -1,9 +1,15 @@
-import { createClient } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
-import { SessionActions } from "./components/SessionActions";
-import { CopyLinkButton } from "./components/CopyLinkButton";
-import { UpdateDogImage } from "./components/UpdateDogImage";
 import Image from "next/image";
+import { redirect } from "next/navigation";
+
+import { createClient } from "@/lib/supabase/server";
+import { getSessionEngagementStatus } from "@/lib/sessions/getSessionEngagementStatus";
+
+import { CopyLinkButton } from "./components/CopyLinkButton";
+import { SessionActions } from "./components/SessionActions";
+import { SessionProgressMeta } from "./components/SessionProgressMeta";
+import { SessionStatusBadge } from "./components/SessionStatusBadge";
+import { UpdateDogImage } from "./components/UpdateDogImage";
+import type { ClientSessionRow, ClientSessionWithMeta } from "./types";
 
 export default async function ClientPage({
   params,
@@ -16,6 +22,7 @@ export default async function ClientPage({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
   if (!user) redirect("/login");
 
   const { data: client } = await supabase
@@ -28,34 +35,71 @@ export default async function ClientPage({
 
   const { data: sessions } = await supabase
     .from("sessions")
-    .select("*")
+    .select(
+      `
+      id,
+      token,
+      summary,
+      session_number,
+      created_at,
+      sent_at,
+      first_viewed_at,
+      last_viewed_at,
+      view_count,
+      homework_items (
+        id,
+        is_checked
+      )
+    `,
+    )
     .eq("client_id", id)
     .order("created_at", { ascending: false });
 
+  const sessionsWithMeta: ClientSessionWithMeta[] =
+    (sessions as ClientSessionRow[] | null)?.map((session) => {
+      const homeworkItems = session.homework_items ?? [];
+      const homeworkTotal = homeworkItems.length;
+      const homeworkCompleted = homeworkItems.filter(
+        (item) => item.is_checked,
+      ).length;
+
+      const status = getSessionEngagementStatus({
+        firstViewedAt: session.first_viewed_at,
+        homeworkTotal,
+        homeworkCompleted,
+      });
+
+      return {
+        ...session,
+        homeworkTotal,
+        homeworkCompleted,
+        status,
+      };
+    }) ?? [];
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        {/* Back */}
+      <div className="mx-auto max-w-2xl px-4 py-8">
         <a
           href="/dashboard"
-          className="inline-block py-1 text-hint hover:text-muted-foreground text-sm"
+          className="inline-block py-1 text-sm text-hint hover:text-muted-foreground"
         >
           ← Back
         </a>
 
-        {/* Client Header */}
-        <div className="bg-card rounded-2xl p-6 shadow-sm mt-4 flex items-center gap-5">
-          <div className="flex flex-col items-center gap-3 shrink-0">
+        <div className="mt-4 flex items-center gap-5 rounded-2xl bg-card p-6 shadow-sm">
+          <div className="flex shrink-0 flex-col items-center gap-3">
             {client.dog_photo_url ? (
               <Image
                 src={client.dog_photo_url}
                 alt={client.dog_name}
                 width={80}
                 height={80}
-                className="w-20 h-20 rounded-full object-cover"
+                className="h-20 w-20 rounded-full object-cover"
+                priority
               />
             ) : (
-              <div className="w-20 h-20 rounded-full bg-accent flex items-center justify-center text-3xl">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent text-3xl">
                 🐾
               </div>
             )}
@@ -67,42 +111,42 @@ export default async function ClientPage({
             <h1 className="text-2xl font-bold text-foreground">
               {client.dog_name}
             </h1>
-            <p className="text-sm text-muted-foreground mt-0.5">
+
+            <p className="mt-0.5 text-sm text-muted-foreground">
               {client.owner_name}
             </p>
 
             {client.phone && (
-              <p className="text-hint text-sm mt-1">{client.phone}</p>
+              <p className="mt-1 text-sm text-hint">{client.phone}</p>
             )}
           </div>
         </div>
 
-        {/* Sessions Section Header */}
-        <div className="mt-8 pb-3 border-b border-border flex justify-between items-center">
+        <div className="mt-8 flex items-center justify-between border-b border-border pb-3">
           <h2 className="text-lg font-semibold text-foreground">Sessions</h2>
 
           <a
             href={`/sessions/new?clientId=${client.id}`}
-            className="flex items-center min-h-[44px] bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-hover"
+            className="flex min-h-11 items-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
           >
             + New Session
           </a>
         </div>
 
-        {/* Session List */}
         <div className="mt-4 flex flex-col gap-4">
-          {sessions && sessions.length > 0 ? (
-            sessions.map((session) => (
+          {sessionsWithMeta.length > 0 ? (
+            sessionsWithMeta.map((session) => (
               <div
                 key={session.id}
-                className="bg-card rounded-2xl p-5 shadow-sm"
+                className="rounded-2xl bg-card p-5 shadow-sm"
               >
-                <div className="flex justify-between items-start">
+                <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-base font-semibold text-foreground">
                       Session {session.session_number}
                     </p>
-                    <p className="text-sm text-muted-foreground mt-0.5">
+
+                    <p className="mt-0.5 text-sm text-muted-foreground">
                       {new Date(session.created_at).toLocaleDateString(
                         "en-US",
                         {
@@ -113,28 +157,37 @@ export default async function ClientPage({
                       )}
                     </p>
                   </div>
-                  {session.sent_at && (
-                    <span className="text-xs bg-success text-success-foreground px-2 py-1 rounded-full">
-                      Sent
-                    </span>
-                  )}
+
+                  <SessionStatusBadge status={session.status} />
                 </div>
+
                 {session.summary && (
-                  <p className="text-text text-sm mt-3 line-clamp-2">
+                  <p className="mt-3 line-clamp-2 text-sm text-text">
                     {session.summary}
                   </p>
                 )}
+
+                <SessionProgressMeta
+                  homeworkCompleted={session.homeworkCompleted}
+                  homeworkTotal={session.homeworkTotal}
+                  firstViewedAt={session.first_viewed_at}
+                  lastViewedAt={session.last_viewed_at}
+                />
+
                 <div className="mt-4 flex items-center gap-3">
                   <a
                     href={`/s/${session.token}`}
                     target="_blank"
-                    className="text-primary text-sm hover:underline"
+                    rel="noreferrer"
+                    className="text-sm text-primary hover:underline"
                   >
                     View client page →
                   </a>
+
                   <CopyLinkButton sessionToken={session.token} />
                 </div>
-                <div className="mt-4 pt-4 border-t border-border">
+
+                <div className="mt-4 border-t border-border pt-4">
                   <SessionActions
                     sessionId={session.id}
                     sessionNumber={session.session_number}
@@ -144,14 +197,14 @@ export default async function ClientPage({
               </div>
             ))
           ) : (
-            <div className="bg-card rounded-2xl py-14 px-8 text-center shadow-sm">
-              <p className="text-sm text-muted-foreground mb-4">
+            <div className="rounded-2xl bg-card px-8 py-14 text-center shadow-sm">
+              <p className="mb-4 text-sm text-muted-foreground">
                 No sessions yet
               </p>
 
               <a
                 href={`/sessions/new?clientId=${client.id}`}
-                className="inline-flex items-center min-h-[44px] bg-primary text-primary-foreground px-6 py-2 rounded-lg text-sm font-medium hover:bg-primary-hover"
+                className="inline-flex min-h-11 items-center rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
               >
                 Create first session
               </a>

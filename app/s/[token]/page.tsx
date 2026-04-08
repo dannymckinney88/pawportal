@@ -6,6 +6,7 @@ import { ClientHero } from "./components/ClientHero";
 import { SessionSummaryCard } from "./components/SessionSummaryCard";
 import { ReviewCard } from "./components/ReviewCard";
 import { TrainerSocialLinks } from "./components/TrainerSocialLinks";
+import { SessionViewTracker } from "./components/SessionViewTracker";
 
 type Dog = {
   dog_name: string;
@@ -44,6 +45,9 @@ type SessionRow = {
   created_at: string;
   client_id: string;
   trainer_id: string;
+  first_viewed_at: string | null;
+  last_viewed_at: string | null;
+  view_count: number;
 };
 
 export default async function Page({
@@ -124,6 +128,7 @@ export default async function Page({
   return (
     <div className="bg-background min-h-screen">
       <div className="max-w-lg mx-auto px-4 py-8 flex flex-col gap-6">
+        <SessionViewTracker token={token} />
         <ClientHero dogName={dog.dog_name} dogPhotoUrl={dog.dog_photo_url} />
 
         <SessionSummaryCard
@@ -142,6 +147,7 @@ export default async function Page({
               <HomeworkCard
                 key={item.id}
                 id={item.id}
+                sessionToken={token}
                 title={item.title}
                 description={item.description}
                 link_url={item.link_url}

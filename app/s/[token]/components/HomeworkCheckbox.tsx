@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { createClient } from "@/lib/supabase/client";
 
 type HomeworkCardProps = {
   id: string;
+  sessionToken: string;
   title: string;
   description: string | null;
   link_url: string | null;
@@ -13,70 +13,103 @@ type HomeworkCardProps = {
   initialChecked: boolean;
 };
 
-export function HomeworkCard({
+export const HomeworkCard = ({
   id,
+  sessionToken,
   title,
   description,
   link_url,
   dog_note,
   steps,
   initialChecked,
-}: HomeworkCardProps) {
+}: HomeworkCardProps) => {
   const [checked, setChecked] = useState(initialChecked);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const toggle = () => {
+  const toggle = async () => {
+    console.log("[HomeworkCard] toggle clicked", {
+      id,
+      sessionToken,
+      checked,
+      isSaving,
+    });
+
+    if (isSaving) return;
+
     const next = !checked;
     setChecked(next);
-    const supabase = createClient();
-    supabase
-      .from("homework_items")
-      .update({
-        is_checked: next,
-        checked_at: next ? new Date().toISOString() : null,
-      })
-      .eq("id", id);
+    setIsSaving(true);
+
+    try {
+      const response = await fetch(
+        `/api/sessions/${sessionToken}/homework/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            isChecked: next,
+          }),
+        },
+      );
+
+      const result = await response.json().catch(() => null);
+
+      console.log("[HomeworkCard] toggle response", {
+        status: response.status,
+        ok: response.ok,
+        result,
+      });
+
+      if (!response.ok) {
+        throw new Error(result?.error ?? "Failed to update homework item");
+      }
+    } catch (error) {
+      console.error("[HomeworkCard] toggle failed", error);
+      setChecked(!next);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const filteredSteps = steps?.filter((s) => s.trim().length > 0) ?? [];
+  const filteredSteps = steps?.filter((step) => step.trim().length > 0) ?? [];
   const hasSteps = filteredSteps.length > 0;
 
   return (
     <div
-      className={`bg-card rounded-2xl p-4 shadow-sm mb-3 transition-opacity ${
+      className={`mb-3 rounded-2xl bg-card p-4 shadow-sm transition-opacity ${
         checked ? "opacity-60" : ""
       }`}
     >
-      {/* Title */}
       <p
-        className={`text-base font-semibold text-foreground mb-2 ${
+        className={`mb-2 text-base font-semibold text-foreground ${
           checked ? "line-through" : ""
         }`}
       >
         {title}
       </p>
 
-      {/* Divider */}
-      <div className="border-t border-border-subtle my-2" />
+      <div className="my-2 border-t border-border-subtle" />
 
-      {/* Description */}
       {description && description.trim().length > 0 && (
-        <p className="text-sm text-text leading-relaxed mb-3">{description}</p>
+        <p className="mb-3 text-sm leading-relaxed text-text">{description}</p>
       )}
 
-      {/* Steps */}
       {hasSteps && (
         <div className={description?.trim() ? "mt-3" : ""}>
-          <p className="text-xs font-medium text-hint uppercase tracking-wide mb-2">
+          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-hint">
             Steps
           </p>
+
           <ol>
-            {filteredSteps.map((step, i) => (
+            {filteredSteps.map((step, index) => (
               <li
-                key={i}
-                className="flex items-start gap-3 py-2 border-b border-border-subtle last:border-0"
+                key={index}
+                className="flex items-start gap-3 border-b border-border-subtle py-2 last:border-0"
               >
-                <span className="text-xs font-bold text-primary-subtle-foreground bg-primary-subtle rounded-full w-6 h-6 flex items-center justify-center shrink-0 mt-0.5">
-                  {i + 1}
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-subtle text-xs font-bold text-primary-subtle-foreground">
+                  {index + 1}
                 </span>
                 <span className="text-sm text-label">{step}</span>
               </li>
@@ -85,49 +118,47 @@ export function HomeworkCard({
         </div>
       )}
 
-      {/* Video link */}
       {link_url && (
         <a
           href={link_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 block text-sm text-primary font-medium hover:underline"
+          className="mt-3 block text-sm font-medium text-primary hover:underline"
         >
           ▶ Watch video
         </a>
       )}
 
-      {/* Dog note */}
       {dog_note && (
-        <div className="mt-3 pt-3 border-t border-border-subtle flex items-start gap-2">
+        <div className="mt-3 flex items-start gap-2 border-t border-border-subtle pt-3">
           <span className="shrink-0" aria-hidden="true">
             🐾
           </span>
-          <p className="text-sm text-accent-foreground italic">{dog_note}</p>
+          <p className="text-sm italic text-accent-foreground">{dog_note}</p>
         </div>
       )}
 
-      {/* Completion toggle */}
-      <div className="mt-3 pt-3 border-t border-border-subtle">
+      <div className="mt-3 border-t border-border-subtle pt-3">
         <button
           type="button"
           onClick={toggle}
+          disabled={isSaving}
           aria-pressed={checked}
           aria-label={
             checked ? `Mark "${title}" incomplete` : `Mark "${title}" complete`
           }
-          className="flex items-center gap-2 min-h-11 w-full"
+          className="flex min-h-11 w-full items-center gap-2 disabled:opacity-60"
         >
           <span
-            className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-colors shrink-0 ${
-              checked ? "bg-primary border-primary" : "border-border"
+            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
+              checked ? "border-primary bg-primary" : "border-border"
             }`}
           >
             {checked && (
               <svg
                 viewBox="0 0 12 12"
                 fill="none"
-                className="w-3 h-3"
+                className="h-3 w-3"
                 aria-hidden="true"
               >
                 <polyline
@@ -140,10 +171,11 @@ export function HomeworkCard({
               </svg>
             )}
           </span>
+
           <span
             className={
               checked
-                ? "text-sm text-success-foreground font-medium"
+                ? "text-sm font-medium text-success-foreground"
                 : "text-sm text-muted-foreground"
             }
           >
@@ -153,4 +185,4 @@ export function HomeworkCard({
       </div>
     </div>
   );
-}
+};
