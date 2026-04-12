@@ -10,7 +10,7 @@
   /* Page shells */
   --color-background: var(--color-gray-50);
   --color-foreground: var(--color-gray-900);
-  --color-text: var(--color-gray-600);
+  --color-text: var(--color-gray-700);
   --color-label: var(--color-gray-700);
 
   /* Cards / surfaces */
@@ -19,14 +19,14 @@
 
   /* Muted surfaces and secondary text */
   --color-muted: var(--color-gray-100);
-  --color-muted-foreground: var(--color-gray-500);
+  --color-muted-foreground: var(--color-gray-600);
 
   /* Borders — border for inputs/cards, border-subtle for dividers */
   --color-border: var(--color-gray-200);
   --color-border-subtle: var(--color-gray-100);
 
   /* Hint / placeholder text */
-  --color-hint: var(--color-gray-400);
+  --color-hint: var(--color-gray-500);
 
   /* Primary — blue-600 */
   --color-primary: var(--color-blue-600);
@@ -49,7 +49,7 @@
   --color-success-foreground: var(--color-green-700);
 
   /* Danger */
-  --color-danger: var(--color-red-500);
+  --color-danger: var(--color-red-600);
   --color-danger-foreground: oklch(100% 0 0);
   --color-danger-hover: var(--color-red-600);
   --color-danger-subtle: var(--color-red-50);

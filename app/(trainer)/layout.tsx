@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { NavLinks } from "./components/NavLinks";
 import { LogoutButton } from "./components/LogoutButton";
 
 export default function TrainerLayout({
@@ -18,20 +19,7 @@ export default function TrainerLayout({
           </Link>
 
           <div className="flex items-center gap-1">
-            <Link
-              href="/dashboard"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg hover:bg-background"
-            >
-              Clients
-            </Link>
-
-            <Link
-              href="/templates"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg hover:bg-background"
-            >
-              Templates
-            </Link>
-
+            <NavLinks />
             <LogoutButton />
           </div>
         </div>

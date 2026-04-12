@@ -52,6 +52,7 @@ export default function LoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              aria-required="true"
               className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
@@ -70,6 +71,7 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              aria-required="true"
               className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>

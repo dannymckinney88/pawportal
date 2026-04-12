@@ -223,7 +223,7 @@ export function TemplatesClient({
           <div className="flex flex-col gap-1">
             <label
               htmlFor="tpl-title"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-label"
             >
               Title{" "}
               <span className="text-danger" aria-hidden="true">
@@ -245,7 +245,7 @@ export function TemplatesClient({
           <div className="flex flex-col gap-1">
             <label
               htmlFor="tpl-description"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-label"
             >
               Description{" "}
               <span className="text-hint font-normal">(optional)</span>
@@ -262,7 +262,7 @@ export function TemplatesClient({
 
           {/* Steps */}
           <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium text-gray-700">
+            <p className="text-sm font-medium text-label">
               Steps{" "}
               <span className="text-hint font-normal">(optional)</span>
             </p>
@@ -287,7 +287,7 @@ export function TemplatesClient({
                     type="button"
                     onClick={() => removeStep(i)}
                     aria-label={`Remove step ${i + 1}`}
-                    className="text-red-400 hover:text-red-600 min-h-11 min-w-11 flex items-center justify-center shrink-0"
+                    className="text-danger hover:text-danger min-h-11 min-w-11 flex items-center justify-center shrink-0"
                   >
                     ✕
                   </button>
@@ -307,7 +307,7 @@ export function TemplatesClient({
           <div className="flex flex-col gap-1">
             <label
               htmlFor="tpl-link"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-label"
             >
               Resource link{" "}
               <span className="text-hint font-normal">(optional)</span>
@@ -326,7 +326,7 @@ export function TemplatesClient({
           <div className="flex flex-col gap-1">
             <label
               htmlFor="tpl-dog-note"
-              className="text-sm font-medium text-gray-700"
+              className="text-sm font-medium text-label"
             >
               Dog-specific note{" "}
               <span className="text-hint font-normal">(optional)</span>
@@ -428,6 +428,7 @@ export function TemplatesClient({
                       type="button"
                       onClick={() => startEdit(template)}
                       disabled={isFormOpen}
+                      aria-label={`Edit "${template.title}"`}
                       className="text-sm text-muted-foreground hover:text-foreground min-h-11 px-2 disabled:opacity-40"
                     >
                       Edit
@@ -436,7 +437,8 @@ export function TemplatesClient({
                       type="button"
                       onClick={() => setConfirmDeleteId(template.id)}
                       disabled={isFormOpen || isConfirmingDelete}
-                      className="text-sm text-danger hover:text-red-700 min-h-11 px-2 disabled:opacity-40"
+                      aria-label={`Delete "${template.title}"`}
+                      className="text-sm text-danger hover:text-danger min-h-11 px-2 disabled:opacity-40"
                     >
                       Delete
                     </button>
@@ -444,7 +446,7 @@ export function TemplatesClient({
                 </div>
 
                 {template.description && (
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-2">
+                  <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
                     {template.description}
                   </p>
                 )}
@@ -454,6 +456,7 @@ export function TemplatesClient({
                   <div
                     role="alertdialog"
                     aria-labelledby={`delete-tpl-${template.id}`}
+                    aria-describedby={`delete-tpl-desc-${template.id}`}
                     className="mt-3 bg-danger-subtle border border-danger-border rounded-xl p-3 flex flex-col gap-2"
                   >
                     <p
@@ -462,7 +465,7 @@ export function TemplatesClient({
                     >
                       Delete &quot;{template.title}&quot;?
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p id={`delete-tpl-desc-${template.id}`} className="text-xs text-muted-foreground">
                       This cannot be undone.
                     </p>
                     {error && (

@@ -54,13 +54,13 @@ export function HomeworkItemEditor({
     <div className="flex flex-col gap-3 border border-border-subtle rounded-xl p-4">
       {/* Item header */}
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-700">Item {index + 1}</p>
+        <p className="text-sm font-medium text-label">Item {index + 1}</p>
         {itemsCount > 1 && (
           <button
             type="button"
             onClick={onRemove}
             aria-label={`Remove homework item ${index + 1}`}
-            className="text-danger text-sm hover:text-red-700 min-h-11 min-w-11 flex items-center justify-center"
+            className="text-danger text-sm hover:text-danger min-h-11 min-w-11 flex items-center justify-center"
           >
             Remove
           </button>
@@ -71,7 +71,7 @@ export function HomeworkItemEditor({
       <div className="flex flex-col gap-1">
         <label
           htmlFor={`title-${index}`}
-          className="text-sm font-medium text-gray-700"
+          className="text-sm font-medium text-label"
         >
           Title{" "}
           <span className="text-danger" aria-hidden="true">
@@ -161,7 +161,7 @@ export function HomeworkItemEditor({
       <div className="flex flex-col gap-1">
         <label
           htmlFor={`link-${index}`}
-          className="text-sm font-medium text-gray-700"
+          className="text-sm font-medium text-label"
         >
           Resource link{" "}
           <span className="text-hint font-normal">(optional)</span>
@@ -184,7 +184,7 @@ export function HomeworkItemEditor({
       <div className="flex flex-col gap-1">
         <label
           htmlFor={`dog_note-${index}`}
-          className="text-sm font-medium text-gray-700"
+          className="text-sm font-medium text-label"
         >
           Note for {dogName ?? "this dog"}{" "}
           <span className="text-hint font-normal">(optional)</span>

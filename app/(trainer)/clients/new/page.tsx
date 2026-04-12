@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -15,6 +15,7 @@ export default function NewClientPage() {
   const [error, setError] = useState("");
   const router = useRouter();
   const supabase = createClient();
+  const photoInputRef = useRef<HTMLInputElement>(null);
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -109,15 +110,23 @@ export default function NewClientPage() {
                 <span className="text-4xl">🐾</span>
               )}
             </div>
-            <label className="cursor-pointer text-sm text-primary font-medium">
+            <button
+              type="button"
+              onClick={() => photoInputRef.current?.click()}
+              className="text-sm text-primary font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+            >
               Upload dog photo
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handlePhotoChange}
-                className="hidden"
-              />
-            </label>
+            </button>
+            {/* Input hidden from AT — the button above is the accessible control */}
+            <input
+              ref={photoInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handlePhotoChange}
+              tabIndex={-1}
+              aria-hidden="true"
+              className="sr-only"
+            />
           </div>
 
           {/* Dog Name */}
@@ -131,6 +140,7 @@ export default function NewClientPage() {
               value={dogName}
               onChange={(e) => setDogName(e.target.value)}
               required
+              aria-required="true"
               placeholder="Buddy"
               className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
@@ -150,6 +160,7 @@ export default function NewClientPage() {
               value={ownerName}
               onChange={(e) => setOwnerName(e.target.value)}
               required
+              aria-required="true"
               placeholder="Jane Smith"
               className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />

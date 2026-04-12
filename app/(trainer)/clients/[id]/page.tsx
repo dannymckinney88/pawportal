@@ -10,6 +10,7 @@ import { SessionProgressMeta } from "./components/SessionProgressMeta";
 import { SessionStatusBadge } from "./components/SessionStatusBadge";
 import { UpdateDogImage } from "./components/UpdateDogImage";
 import { ArchiveClientButton } from "./components/ArchiveClientButton";
+import { PageHeading } from "@/app/(trainer)/components/PageHeading";
 import type { ClientSessionRow } from "./types";
 
 export default async function ClientPage({
@@ -91,9 +92,9 @@ export default async function ClientPage({
           </div>
 
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <PageHeading className="text-2xl font-bold text-foreground">
               {client.dog_name}
-            </h1>
+            </PageHeading>
 
             <p className="mt-0.5 text-sm text-muted-foreground">
               {client.owner_name}

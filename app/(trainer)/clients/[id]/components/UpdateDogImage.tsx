@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -8,6 +8,7 @@ export function UpdateDogImage({ clientId }: { clientId: string }) {
   const supabase = createClient();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -46,16 +47,25 @@ export function UpdateDogImage({ clientId }: { clientId: string }) {
   };
 
   return (
-    <label className="cursor-pointer text-center">
-      <span className="text-xs text-primary hover:underline">
+    <>
+      <button
+        type="button"
+        onClick={() => inputRef.current?.click()}
+        disabled={loading}
+        className="text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded disabled:opacity-50"
+      >
         {loading ? "Uploading..." : "Update photo"}
-      </span>
+      </button>
+      {/* Input is hidden from AT — the button above is the accessible control */}
       <input
+        ref={inputRef}
         type="file"
         accept="image/*"
         onChange={handleUpload}
-        className="hidden"
+        tabIndex={-1}
+        aria-hidden="true"
+        className="sr-only"
       />
-    </label>
+    </>
   );
 }
