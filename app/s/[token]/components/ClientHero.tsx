@@ -11,10 +11,10 @@ export function ClientHero({ dogName, dogPhotoUrl }: Props) {
       <div className="relative w-full aspect-4/3 rounded-2xl overflow-hidden">
         <Image
           src={dogPhotoUrl}
-          alt={dogName}
+          alt={`${dogName} photo`}
           fill
-          unoptimized
           priority
+          sizes="(max-width: 640px) 100vw, 680px"
           className="object-cover"
         />
         <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 to-transparent p-4">
