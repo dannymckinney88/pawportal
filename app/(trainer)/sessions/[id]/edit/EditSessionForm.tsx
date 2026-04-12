@@ -6,38 +6,10 @@ import { createClient } from "@/lib/supabase/client";
 import { ClientInfoBanner } from "../../components/ClientInfoBanner";
 import {
   HomeworkItemEditor,
+  emptyItem,
   type ItemEditorItem,
 } from "../../components/HomeworkItemEditor";
-
-type DBHomeworkItem = {
-  id: string;
-  title: string;
-  description: string | null;
-  link_url: string | null;
-  dog_note: string | null;
-  steps: string[] | null;
-};
-
-type Session = {
-  id: string;
-  summary: string;
-  session_number: number;
-  client_id: string;
-};
-
-type Dog = {
-  dog_name: string;
-  owner_name: string;
-};
-
-const emptyItem = (): ItemEditorItem => ({
-  title: "",
-  description: "",
-  link_url: "",
-  dog_note: "",
-
-  steps: [""],
-});
+import type { DBHomeworkItem, EditSession, EditSessionDog } from "./types";
 
 function dbRowToItem(row: DBHomeworkItem): ItemEditorItem {
   return {
@@ -56,8 +28,8 @@ export function EditSessionForm({
   dog,
   initialItems,
 }: {
-  session: Session;
-  dog: Dog;
+  session: EditSession;
+  dog: EditSessionDog;
   initialItems: DBHomeworkItem[];
 }) {
   const router = useRouter();

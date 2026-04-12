@@ -2,7 +2,7 @@ import Image from "next/image";
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/supabase/server";
-import { getSessionEngagementStatus } from "@/lib/sessions/getSessionEngagementStatus";
+import { enrichSessionsWithMeta } from "./utils";
 
 import { CopyLinkButton } from "./components/CopyLinkButton";
 import { SessionActions } from "./components/SessionActions";
@@ -10,7 +10,7 @@ import { SessionProgressMeta } from "./components/SessionProgressMeta";
 import { SessionStatusBadge } from "./components/SessionStatusBadge";
 import { UpdateDogImage } from "./components/UpdateDogImage";
 import { ArchiveClientButton } from "./components/ArchiveClientButton";
-import type { ClientSessionRow, ClientSessionWithMeta } from "./types";
+import type { ClientSessionRow } from "./types";
 
 export default async function ClientPage({
   params,
@@ -56,27 +56,9 @@ export default async function ClientPage({
     .eq("client_id", id)
     .order("created_at", { ascending: false });
 
-  const sessionsWithMeta: ClientSessionWithMeta[] =
-    (sessions as ClientSessionRow[] | null)?.map((session) => {
-      const homeworkItems = session.homework_items ?? [];
-      const homeworkTotal = homeworkItems.length;
-      const homeworkCompleted = homeworkItems.filter(
-        (item) => item.is_checked,
-      ).length;
-
-      const status = getSessionEngagementStatus({
-        firstViewedAt: session.first_viewed_at,
-        homeworkTotal,
-        homeworkCompleted,
-      });
-
-      return {
-        ...session,
-        homeworkTotal,
-        homeworkCompleted,
-        status,
-      };
-    }) ?? [];
+  const sessionsWithMeta = enrichSessionsWithMeta(
+    (sessions as ClientSessionRow[] | null) ?? [],
+  );
 
   return (
     <div className="min-h-screen bg-background">

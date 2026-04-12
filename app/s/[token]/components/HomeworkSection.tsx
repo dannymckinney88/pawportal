@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { HomeworkCard } from "./HomeworkCheckbox";
+import { HomeworkCard } from "./HomeworkCard";
 import { HomeworkProgressCard } from "./HomeworkProgressCard";
 
 type HomeworkItem = {

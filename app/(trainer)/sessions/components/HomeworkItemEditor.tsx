@@ -9,9 +9,16 @@ export type ItemEditorItem = {
   description: string;
   link_url: string;
   dog_note: string;
-
   steps: string[];
 };
+
+export const emptyItem = (): ItemEditorItem => ({
+  title: "",
+  description: "",
+  link_url: "",
+  dog_note: "",
+  steps: [""],
+});
 
 type Props = {
   item: ItemEditorItem;
