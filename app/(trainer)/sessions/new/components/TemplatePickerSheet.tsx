@@ -1,27 +1,15 @@
 "use client";
 
-type Template = {
-  id: string;
-  title: string;
-  description: string | null;
-  steps: string[] | null;
-  link_url: string | null;
-  dog_note: string | null;
-};
+import type { HomeworkTemplate } from "../types";
 
 type Props = {
   open: boolean;
   onClose: () => void;
-  templates: Template[];
-  onApply: (template: Template) => void;
+  templates: HomeworkTemplate[];
+  onApply: (template: HomeworkTemplate) => void;
 };
 
-export function TemplatePickerSheet({
-  open,
-  onClose,
-  templates,
-  onApply,
-}: Props) {
+export function TemplatePickerSheet({ open, onClose, templates, onApply }: Props) {
   return (
     <>
       {/* Backdrop */}
