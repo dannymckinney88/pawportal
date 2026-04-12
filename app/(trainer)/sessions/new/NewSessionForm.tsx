@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { ClientInfoBanner } from "../components/ClientInfoBanner";
@@ -26,6 +26,11 @@ export function NewSessionForm() {
 
   const [templates, setTemplates] = useState<HomeworkTemplate[]>([]);
   const [sheetOpen, setSheetOpen] = useState(false);
+
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
 
   // A blank item (no title, description, link, note, or steps) is a draft
   // placeholder — the submit handler filters these out. Only block save if an
@@ -214,7 +219,13 @@ export function NewSessionForm() {
           >
             ← Back
           </a>
-          <h1 className="text-xl font-bold text-foreground">New Session</h1>
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="text-xl font-bold text-foreground"
+          >
+            New Session
+          </h1>
         </div>
 
         {client && (

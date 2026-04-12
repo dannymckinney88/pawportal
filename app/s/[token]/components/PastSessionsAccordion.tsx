@@ -35,7 +35,7 @@ export function PastSessionsAccordion({
                 onClick={() => setOpenId(isOpen ? null : session.id)}
                 aria-expanded={isOpen}
                 aria-controls={`past-session-${session.id}`}
-                className="w-full flex items-center justify-between px-4 py-3 text-left min-h-11 hover:bg-background focus:outline-none focus-visible:bg-background"
+                className="w-full flex items-center justify-between px-4 py-3 text-left min-h-11 hover:bg-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:bg-background"
               >
                 <span className="text-sm font-semibold text-foreground">
                   {date}

@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { PageHeading } from "@/app/(trainer)/components/PageHeading";
 
 export const DashboardHeader = () => {
   return (
     <div className="mb-6 flex items-center justify-between border-b border-border pb-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">PawPortal</h1>
+        <PageHeading className="text-3xl font-bold text-foreground">PawPortal</PageHeading>
         <p className="mt-1 text-sm text-muted-foreground">Your clients</p>
       </div>
 

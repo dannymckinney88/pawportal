@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -17,6 +17,19 @@ export function SessionActions({
   const [confirming, setConfirming] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [error, setError] = useState("");
+
+  const deleteButtonRef = useRef<HTMLButtonElement>(null);
+  const confirmRef = useRef<HTMLDivElement>(null);
+
+  // Move focus into confirm dialog when it appears; restore to Delete button on cancel
+  useEffect(() => {
+    if (confirming) {
+      const firstBtn = confirmRef.current?.querySelector<HTMLElement>("button");
+      firstBtn?.focus();
+    } else {
+      deleteButtonRef.current?.focus();
+    }
+  }, [confirming]);
 
   const handleDelete = async () => {
     setDeleting(true);
@@ -41,8 +54,10 @@ export function SessionActions({
   if (confirming) {
     return (
       <div
+        ref={confirmRef}
         role="alertdialog"
         aria-labelledby={`delete-confirm-${sessionId}`}
+        aria-describedby={`delete-desc-${sessionId}`}
         className="mt-3 bg-danger-subtle border border-danger-border rounded-xl p-3 flex flex-col gap-2"
       >
         <p
@@ -51,7 +66,7 @@ export function SessionActions({
         >
           Delete Session {sessionNumber}?
         </p>
-        <p className="text-xs text-muted-foreground">
+        <p id={`delete-desc-${sessionId}`} className="text-xs text-muted-foreground">
           This cannot be undone. The client&apos;s recap link will stop working.
         </p>
         {error && (
@@ -85,12 +100,15 @@ export function SessionActions({
     <div className="mt-3 flex gap-2">
       <a
         href={`/sessions/${sessionId}/edit`}
+        aria-label={`Edit Session ${sessionNumber}`}
         className="flex-1 text-center bg-secondary text-secondary-foreground rounded-lg py-2 text-sm font-medium hover:bg-secondary-hover min-h-11 flex items-center justify-center"
       >
         Edit
       </a>
       <button
+        ref={deleteButtonRef}
         type="button"
+        aria-label={`Delete Session ${sessionNumber}`}
         onClick={() => setConfirming(true)}
         className="flex-1 text-center bg-card border border-danger-border text-danger rounded-lg py-2 text-sm font-medium hover:bg-danger-subtle min-h-11"
       >

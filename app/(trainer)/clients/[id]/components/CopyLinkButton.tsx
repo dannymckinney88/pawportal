@@ -22,22 +22,32 @@ export function CopyLinkButton({ sessionToken }: { sessionToken: string }) {
   };
 
   return (
-    <button
-      type="button"
-      onClick={handleCopy}
-      className={`text-sm font-medium px-3 py-1.5 rounded-lg border min-h-11 transition-colors ${
-        state === "copied"
-          ? "border-success-foreground/30 text-success-foreground bg-success"
+    <>
+      <button
+        type="button"
+        onClick={handleCopy}
+        className={`text-sm font-medium px-3 py-1.5 rounded-lg border min-h-11 transition-colors ${
+          state === "copied"
+            ? "border-success-foreground/30 text-success-foreground bg-success"
+            : state === "failed"
+              ? "border-danger-border text-danger"
+              : "border-border text-muted-foreground hover:bg-background"
+        }`}
+      >
+        {state === "copied"
+          ? "Copied! ✓"
           : state === "failed"
-            ? "border-danger-border text-danger"
-            : "border-border text-muted-foreground hover:bg-background"
-      }`}
-    >
-      {state === "copied"
-        ? "Copied! ✓"
-        : state === "failed"
-          ? "Failed"
-          : "Copy link"}
-    </button>
+            ? "Failed"
+            : "Copy link"}
+      </button>
+      {/* Polite live region announces copy result to screen readers */}
+      <span role="status" aria-live="polite" className="sr-only">
+        {state === "copied"
+          ? "Link copied to clipboard"
+          : state === "failed"
+            ? "Copy failed. Try again."
+            : ""}
+      </span>
+    </>
   );
 }

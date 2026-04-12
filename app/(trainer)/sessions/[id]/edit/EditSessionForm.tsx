@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { ClientInfoBanner } from "../../components/ClientInfoBanner";
@@ -34,6 +34,11 @@ export function EditSessionForm({
 }) {
   const router = useRouter();
   const supabase = createClient();
+
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    headingRef.current?.focus();
+  }, []);
 
   const [summary, setSummary] = useState(session.summary);
   const [items, setItems] = useState<ItemEditorItem[]>(
@@ -197,7 +202,11 @@ export function EditSessionForm({
           >
             ← Back
           </a>
-          <h1 className="text-xl font-bold text-foreground">
+          <h1
+            ref={headingRef}
+            tabIndex={-1}
+            className="text-xl font-bold text-foreground"
+          >
             Edit Session {session.session_number}
           </h1>
         </div>
@@ -282,6 +291,7 @@ export function EditSessionForm({
             <div
               role="alertdialog"
               aria-labelledby="confirm-save-heading"
+              aria-describedby="confirm-save-desc"
               className="bg-warning-subtle border border-warning-border rounded-2xl p-4 flex flex-col gap-3"
             >
               <div>
@@ -291,7 +301,7 @@ export function EditSessionForm({
                 >
                   Save changes to Session {session.session_number}?
                 </p>
-                <p className="text-xs text-muted-foreground mt-1">
+                <p id="confirm-save-desc" className="text-xs text-muted-foreground mt-1">
                   This will update the client&apos;s recap page immediately.
                 </p>
               </div>
