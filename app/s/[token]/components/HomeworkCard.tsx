@@ -122,6 +122,7 @@ export const HomeworkCard = ({
           target="_blank"
           rel="noopener noreferrer"
           className="mt-3 block text-sm font-medium text-primary hover:underline"
+          aria-label={`Watch video for ${title}`}
         >
           ▶ Watch video
         </a>
