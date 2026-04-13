@@ -49,9 +49,11 @@ export const HomeworkSection = ({ sessionToken, items }: HomeworkSectionProps) =
   };
 
   return (
-    <section aria-label="Homework" className="flex flex-col gap-4">
+    <section className="flex flex-col gap-4">
       <div>
-        <h2 className="text-foreground text-xl font-bold">Your Homework 📋</h2>
+        <h2 className="text-foreground text-xl font-bold">
+          Your Homework <span aria-hidden="true">📋</span>
+        </h2>
         <p className="text-muted-foreground mt-1 text-sm">Practice these before your next lesson</p>
       </div>
 

@@ -91,25 +91,48 @@ export const HomeworkCard = ({
         <p className="text-text mb-3 text-sm leading-relaxed">{description}</p>
       )}
 
-      {hasSteps && (
-        <div className={description?.trim() ? "mt-3" : ""}>
-          <p className="text-hint mb-2 text-xs font-medium tracking-wide uppercase">Steps</p>
+      {hasSteps &&
+        (checked ? (
+          // Completed: steps collapsed to reduce page noise
+          <details className={description?.trim() ? "mt-3" : ""}>
+            <summary className="text-hint cursor-pointer text-xs font-medium tracking-wide uppercase select-none">
+              Steps ({filteredSteps.length})
+            </summary>
 
-          <ol>
-            {filteredSteps.map((step, index) => (
-              <li
-                key={index}
-                className="border-border-subtle flex items-start gap-3 border-b py-2 last:border-0"
-              >
-                <span className="bg-primary-subtle text-primary-subtle-foreground mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold">
-                  {index + 1}
-                </span>
-                <span className="text-label text-sm">{step}</span>
-              </li>
-            ))}
-          </ol>
-        </div>
-      )}
+            <ol className="mt-2">
+              {filteredSteps.map((step, index) => (
+                <li
+                  key={index}
+                  className="border-border-subtle flex items-start gap-3 border-b py-2 last:border-0"
+                >
+                  <span className="bg-primary-subtle text-primary-subtle-foreground mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+                    {index + 1}
+                  </span>
+                  <span className="text-label text-sm">{step}</span>
+                </li>
+              ))}
+            </ol>
+          </details>
+        ) : (
+          // Incomplete: steps always visible — these are the active instructions
+          <div className={description?.trim() ? "mt-3" : ""}>
+            <p className="text-hint mb-2 text-xs font-medium tracking-wide uppercase">Steps</p>
+
+            <ol>
+              {filteredSteps.map((step, index) => (
+                <li
+                  key={index}
+                  className="border-border-subtle flex items-start gap-3 border-b py-2 last:border-0"
+                >
+                  <span className="bg-primary-subtle text-primary-subtle-foreground mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+                    {index + 1}
+                  </span>
+                  <span className="text-label text-sm">{step}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))}
 
       {link_url && (
         <a
@@ -119,7 +142,7 @@ export const HomeworkCard = ({
           className="text-primary mt-3 block text-sm font-medium hover:underline"
           aria-label={`Watch video for ${title}`}
         >
-          ▶ Watch video
+          <span aria-hidden="true">▶</span> Watch video
         </a>
       )}
 

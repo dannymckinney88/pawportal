@@ -91,7 +91,7 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
   const hiddenCount = messages.length - PREVIEW_COUNT;
 
   return (
-    <section aria-labelledby={headingId}>
+    <div>
       {isTrainer ? (
         <p
           id={headingId}
@@ -116,57 +116,92 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
         }`}
       >
         {/* Message list */}
-        <div
-          ref={listRef}
-          id={listId}
-          role="log"
-          aria-label="Message thread"
-          aria-live="polite"
-          aria-relevant="additions"
-          tabIndex={0}
-          className={`focus-visible:ring-primary/20 overflow-y-auto px-4 pt-3 pb-2 focus-visible:ring-2 focus-visible:outline-none ${isTrainer ? "max-h-72" : "min-h-36 max-h-80 sm:max-h-96"}`}
-        >
-          {loading ? (
-            <p className="text-muted-foreground py-4 text-center text-sm">Loading…</p>
-          ) : messages.length === 0 ? (
-            <p
-              className={`text-muted-foreground text-center text-sm ${isTrainer ? "py-4" : "py-6"}`}
-            >
-              {isTrainer
-                ? "No messages from this client yet."
-                : "No messages yet — ask a question below."}
+        {loading ? (
+          <div
+            className={`px-4 pt-3 pb-2 ${isTrainer ? "max-h-72" : "min-h-36 max-h-80 sm:max-h-96"}`}
+          >
+            <p className="text-muted-foreground py-4 text-center text-sm" aria-hidden="true">
+              Loading…
             </p>
-          ) : (
-            <div className="flex flex-col pb-1">
-              {isTrainer && hasOverflow && (
-                <button
-                  type="button"
-                  onClick={() => setExpanded((v) => !v)}
-                  aria-expanded={expanded}
-                  aria-controls={listId}
-                  className="text-muted-foreground hover:text-foreground focus-visible:ring-primary/20 mb-1 w-full rounded py-1 text-xs font-medium transition hover:underline focus-visible:ring-2 focus-visible:outline-none"
-                >
-                  {expanded
-                    ? "Show fewer messages"
-                    : `↑ ${hiddenCount} earlier message${hiddenCount !== 1 ? "s" : ""}`}
-                </button>
-              )}
+          </div>
+        ) : !isTrainer && messages.length > 0 ? (
+          // Client view with messages: disclose history on demand so the composer
+          // is immediately reachable and the full thread isn't read on landing.
+          <details className="border-border border-b">
+            <summary className="text-muted-foreground hover:text-foreground focus-visible:ring-primary/20 flex cursor-pointer select-none items-center justify-between px-4 py-3 text-sm font-medium transition focus-visible:ring-2 focus-visible:outline-none">
+              <span>Conversation</span>
+              <span className="text-hint text-xs">
+                {messages.length} message{messages.length !== 1 ? "s" : ""}
+              </span>
+            </summary>
 
-              {visibleMessages.map((msg, i) => (
-                <SessionMessageBubble
-                  key={msg.id}
-                  message={msg}
-                  isTrainer={isTrainer}
-                  prevSenderType={i > 0 ? visibleMessages[i - 1].sender_type : undefined}
-                />
-              ))}
+            <div
+              ref={listRef}
+              id={listId}
+              className="max-h-80 overflow-y-auto px-4 pt-1 pb-3 sm:max-h-96"
+            >
+              <div className="flex flex-col">
+                {messages.map((msg, i) => (
+                  <SessionMessageBubble
+                    key={msg.id}
+                    message={msg}
+                    isTrainer={false}
+                    prevSenderType={i > 0 ? messages[i - 1].sender_type : undefined}
+                  />
+                ))}
+              </div>
             </div>
-          )}
-        </div>
+          </details>
+        ) : (
+          // Trainer view (unchanged) + client empty state
+          <div
+            ref={listRef}
+            id={listId}
+            className={`overflow-y-auto px-4 pt-3 pb-2 ${isTrainer ? "max-h-72" : "min-h-36 max-h-80 sm:max-h-96"}`}
+          >
+            {messages.length === 0 ? (
+              <p
+                className={`text-muted-foreground text-center text-sm ${isTrainer ? "py-4" : "py-6"}`}
+              >
+                {isTrainer
+                  ? "No messages from this client yet."
+                  : "No messages yet — ask a question below."}
+              </p>
+            ) : (
+              <div className="flex flex-col pb-1">
+                {isTrainer && hasOverflow && (
+                  <button
+                    type="button"
+                    onClick={() => setExpanded((v) => !v)}
+                    aria-expanded={expanded}
+                    aria-controls={listId}
+                    className="text-muted-foreground hover:text-foreground focus-visible:ring-primary/20 mb-1 w-full rounded py-1 text-xs font-medium transition hover:underline focus-visible:ring-2 focus-visible:outline-none"
+                  >
+                    {expanded ? (
+                      "Show fewer messages"
+                    ) : (
+                      <>
+                        <span aria-hidden="true">↑ </span>
+                        {hiddenCount} earlier message{hiddenCount !== 1 ? "s" : ""}
+                      </>
+                    )}
+                  </button>
+                )}
 
-        <div className="border-border border-t" aria-hidden="true" />
+                {visibleMessages.map((msg, i) => (
+                  <SessionMessageBubble
+                    key={msg.id}
+                    message={msg}
+                    isTrainer={isTrainer}
+                    prevSenderType={i > 0 ? visibleMessages[i - 1].sender_type : undefined}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
 
-        <div className="p-3">
+        <div className="border-border border-t p-3">
           <SessionMessageComposer
             onSend={handleSend}
             senderLabel={senderLabel}
@@ -174,6 +209,6 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
           />
         </div>
       </div>
-    </section>
+    </div>
   );
 }

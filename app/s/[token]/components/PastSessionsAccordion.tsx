@@ -14,7 +14,7 @@ export function PastSessionsAccordion({ sessions }: { sessions: PastSessionRow[]
   const [openId, setOpenId] = useState<string | null>(null);
 
   return (
-    <section aria-label="Past sessions">
+    <section>
       <h2 className="text-foreground mb-3 text-xl font-bold">Past Sessions</h2>
       <div className="bg-card divide-border-subtle divide-y overflow-hidden rounded-2xl shadow-sm">
         {sessions.map((session) => {

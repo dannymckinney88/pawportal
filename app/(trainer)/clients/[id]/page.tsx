@@ -10,7 +10,8 @@ import { SessionProgressMeta } from "./components/SessionProgressMeta";
 import { SessionStatusBadge } from "./components/SessionStatusBadge";
 import { UpdateDogImage } from "./components/UpdateDogImage";
 import { ArchiveClientButton } from "./components/ArchiveClientButton";
-import { PageHeading } from "@/app/(trainer)/components/PageHeading";
+import { ClientPageHeading } from "./components/ClientPageHeading";
+import { ClientDetailBackLink } from "./components/ClientDetailBackLink";
 import { SessionMessageThread } from "@/app/components/session-messages/SessionMessageThread";
 import type { ClientSessionRow } from "./types";
 
@@ -55,12 +56,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
   return (
     <div className="bg-background min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-8">
-        <a
-          href="/dashboard"
-          className="text-hint hover:text-muted-foreground inline-block py-1 text-sm"
-        >
-          ← Back
-        </a>
+        <ClientDetailBackLink />
 
         <div className="bg-card mt-4 flex items-center gap-5 rounded-2xl p-6 shadow-sm">
           <div className="flex shrink-0 flex-col items-center gap-3">
@@ -83,9 +79,9 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
           </div>
 
           <div>
-            <PageHeading className="text-foreground text-2xl font-bold">
+            <ClientPageHeading className="text-foreground text-2xl font-bold">
               {client.dog_name}
-            </PageHeading>
+            </ClientPageHeading>
 
             <p className="text-muted-foreground mt-0.5 text-sm">{client.owner_name}</p>
 
@@ -98,9 +94,10 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
 
           <a
             href={`/sessions/new?clientId=${client.id}`}
-            className="bg-primary text-primary-foreground hover:bg-primary-hover flex min-h-11 items-center rounded-lg px-4 py-2 text-sm font-medium"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover flex min-h-11 items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium"
           >
-            + New Session
+            <span aria-hidden="true">+</span>
+            <span>New Session</span>
           </a>
         </div>
 
@@ -144,7 +141,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
                     rel="noreferrer"
                     className="text-primary/80 hover:text-primary text-sm hover:underline"
                   >
-                    View client page →
+                    View client page <span aria-hidden="true"> →</span>
                   </a>
 
                   <CopyLinkButton sessionToken={session.token} />
