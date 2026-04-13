@@ -6,9 +6,9 @@ import { SessionSummaryCard } from "./components/SessionSummaryCard";
 import { ReviewCard } from "./components/ReviewCard";
 import { TrainerSocialLinks } from "./components/TrainerSocialLinks";
 import { SessionViewTracker } from "./components/SessionViewTracker";
-import { FocusPageHeading } from "./components/FocusPageHeading";
 import { HomeworkSection } from "./components/HomeworkSection";
 import { SessionMessageThread } from "@/app/components/session-messages/SessionMessageThread";
+import { LandingFocus } from "@/app/components/LandingFocus";
 import type { Dog, Trainer, HomeworkItemRow, PastSessionRow, SessionRow } from "./types";
 
 export default async function Page({ params }: { params: Promise<{ token: string }> }) {
@@ -75,8 +75,8 @@ export default async function Page({ params }: { params: Promise<{ token: string
   return (
     <div className="bg-background min-h-screen">
       <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 pt-4 pb-20 sm:pt-8 sm:pb-12">
+        <LandingFocus defaultTargetId="page-heading" />
         <SessionViewTracker token={token} />
-        <FocusPageHeading />
 
         <ClientHero dogName={dog.dog_name} dogPhotoUrl={dog.dog_photo_url} />
 

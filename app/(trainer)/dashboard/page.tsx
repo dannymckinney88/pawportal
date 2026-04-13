@@ -7,7 +7,7 @@ import { buildClientsWithEngagement } from "./utils";
 import { ClientSection } from "./components/ClientSection";
 import { DashboardHeader } from "./components/DashboardHeader";
 import { EmptyClientsState } from "./components/EmptyClientsState";
-import { DashboardFocusRestorer } from "./components/DashboardFocusRestorer";
+import { LandingFocus } from "@/app/components/LandingFocus";
 
 /**
  * Dashboard page
@@ -70,7 +70,7 @@ export default async function DashboardPage() {
 
   return (
     <div className="bg-background min-h-screen">
-      <DashboardFocusRestorer />
+      <LandingFocus />
       <div className="mx-auto max-w-4xl px-4 py-8">
         <DashboardHeader />
 

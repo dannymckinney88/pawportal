@@ -12,6 +12,8 @@ import { UpdateDogImage } from "./components/UpdateDogImage";
 import { ArchiveClientButton } from "./components/ArchiveClientButton";
 import { ClientPageHeading } from "./components/ClientPageHeading";
 import { ClientDetailBackLink } from "./components/ClientDetailBackLink";
+import { NewSessionLink } from "./components/NewSessionLink";
+import { LandingFocus } from "@/app/components/LandingFocus";
 import { SessionMessageThread } from "@/app/components/session-messages/SessionMessageThread";
 import type { ClientSessionRow } from "./types";
 
@@ -56,7 +58,8 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
   return (
     <div className="bg-background min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-8">
-        <ClientDetailBackLink />
+        <LandingFocus />
+        <ClientDetailBackLink clientId={id} />
 
         <div className="bg-card mt-4 flex items-center gap-5 rounded-2xl p-6 shadow-sm">
           <div className="flex shrink-0 flex-col items-center gap-3">
@@ -79,7 +82,11 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
           </div>
 
           <div>
-            <ClientPageHeading className="text-foreground text-2xl font-bold">
+            <ClientPageHeading
+              id="client-heading"
+              tabIndex={-1}
+              className="text-foreground text-2xl font-bold focus:outline-none"
+            >
               {client.dog_name}
             </ClientPageHeading>
 
@@ -92,13 +99,13 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
         <div className="border-border mt-8 flex items-center justify-between border-b pb-3">
           <h2 className="text-foreground text-lg font-semibold">Sessions</h2>
 
-          <a
-            href={`/sessions/new?clientId=${client.id}`}
+          <NewSessionLink
+            clientId={client.id}
             className="bg-primary text-primary-foreground hover:bg-primary-hover flex min-h-11 items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium"
           >
             <span aria-hidden="true">+</span>
             <span>New Session</span>
-          </a>
+          </NewSessionLink>
         </div>
 
         <div className="mt-4 flex flex-col gap-4">
@@ -168,12 +175,12 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
             <div className="bg-card rounded-2xl px-8 py-14 text-center shadow-sm">
               <p className="text-muted-foreground mb-4 text-sm">No sessions yet</p>
 
-              <a
-                href={`/sessions/new?clientId=${client.id}`}
+              <NewSessionLink
+                clientId={client.id}
                 className="bg-primary text-primary-foreground hover:bg-primary-hover inline-flex min-h-11 items-center rounded-lg px-6 py-2 text-sm font-medium"
               >
                 Create first session
-              </a>
+              </NewSessionLink>
             </div>
           )}
         </div>

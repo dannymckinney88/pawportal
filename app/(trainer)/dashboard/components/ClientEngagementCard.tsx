@@ -5,6 +5,7 @@ import {
   getSessionEngagementStatus,
   getSessionEngagementLabel,
 } from "@/lib/sessions/getSessionEngagementStatus";
+import { setFocusIntent } from "@/lib/focus-intent";
 
 type ClientEngagementCardProps = {
   clientId: string;
@@ -44,12 +45,12 @@ export const ClientEngagementCard = ({
     <a
       id={`client-card-${clientId}`}
       href={`/clients/${clientId}`}
-      onClick={() => {
-        try {
-          sessionStorage.setItem("lastOpenedClientId", clientId);
-        } catch {
-          // sessionStorage unavailable — focus restoration simply won't happen
-        }
+      onClick={(e) => {
+        setFocusIntent(
+          e.currentTarget.matches(":focus-visible")
+            ? { targetId: "client-heading", visible: true }
+            : { targetId: "main-content", visible: false }
+        );
       }}
       className="bg-card focus-visible:ring-primary flex gap-4 rounded-2xl p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
     >

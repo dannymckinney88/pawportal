@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -12,6 +12,8 @@ import {
   type ItemEditorItem,
 } from "../components/HomeworkItemEditor";
 import { TemplatePickerSheet } from "./components/TemplatePickerSheet";
+import { LandingFocus } from "@/app/components/LandingFocus";
+import { setFocusIntent } from "@/lib/focus-intent";
 import type { NewSessionClient, HomeworkTemplate } from "./types";
 
 export function NewSessionForm() {
@@ -28,11 +30,6 @@ export function NewSessionForm() {
 
   const [templates, setTemplates] = useState<HomeworkTemplate[]>([]);
   const [sheetOpen, setSheetOpen] = useState(false);
-
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  useEffect(() => {
-    headingRef.current?.focus();
-  }, []);
 
   // A blank item (no title, description, link, note, or steps) is a draft
   // placeholder — the submit handler filters these out. Only block save if an
@@ -193,6 +190,7 @@ export function NewSessionForm() {
       }
     }
 
+    setFocusIntent({ targetId: "client-heading", visible: true });
     router.push(`/clients/${clientId}`);
   };
 
@@ -212,11 +210,19 @@ export function NewSessionForm() {
           <Link
             href={`/clients/${clientId}`}
             className="text-hint hover:text-muted-foreground text-sm"
+            onClick={(e) => {
+              setFocusIntent(
+                e.currentTarget.matches(":focus-visible")
+                  ? { targetId: "client-heading", visible: true }
+                  : { targetId: "main-content", visible: false }
+              );
+            }}
           >
             <span aria-hidden="true">← </span>
             Back
           </Link>
-          <h1 ref={headingRef} tabIndex={-1} className="text-foreground text-xl font-bold">
+          <LandingFocus />
+          <h1 id="new-session-heading" tabIndex={-1} className="text-foreground text-xl font-bold focus:outline-none">
             New Session
           </h1>
         </div>
