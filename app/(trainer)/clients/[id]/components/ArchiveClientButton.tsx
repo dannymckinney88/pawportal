@@ -48,7 +48,7 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
         ref={triggerRef}
         type="button"
         onClick={() => setConfirming(true)}
-        className="text-danger text-sm hover:underline"
+        className="text-danger cursor-pointer text-sm hover:underline"
       >
         Archive client
       </button>

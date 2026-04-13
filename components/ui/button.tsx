@@ -1,6 +1,6 @@
 import { forwardRef, ButtonHTMLAttributes } from "react";
 
-type Variant = "primary" | "secondary" | "cta" | "danger";
+type Variant = "primary" | "secondary" | "cta" | "danger" | "danger-outline";
 
 const variants: Record<Variant, string> = {
   primary:
@@ -9,6 +9,8 @@ const variants: Record<Variant, string> = {
     "bg-card border border-border text-secondary-foreground hover:bg-background focus-visible:ring-primary/20",
   cta: "bg-cta text-cta-foreground hover:bg-cta-hover hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 focus-visible:ring-cta/20 disabled:hover:translate-y-0 disabled:hover:shadow-none",
   danger: "bg-danger text-danger-foreground hover:bg-danger-hover focus-visible:ring-danger/20",
+  "danger-outline":
+    "border border-danger text-danger bg-transparent hover:bg-danger hover:text-danger-foreground focus-visible:ring-danger/20",
 };
 
 const base =

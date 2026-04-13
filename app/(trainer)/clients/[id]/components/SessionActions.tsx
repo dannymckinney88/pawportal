@@ -119,15 +119,16 @@ export function SessionActions({
         Edit
       </Link>
 
-      <button
+      <Button
         ref={deleteButtonRef}
         type="button"
+        variant="danger-outline"
         aria-label={`Delete Session ${sessionNumber}`}
         onClick={() => setConfirming(true)}
-        className="bg-card border-danger-border text-danger hover:bg-danger-subtle focus-visible:ring-danger/20 min-h-11 flex-1 rounded-lg border py-2 text-center text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
+        className="flex-1"
       >
         Delete
-      </button>
+      </Button>
     </div>
   );
 }

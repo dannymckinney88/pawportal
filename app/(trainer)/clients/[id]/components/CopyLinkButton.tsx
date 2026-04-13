@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
 
 export function CopyLinkButton({ sessionToken }: { sessionToken: string }) {
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
@@ -23,19 +24,20 @@ export function CopyLinkButton({ sessionToken }: { sessionToken: string }) {
 
   return (
     <>
-      <button
+      <Button
         type="button"
+        variant="secondary"
         onClick={handleCopy}
-        className={`min-h-11 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
+        className={
           state === "copied"
-            ? "border-success-foreground/30 text-success-foreground bg-success"
+            ? "border-success-foreground/30 bg-success text-success-foreground hover:bg-success"
             : state === "failed"
-              ? "border-danger-border text-danger"
-              : "border-border text-muted-foreground hover:bg-background"
-        }`}
+              ? "border-danger-border text-danger hover:bg-background"
+              : ""
+        }
       >
         {state === "copied" ? "Copied! ✓" : state === "failed" ? "Failed" : "Copy link"}
-      </button>
+      </Button>
       {/* Polite live region announces copy result to screen readers */}
       <span role="status" aria-live="polite" className="sr-only">
         {state === "copied"

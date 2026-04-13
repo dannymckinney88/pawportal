@@ -4,6 +4,7 @@
 // fields simultaneously (new flow).
 
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export type ItemEditorItem = {
   id?: string;
@@ -55,14 +56,15 @@ export function HomeworkItemEditor({
       <div className="flex items-center justify-between">
         <p className="text-label text-sm font-medium">Item {index + 1}</p>
         {itemsCount > 1 && (
-          <button
+          <Button
             type="button"
+            variant="danger"
             onClick={onRemove}
             aria-label={`Remove homework item ${index + 1}`}
-            className="text-danger hover:text-danger flex min-h-11 min-w-11 items-center justify-center text-sm"
+            className="px-3"
           >
             Remove
-          </button>
+          </Button>
         )}
       </div>
 
@@ -128,26 +130,28 @@ export function HomeworkItemEditor({
             />
 
             {item.steps.length > 1 && (
-              <button
+              <Button
                 type="button"
+                variant="danger-outline"
                 onClick={() => onRemoveStep(stepIndex)}
                 aria-label={`Remove step ${stepIndex + 1} from item ${index + 1}`}
-                className="text-danger hover:text-danger flex min-h-11 min-w-11 shrink-0 items-center justify-center"
+                className="min-w-11 shrink-0 px-0"
               >
                 ✕
-              </button>
+              </Button>
             )}
           </div>
         ))}
 
-        <button
+        <Button
           type="button"
+          variant="secondary"
           onClick={onAddStep}
-          className="border-border text-muted-foreground hover:bg-background min-h-11 w-full rounded-lg border border-dashed py-2 text-sm"
+          className="w-full border-dashed"
         >
           <span aria-hidden="true">+ </span>
           Add step
-        </button>
+        </Button>
       </div>
 
       {/* Resource link */}
