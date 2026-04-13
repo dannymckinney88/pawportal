@@ -11,6 +11,7 @@ import { SessionStatusBadge } from "./components/SessionStatusBadge";
 import { UpdateDogImage } from "./components/UpdateDogImage";
 import { ArchiveClientButton } from "./components/ArchiveClientButton";
 import { PageHeading } from "@/app/(trainer)/components/PageHeading";
+import { SessionMessageThread } from "@/app/components/session-messages/SessionMessageThread";
 import type { ClientSessionRow } from "./types";
 
 export default async function ClientPage({
@@ -176,6 +177,14 @@ export default async function ClientPage({
                     sessionId={session.id}
                     sessionNumber={session.session_number}
                     clientId={id}
+                  />
+                </div>
+
+                <div className="border-t border-border pt-4">
+                  <SessionMessageThread
+                    sessionId={session.id}
+                    sessionToken={session.token}
+                    senderType="trainer"
                   />
                 </div>
               </div>
