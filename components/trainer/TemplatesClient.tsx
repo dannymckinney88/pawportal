@@ -186,7 +186,13 @@ export function TemplatesClient({
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-foreground text-2xl font-bold">Templates</h1>
+          <h1
+            className="text-foreground text-2xl font-bold focus:outline-none"
+            id="session-template-heading"
+            tabIndex={-1}
+          >
+            Templates
+          </h1>
           <p className="text-muted-foreground text-sm">Reusable homework items</p>
         </div>
         {!isFormOpen && (
@@ -240,7 +246,7 @@ export function TemplatesClient({
               onChange={(e) => updateDraft("description", e.target.value)}
               rows={3}
               placeholder="General notes or context for this exercise..."
-              className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
+              className="border-border bg-muted text-foreground placeholder:text-hint hover:border-primary/50 focus:border-primary focus:ring-primary/20 focus:bg-background w-full resize-none rounded-lg border px-4 py-3 text-sm transition outline-none focus:ring-2"
             />
           </div>
 

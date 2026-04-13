@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
@@ -11,6 +11,8 @@ import {
   emptyItem,
   type ItemEditorItem,
 } from "../../components/HomeworkItemEditor";
+import { LandingFocus } from "@/app/components/LandingFocus";
+import { setFocusIntent } from "@/lib/focus-intent";
 import type { DBHomeworkItem, EditSession, EditSessionDog } from "./types";
 
 function dbRowToItem(row: DBHomeworkItem): ItemEditorItem {
@@ -36,11 +38,6 @@ export function EditSessionForm({
 }) {
   const router = useRouter();
   const supabase = createClient();
-
-  const headingRef = useRef<HTMLHeadingElement>(null);
-  useEffect(() => {
-    headingRef.current?.focus();
-  }, []);
 
   const [summary, setSummary] = useState(session.summary);
   const [items, setItems] = useState<ItemEditorItem[]>(
@@ -178,6 +175,7 @@ export function EditSessionForm({
       }
     }
 
+    setFocusIntent({ targetId: "client-heading", visible: true });
     router.push(`/clients/${session.client_id}`);
     router.refresh();
   };
@@ -190,11 +188,19 @@ export function EditSessionForm({
           <Link
             href={`/clients/${session.client_id}`}
             className="text-hint hover:text-muted-foreground text-sm"
+            onClick={(e) => {
+              setFocusIntent(
+                e.currentTarget.matches(":focus-visible")
+                  ? { targetId: "client-heading", visible: true }
+                  : { targetId: "main-content", visible: false }
+              );
+            }}
           >
             <span aria-hidden="true">← </span>
             Back
           </Link>
-          <h1 ref={headingRef} tabIndex={-1} className="text-foreground text-xl font-bold">
+          <LandingFocus />
+          <h1 id="edit-session-heading" tabIndex={-1} className="text-foreground text-xl font-bold focus:outline-none">
             Edit Session {session.session_number}
           </h1>
         </div>

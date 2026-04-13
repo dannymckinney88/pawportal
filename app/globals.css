@@ -63,3 +63,14 @@
   --color-warning-border: var(--color-yellow-200);
   --color-warning-foreground: var(--color-yellow-800); /* ← added */
 }
+
+/*
+ * Landing-focus ring
+ * Applied by LandingFocus.tsx after keyboard-triggered navigations.
+ * Using :focus (not :focus-visible) because the attribute is set intentionally —
+ * it is always correct to show the ring when it is present.
+ */
+[data-landing-focus]:focus {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 4px;
+}

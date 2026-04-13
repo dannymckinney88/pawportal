@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { setFocusIntent } from "@/lib/focus-intent";
 
 export function NavLinks() {
   const pathname = usePathname();
@@ -20,6 +21,13 @@ export function NavLinks() {
         href="/templates"
         aria-current={pathname.startsWith("/templates") ? "page" : undefined}
         className="text-muted-foreground hover:text-foreground hover:bg-background rounded-lg px-3 py-2 text-sm font-medium"
+        onClick={(e) => {
+          setFocusIntent(
+            e.currentTarget.matches(":focus-visible")
+              ? { targetId: "session-template-heading", visible: true }
+              : { targetId: "main-content", visible: false }
+          );
+        }}
       >
         Templates
       </Link>

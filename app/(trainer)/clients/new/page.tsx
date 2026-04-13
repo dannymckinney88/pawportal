@@ -8,6 +8,8 @@ import Link from "next/link";
 import { PawPrint } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { LandingFocus } from "@/app/components/LandingFocus";
+import { setFocusIntent } from "@/lib/focus-intent";
 
 export default function NewClientPage() {
   const [ownerName, setOwnerName] = useState("");
@@ -76,6 +78,7 @@ export default function NewClientPage() {
       return;
     }
 
+    setFocusIntent({ targetId: "dashboard-heading", visible: true });
     router.push("/dashboard");
   };
 
@@ -83,15 +86,25 @@ export default function NewClientPage() {
     <div className="bg-background min-h-screen">
       <div className="mx-auto max-w-lg px-4 py-8">
         <div className="mb-6 flex items-center gap-3">
+          <LandingFocus />
           <Link
             href="/dashboard"
             className="text-hint hover:text-muted-foreground focus-visible:ring-primary/20 inline-flex items-center rounded-md text-sm transition focus-visible:ring-2 focus-visible:outline-none"
+            onClick={(e) => {
+              setFocusIntent(
+                e.currentTarget.matches(":focus-visible")
+                  ? { targetId: "dashboard-heading", visible: true }
+                  : { targetId: "main-content", visible: false }
+              );
+            }}
           >
             <span aria-hidden="true">← </span>
             Back
           </Link>
 
-          <h1 className="text-foreground text-xl font-bold">Add Client</h1>
+          <h1 id="new-client-heading" tabIndex={-1} className="text-foreground text-xl font-bold focus:outline-none">
+            Add Client
+          </h1>
         </div>
 
         <form

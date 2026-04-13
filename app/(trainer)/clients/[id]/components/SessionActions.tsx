@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
+import { setFocusIntent } from "@/lib/focus-intent";
 
 export function SessionActions({
   sessionId,
@@ -22,24 +23,14 @@ export function SessionActions({
 
   const deleteButtonRef = useRef<HTMLButtonElement>(null);
   const confirmRef = useRef<HTMLDivElement>(null);
-  const hasMounted = useRef(false);
 
-  /**
-   * Move focus into confirm dialog when it appears.
-   * Restore focus to Delete button only after the dialog closes,
-   * not on initial mount.
-   */
+  // Move focus into confirm dialog when it opens.
+  // Focus is restored to the Delete button explicitly in the Cancel handler,
+  // not in this effect, to avoid mount-time focus stealing.
   useEffect(() => {
-    if (!hasMounted.current) {
-      hasMounted.current = true;
-      return;
-    }
-
     if (confirming) {
       const firstBtn = confirmRef.current?.querySelector<HTMLElement>("button");
       firstBtn?.focus();
-    } else {
-      deleteButtonRef.current?.focus();
     }
   }, [confirming]);
 
@@ -97,7 +88,10 @@ export function SessionActions({
           <Button
             type="button"
             variant="secondary"
-            onClick={() => setConfirming(false)}
+            onClick={() => {
+              setConfirming(false);
+              deleteButtonRef.current?.focus();
+            }}
             disabled={deleting}
             className="flex-1"
           >
@@ -113,6 +107,13 @@ export function SessionActions({
       <Link
         href={`/sessions/${sessionId}/edit`}
         aria-label={`Edit Session ${sessionNumber}`}
+        onClick={(e) => {
+          setFocusIntent(
+            e.currentTarget.matches(":focus-visible")
+              ? { targetId: "edit-session-heading", visible: true }
+              : { targetId: "main-content", visible: false }
+          );
+        }}
         className="bg-secondary text-secondary-foreground hover:bg-secondary-hover focus-visible:ring-primary/20 flex min-h-11 flex-1 items-center justify-center rounded-lg py-2 text-center text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
       >
         Edit
