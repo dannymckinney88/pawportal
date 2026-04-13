@@ -35,7 +35,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="bg-background flex min-h-screen items-center justify-center">
+    <div className="bg-background flex min-h-dvh items-center justify-center px-4">
       <div className="bg-card w-full max-w-md rounded-2xl p-8 shadow-sm">
         <div className="mb-12 flex flex-col items-center gap-3">
           <PawPrint className="text-primary h-6 w-6" aria-hidden="true" />

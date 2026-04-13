@@ -14,9 +14,15 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
 
   const triggerRef = useRef<HTMLButtonElement>(null);
   const confirmRef = useRef<HTMLDivElement>(null);
+  const hasMounted = useRef(false);
 
-  // Move focus into the confirmation dialog when it appears; restore on cancel
+  // Move focus into the confirmation dialog when it appears; restore on cancel.
+  // Guard against initial mount so this never steals focus on page load.
   useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
     if (confirming) {
       const firstBtn = confirmRef.current?.querySelector<HTMLElement>("button");
       firstBtn?.focus();

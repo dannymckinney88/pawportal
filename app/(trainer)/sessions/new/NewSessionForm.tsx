@@ -213,7 +213,8 @@ export function NewSessionForm() {
             href={`/clients/${clientId}`}
             className="text-hint hover:text-muted-foreground text-sm"
           >
-            ← Back
+            <span aria-hidden="true">← </span>
+            Back
           </Link>
           <h1 ref={headingRef} tabIndex={-1} className="text-foreground text-xl font-bold">
             New Session
@@ -249,7 +250,7 @@ export function NewSessionForm() {
                 aria-required="true"
                 aria-describedby="summary-hint"
                 placeholder="We worked on loose-leash walking and sit-stay. Buddy did great with focus exercises..."
-                className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
+                className="border-border bg-muted text-foreground placeholder:text-hint hover:border-primary/50 focus:border-primary focus:ring-primary/20 focus:bg-background w-full resize-none rounded-lg border px-4 py-3 text-sm transition outline-none focus:ring-2"
               />
               <p id="summary-hint" className="text-hint text-xs">
                 Briefly describe what you worked on. This appears on the client&apos;s recap page.
@@ -290,7 +291,8 @@ export function NewSessionForm() {
               onClick={addItem}
               className="border-border text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:ring-primary/20 min-h-11 w-full rounded-xl border border-dashed py-2.5 text-sm transition focus-visible:ring-2 focus-visible:outline-none"
             >
-              + Add homework item
+              <span aria-hidden="true">+ </span>
+              Add homework item
             </button>
           </div>
 

@@ -87,7 +87,8 @@ export default function NewClientPage() {
             href="/dashboard"
             className="text-hint hover:text-muted-foreground focus-visible:ring-primary/20 inline-flex items-center rounded-md text-sm transition focus-visible:ring-2 focus-visible:outline-none"
           >
-            ← Back
+            <span aria-hidden="true">← </span>
+            Back
           </Link>
 
           <h1 className="text-foreground text-xl font-bold">Add Client</h1>
@@ -104,7 +105,7 @@ export default function NewClientPage() {
               className="focus-visible:ring-primary/20 flex cursor-pointer flex-col items-center gap-3 rounded-xl p-2 transition hover:scale-[1.02] hover:opacity-90 focus-visible:ring-2 focus-visible:outline-none"
               aria-label="Upload dog photo"
             >
-              <div className="bg-accent-subtle flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border">
+              <div className="bg-accent-subtle border-border flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border">
                 {preview ? (
                   <Image
                     src={preview}

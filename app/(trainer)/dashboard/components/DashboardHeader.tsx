@@ -5,7 +5,9 @@ export const DashboardHeader = () => {
   return (
     <div className="border-border mb-8 flex items-center justify-between border-b pb-6">
       <div>
-        <PageHeading className="text-foreground text-2xl font-bold">Clients</PageHeading>
+        <PageHeading className="text-foreground focus-visible:ring-primary text-2xl font-bold focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2">
+          Clients
+        </PageHeading>
         <p className="text-muted-foreground mt-1 text-sm">Manage your training clients</p>
       </div>
 

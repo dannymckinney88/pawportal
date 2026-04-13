@@ -22,9 +22,19 @@ export function SessionActions({
 
   const deleteButtonRef = useRef<HTMLButtonElement>(null);
   const confirmRef = useRef<HTMLDivElement>(null);
+  const hasMounted = useRef(false);
 
-  // Move focus into confirm dialog when it appears; restore to Delete button on cancel
+  /**
+   * Move focus into confirm dialog when it appears.
+   * Restore focus to Delete button only after the dialog closes,
+   * not on initial mount.
+   */
   useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
+
     if (confirming) {
       const firstBtn = confirmRef.current?.querySelector<HTMLElement>("button");
       firstBtn?.focus();
@@ -62,14 +72,17 @@ export function SessionActions({
         <p id={`delete-confirm-${sessionId}`} className="text-foreground text-sm font-semibold">
           Delete Session {sessionNumber}?
         </p>
+
         <p id={`delete-desc-${sessionId}`} className="text-muted-foreground text-xs">
           This cannot be undone. The client&apos;s recap link will stop working.
         </p>
+
         {error && (
           <p role="alert" className="text-danger text-xs">
             {error}
           </p>
         )}
+
         <div className="flex gap-2">
           <Button
             type="button"
@@ -80,6 +93,7 @@ export function SessionActions({
           >
             {deleting ? "Deleting..." : "Yes, delete"}
           </Button>
+
           <Button
             type="button"
             variant="secondary"
@@ -99,16 +113,17 @@ export function SessionActions({
       <Link
         href={`/sessions/${sessionId}/edit`}
         aria-label={`Edit Session ${sessionNumber}`}
-        className="bg-secondary text-secondary-foreground hover:bg-secondary-hover flex min-h-11 flex-1 items-center justify-center rounded-lg py-2 text-center text-sm font-medium"
+        className="bg-secondary text-secondary-foreground hover:bg-secondary-hover focus-visible:ring-primary/20 flex min-h-11 flex-1 items-center justify-center rounded-lg py-2 text-center text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
       >
         Edit
       </Link>
+
       <button
         ref={deleteButtonRef}
         type="button"
         aria-label={`Delete Session ${sessionNumber}`}
         onClick={() => setConfirming(true)}
-        className="bg-card border-danger-border text-danger hover:bg-danger-subtle min-h-11 flex-1 rounded-lg border py-2 text-center text-sm font-medium"
+        className="bg-card border-danger-border text-danger hover:bg-danger-subtle focus-visible:ring-danger/20 min-h-11 flex-1 rounded-lg border py-2 text-center text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
       >
         Delete
       </button>

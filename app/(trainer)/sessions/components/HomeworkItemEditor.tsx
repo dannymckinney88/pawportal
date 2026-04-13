@@ -99,7 +99,7 @@ export function HomeworkItemEditor({
           onChange={(e) => onUpdate("description", e.target.value)}
           rows={2}
           placeholder="General notes or context for this exercise..."
-          className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
+          className="border-border bg-muted text-foreground placeholder:text-hint hover:border-primary/50 focus:border-primary focus:ring-primary/20 focus:bg-background w-full resize-none rounded-lg border px-4 py-3 text-sm transition outline-none focus:ring-2"
         />
       </div>
 
@@ -145,7 +145,8 @@ export function HomeworkItemEditor({
           onClick={onAddStep}
           className="border-border text-muted-foreground hover:bg-background min-h-11 w-full rounded-lg border border-dashed py-2 text-sm"
         >
-          + Add step
+          <span aria-hidden="true">+ </span>
+          Add step
         </button>
       </div>
 

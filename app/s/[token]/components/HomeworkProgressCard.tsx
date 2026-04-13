@@ -17,8 +17,7 @@ export const HomeworkProgressCard = ({ completedCount, totalCount }: HomeworkPro
   const isComplete = totalCount > 0 && completedCount === totalCount;
 
   return (
-    <section
-      aria-label="Homework progress"
+    <div
       className={`rounded-2xl border p-4 shadow-sm ${
         isComplete ? "border-border bg-success" : "border-border bg-card"
       }`}
@@ -40,16 +39,6 @@ export const HomeworkProgressCard = ({ completedCount, totalCount }: HomeworkPro
           >
             {completedCount} of {totalCount} homework item
             {totalCount === 1 ? "" : "s"} completed
-          </p>
-
-          <p
-            className={`mt-1 text-sm ${
-              isComplete ? "text-success-foreground" : "text-muted-foreground"
-            }`}
-          >
-            {isComplete
-              ? "Nice work — you finished this session’s homework."
-              : "Keep going — finish these before your next lesson."}
           </p>
         </div>
 
@@ -73,6 +62,6 @@ export const HomeworkProgressCard = ({ completedCount, totalCount }: HomeworkPro
           aria-hidden="true"
         />
       </div>
-    </section>
+    </div>
   );
 };

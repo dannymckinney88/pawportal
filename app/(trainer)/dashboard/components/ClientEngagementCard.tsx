@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import {
   getSessionEngagementStatus,
@@ -40,8 +42,16 @@ export const ClientEngagementCard = ({
 
   return (
     <a
+      id={`client-card-${clientId}`}
       href={`/clients/${clientId}`}
-      className="bg-card flex gap-4 rounded-2xl p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+      onClick={() => {
+        try {
+          sessionStorage.setItem("lastOpenedClientId", clientId);
+        } catch {
+          // sessionStorage unavailable — focus restoration simply won't happen
+        }
+      }}
+      className="bg-card focus-visible:ring-primary flex gap-4 rounded-2xl p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
     >
       {dogPhotoUrl ? (
         <Image

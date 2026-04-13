@@ -191,7 +191,8 @@ export function EditSessionForm({
             href={`/clients/${session.client_id}`}
             className="text-hint hover:text-muted-foreground text-sm"
           >
-            ← Back
+            <span aria-hidden="true">← </span>
+            Back
           </Link>
           <h1 ref={headingRef} tabIndex={-1} className="text-foreground text-xl font-bold">
             Edit Session {session.session_number}
@@ -201,7 +202,7 @@ export function EditSessionForm({
         <ClientInfoBanner dogName={dog.dog_name} ownerName={dog.owner_name} />
 
         <p className="text-hint mb-4 text-xs">
-          Fields marked{" "}
+          Fields marked
           <span className="text-danger" aria-hidden="true">
             *
           </span>
@@ -226,7 +227,7 @@ export function EditSessionForm({
                 rows={4}
                 aria-required="true"
                 aria-describedby="summary-hint"
-                className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
+                className="border-border bg-muted text-foreground placeholder:text-hint hover:border-primary/50 focus:border-primary focus:ring-primary/20 focus:bg-background w-full resize-none rounded-lg border px-4 py-3 text-sm transition outline-none focus:ring-2"
               />
               <p id="summary-hint" className="text-hint text-xs">
                 This appears on the client&apos;s recap page.
@@ -258,7 +259,8 @@ export function EditSessionForm({
               onClick={addItem}
               className="border-primary/50 text-primary hover:bg-primary-subtle min-h-11 w-full rounded-xl border border-dashed py-3 text-sm font-medium"
             >
-              + Add homework item
+              <span aria-hidden="true">+ </span>
+              Add homework item
             </button>
           </div>
 
@@ -285,12 +287,7 @@ export function EditSessionForm({
                 </p>
               </div>
               <div className="flex gap-3">
-                <Button
-                  type="button"
-                  onClick={handleSave}
-                  disabled={loading}
-                  className="flex-1"
-                >
+                <Button type="button" onClick={handleSave} disabled={loading} className="flex-1">
                   {loading ? "Saving..." : "Yes, save changes"}
                 </Button>
                 <Button

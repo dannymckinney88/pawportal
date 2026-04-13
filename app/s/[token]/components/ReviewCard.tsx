@@ -9,9 +9,11 @@ export function ReviewCard({ googleReviewUrl }: Props) {
         href={googleReviewUrl}
         target="_blank"
         rel="noopener noreferrer"
+        aria-label="Leave Us a Google review (opens in a new tab)"
         className="bg-primary hover:bg-primary-hover text-primary-foreground flex min-h-11 w-full items-center justify-center rounded-2xl py-4 text-center text-base font-semibold transition-colors"
       >
-        ⭐ Leave Us a Google Review
+        <span aria-hidden="true" className="mr-2">⭐</span>
+        Leave Us a Google Review
       </a>
     );
   }
