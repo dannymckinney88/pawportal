@@ -7,6 +7,7 @@ import { ReviewCard } from "./components/ReviewCard";
 import { TrainerSocialLinks } from "./components/TrainerSocialLinks";
 import { SessionViewTracker } from "./components/SessionViewTracker";
 import { HomeworkSection } from "./components/HomeworkSection";
+import { SessionMessageThread } from "@/app/components/session-messages/SessionMessageThread";
 import type {
   Dog,
   Trainer,
@@ -100,6 +101,12 @@ export default async function Page({
         {homeworkItems.length > 0 && (
           <HomeworkSection sessionToken={token} items={homeworkItems} />
         )}
+
+        <SessionMessageThread
+          sessionId={session.id}
+          sessionToken={token}
+          senderType="client"
+        />
 
         {pastSessions.length > 0 && (
           <PastSessionsAccordion sessions={pastSessions} />
