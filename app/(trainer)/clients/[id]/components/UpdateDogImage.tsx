@@ -52,7 +52,7 @@ export function UpdateDogImage({ clientId }: { clientId: string }) {
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={loading}
-        className="text-primary focus-visible:ring-primary rounded text-xs hover:underline focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
+        className="text-primary focus-visible:ring-primary cursor-pointer rounded text-xs hover:underline focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
       >
         {loading ? "Uploading..." : "Update photo"}
       </button>

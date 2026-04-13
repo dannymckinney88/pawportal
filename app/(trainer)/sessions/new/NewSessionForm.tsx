@@ -292,14 +292,15 @@ export function NewSessionForm() {
               />
             ))}
 
-            <button
+            <Button
               type="button"
+              variant="secondary"
               onClick={addItem}
-              className="border-border text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:ring-primary/20 min-h-11 w-full rounded-xl border border-dashed py-2.5 text-sm transition focus-visible:ring-2 focus-visible:outline-none"
+              className="w-full rounded-xl border-dashed"
             >
               <span aria-hidden="true">+ </span>
               Add homework item
-            </button>
+            </Button>
           </div>
 
           {error && (

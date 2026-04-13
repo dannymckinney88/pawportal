@@ -272,24 +272,26 @@ export function TemplatesClient({
                   className="w-auto flex-1"
                 />
                 {draft.steps.length > 1 && (
-                  <button
+                  <Button
                     type="button"
+                    variant="danger-outline"
                     onClick={() => removeStep(i)}
                     aria-label={`Remove step ${i + 1}`}
-                    className="text-danger hover:text-danger flex min-h-11 min-w-11 shrink-0 items-center justify-center"
+                    className="min-w-11 shrink-0 px-0"
                   >
                     ✕
-                  </button>
+                  </Button>
                 )}
               </div>
             ))}
-            <button
+            <Button
               type="button"
+              variant="secondary"
               onClick={addStep}
-              className="border-border text-muted-foreground hover:bg-background min-h-11 w-full rounded-lg border border-dashed py-2 text-sm"
+              className="w-full border-dashed"
             >
               + Add step
-            </button>
+            </Button>
           </div>
 
           {/* Resource link */}

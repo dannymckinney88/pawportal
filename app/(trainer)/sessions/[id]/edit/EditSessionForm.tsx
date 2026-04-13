@@ -260,14 +260,15 @@ export function EditSessionForm({
               />
             ))}
 
-            <button
+            <Button
               type="button"
+              variant="secondary"
               onClick={addItem}
-              className="border-primary/50 text-primary hover:bg-primary-subtle min-h-11 w-full rounded-xl border border-dashed py-3 text-sm font-medium"
+              className="w-full rounded-xl border-dashed"
             >
               <span aria-hidden="true">+ </span>
               Add homework item
-            </button>
+            </Button>
           </div>
 
           {error && (

@@ -31,7 +31,7 @@ export function PastSessionsAccordion({ sessions }: { sessions: PastSessionRow[]
                 onClick={() => setOpenId(isOpen ? null : session.id)}
                 aria-expanded={isOpen}
                 aria-controls={`past-session-${session.id}`}
-                className="hover:bg-background focus-visible:ring-primary focus-visible:bg-background flex min-h-11 w-full items-center justify-between px-4 py-3 text-left focus-visible:ring-2 focus-visible:outline-none"
+                className="hover:bg-background focus-visible:ring-primary focus-visible:bg-background flex min-h-11 w-full cursor-pointer items-center justify-between px-4 py-3 text-left focus-visible:ring-2 focus-visible:outline-none"
               >
                 <span className="text-foreground text-sm font-semibold">{date}</span>
                 <svg

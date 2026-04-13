@@ -159,7 +159,7 @@ export const HomeworkCard = ({
           disabled={isSaving}
           aria-pressed={checked}
           aria-label={checked ? `Mark "${title}" incomplete` : `Mark "${title}" complete`}
-          className="flex min-h-11 w-full items-center gap-2 disabled:opacity-60"
+          className="flex min-h-11 w-full cursor-pointer items-center gap-2 disabled:opacity-60"
         >
           <span
             className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border-2 transition-colors ${
