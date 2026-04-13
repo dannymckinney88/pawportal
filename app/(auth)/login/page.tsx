@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { PawPrint } from "lucide-react";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -32,17 +33,18 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="bg-card p-8 rounded-2xl shadow-sm w-full max-w-md">
-        <h1 className="text-2xl font-bold text-foreground mb-2">PawPortal</h1>
+    <div className="bg-background flex min-h-screen items-center justify-center">
+      <div className="bg-card w-full max-w-md rounded-2xl p-8 shadow-sm">
+        <div className="mb-12 flex flex-col items-center gap-3">
+          <PawPrint className="text-primary h-6 w-6" aria-hidden="true" />
+          <h1 className="text-2xl font-bold">HeelFlow</h1>
+          <p className="text-muted-foreground text-sm">Training made simple between sessions</p>
+        </div>
         <p className="text-muted-foreground mb-6">Sign in to your trainer account</p>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="email"
-              className="text-sm font-medium text-label"
-            >
+            <label htmlFor="email" className="text-label text-sm font-medium">
               Email
             </label>
             <input
@@ -53,15 +55,12 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               aria-required="true"
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
+              className="bg-muted border-border text-foreground placeholder:text-hint hover:border-primary/50 focus:border-primary focus:ring-primary/20 focus:bg-background w-full rounded-lg border px-4 py-3 text-sm transition outline-none focus:ring-2"
             />
           </div>
 
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="password"
-              className="text-sm font-medium text-label"
-            >
+            <label htmlFor="password" className="text-label text-sm font-medium">
               Password
             </label>
             <input
@@ -72,7 +71,7 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               aria-required="true"
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
+              className="bg-muted border-border text-foreground placeholder:text-hint hover:border-primary/50 focus:border-primary focus:ring-primary/20 focus:bg-background w-full rounded-lg border px-4 py-3 text-sm transition outline-none focus:ring-2"
             />
           </div>
 
@@ -85,7 +84,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50"
+            className="bg-cta text-cta-foreground hover:bg-cta-hover rounded-lg px-4 py-3 text-sm font-medium hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>

@@ -22,10 +22,7 @@ type HomeworkSectionProps = {
 /**
  * Homework section
  */
-export const HomeworkSection = ({
-  sessionToken,
-  items,
-}: HomeworkSectionProps) => {
+export const HomeworkSection = ({ sessionToken, items }: HomeworkSectionProps) => {
   const [homeworkItems, setHomeworkItems] = useState(items);
 
   const completedCount = homeworkItems.filter((item) => item.is_checked).length;
@@ -46,24 +43,19 @@ export const HomeworkSection = ({
               ...item,
               is_checked: isChecked,
             }
-          : item,
-      ),
+          : item
+      )
     );
   };
 
   return (
     <section aria-label="Homework" className="flex flex-col gap-4">
       <div>
-        <h2 className="text-xl font-bold text-foreground">Your Homework 📋</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Practice these before your next lesson
-        </p>
+        <h2 className="text-foreground text-xl font-bold">Your Homework 📋</h2>
+        <p className="text-muted-foreground mt-1 text-sm">Practice these before your next lesson</p>
       </div>
 
-      <HomeworkProgressCard
-        completedCount={completedCount}
-        totalCount={totalCount}
-      />
+      <HomeworkProgressCard completedCount={completedCount} totalCount={totalCount} />
 
       <div>
         {orderedItems.map((item) => (

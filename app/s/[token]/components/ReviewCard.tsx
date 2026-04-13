@@ -9,7 +9,7 @@ export function ReviewCard({ googleReviewUrl }: Props) {
         href={googleReviewUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full bg-primary hover:bg-primary-hover text-primary-foreground font-semibold rounded-2xl py-4 text-center text-base min-h-11 flex items-center justify-center transition-colors"
+        className="bg-primary hover:bg-primary-hover text-primary-foreground flex min-h-11 w-full items-center justify-center rounded-2xl py-4 text-center text-base font-semibold transition-colors"
       >
         ⭐ Leave Us a Google Review
       </a>
@@ -18,10 +18,7 @@ export function ReviewCard({ googleReviewUrl }: Props) {
 
   return (
     <>
-      <p
-        id="review-description"
-        className="text-sm text-muted-foreground text-center mb-2"
-      >
+      <p id="review-description" className="text-muted-foreground mb-2 text-center text-sm">
         Loved the session? A quick review helps a lot.
       </p>
 
@@ -29,7 +26,7 @@ export function ReviewCard({ googleReviewUrl }: Props) {
         href="https://search.google.com/local/writereview?placeid=ChIJTUWJ1-ESK4cRkodX8In27h8"
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full inline-flex items-center justify-center bg-primary text-primary-foreground font-semibold rounded-2xl py-4 text-base min-h-11 hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 transition"
+        className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary inline-flex min-h-11 w-full items-center justify-center rounded-2xl py-4 text-base font-semibold transition focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         aria-describedby="review-description"
         aria-label="Leave Us a Google review for Rob's Dogs (opens in a new tab)"
       >

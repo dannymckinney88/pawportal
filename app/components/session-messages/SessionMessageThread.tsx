@@ -14,11 +14,7 @@ type Props = {
   senderType: SenderType;
 };
 
-export function SessionMessageThread({
-  sessionId,
-  sessionToken,
-  senderType,
-}: Props) {
+export function SessionMessageThread({ sessionId, sessionToken, senderType }: Props) {
   const isTrainer = senderType === "trainer";
 
   const [messages, setMessages] = useState<SessionMessage[]>([]);
@@ -59,9 +55,7 @@ export function SessionMessageThread({
 
     if (!res.ok) {
       const data = await res.json().catch(() => null);
-      throw new Error(
-        data?.error ?? "Failed to send message. Please try again.",
-      );
+      throw new Error(data?.error ?? "Failed to send message. Please try again.");
     }
 
     const { message } = await res.json();
@@ -73,33 +67,28 @@ export function SessionMessageThread({
   const senderLabel = isTrainer ? "trainer" : "client";
 
   const hasOverflow = isTrainer && messages.length > PREVIEW_COUNT;
-  const visibleMessages =
-    isTrainer && !expanded ? messages.slice(-PREVIEW_COUNT) : messages;
+  const visibleMessages = isTrainer && !expanded ? messages.slice(-PREVIEW_COUNT) : messages;
   const hiddenCount = messages.length - PREVIEW_COUNT;
 
   return (
     <section aria-labelledby={headingId}>
       {isTrainer ? (
-        <p
-          id={headingId}
-          className="mb-2 text-xs font-semibold uppercase tracking-wide text-hint"
-        >
+        <p id={headingId} className="text-hint mb-2 text-xs font-semibold tracking-wide uppercase">
           Questions &amp; follow-up
         </p>
       ) : (
         <div className="mb-3">
-          <h2 id={headingId} className="text-xl font-bold text-foreground">
+          <h2 id={headingId} className="text-foreground text-xl font-bold">
             Questions &amp; follow-up
           </h2>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Have a question about today&apos;s lesson or homework? Ask your
-            trainer here.
+          <p className="text-muted-foreground mt-1 text-sm">
+            Have a question about today&apos;s lesson or homework? Ask your trainer here.
           </p>
         </div>
       )}
 
       <div
-        className={`overflow-hidden rounded-2xl border border-border ${
+        className={`border-border overflow-hidden rounded-2xl border ${
           isTrainer ? "bg-background" : "bg-card shadow-sm"
         }`}
       >
@@ -111,23 +100,15 @@ export function SessionMessageThread({
           aria-label="Message thread"
           aria-live="polite"
           aria-relevant="additions"
-          className={`overflow-y-auto px-4 pt-3 pb-2 ${
-            isTrainer ? "max-h-44" : "max-h-64"
-          }`}
+          className={`overflow-y-auto px-4 pt-3 pb-2 ${isTrainer ? "max-h-44" : "max-h-64"}`}
         >
           {loading ? (
-            <p className="py-3 text-center text-sm text-muted-foreground">
-              Loading…
-            </p>
+            <p className="text-muted-foreground py-3 text-center text-sm">Loading…</p>
           ) : messages.length === 0 ? (
             <p
-              className={`text-center text-sm text-muted-foreground ${
-                isTrainer ? "py-3" : "py-5"
-              }`}
+              className={`text-muted-foreground text-center text-sm ${isTrainer ? "py-3" : "py-5"}`}
             >
-              {isTrainer
-                ? "No messages yet."
-                : "No messages yet \u2014 ask a question below."}
+              {isTrainer ? "No messages yet." : "No messages yet \u2014 ask a question below."}
             </p>
           ) : (
             <div className="flex flex-col gap-2.5">
@@ -138,7 +119,7 @@ export function SessionMessageThread({
                   onClick={() => setExpanded((v) => !v)}
                   aria-expanded={expanded}
                   aria-controls={listId}
-                  className="w-full py-1 text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+                  className="text-primary focus-visible:ring-primary w-full rounded py-1 text-xs hover:underline focus-visible:ring-2 focus-visible:outline-none"
                 >
                   {expanded
                     ? "Show fewer messages"
@@ -147,18 +128,14 @@ export function SessionMessageThread({
               )}
 
               {visibleMessages.map((msg) => (
-                <SessionMessageBubble
-                  key={msg.id}
-                  message={msg}
-                  isTrainer={isTrainer}
-                />
+                <SessionMessageBubble key={msg.id} message={msg} isTrainer={isTrainer} />
               ))}
             </div>
           )}
         </div>
 
         {/* Divider */}
-        <div className="border-t border-border" aria-hidden="true" />
+        <div className="border-border border-t" aria-hidden="true" />
 
         {/* Composer — always visible so trainer can reply without expanding */}
         <div className="p-3">

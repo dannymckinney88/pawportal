@@ -8,7 +8,7 @@ type Props = {
 export function ClientHero({ dogName, dogPhotoUrl }: Props) {
   if (dogPhotoUrl) {
     return (
-      <div className="relative w-full aspect-4/3 rounded-2xl overflow-hidden">
+      <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl">
         <Image
           src={dogPhotoUrl}
           alt={`${dogName} photo`}
@@ -25,11 +25,11 @@ export function ClientHero({ dogName, dogPhotoUrl }: Props) {
   }
 
   return (
-    <div className="w-full aspect-4/3 rounded-2xl bg-muted flex flex-col items-center justify-center gap-3">
+    <div className="bg-muted flex aspect-4/3 w-full flex-col items-center justify-center gap-3 rounded-2xl">
       <span className="text-5xl" aria-hidden="true">
         🐾
       </span>
-      <p className="text-2xl font-bold text-foreground">Hey, {dogName}!</p>
+      <p className="text-foreground text-2xl font-bold">Hey, {dogName}!</p>
     </div>
   );
 }

@@ -28,7 +28,7 @@ export async function proxy(request: NextRequest) {
           });
         },
       },
-    },
+    }
   );
 
   const { data } = await supabase.auth.getClaims();
@@ -48,10 +48,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    "/dashboard/:path*",
-    "/clients/:path*",
-    "/sessions/:path*",
-    "/templates/:path*",
-  ],
+  matcher: ["/dashboard/:path*", "/clients/:path*", "/sessions/:path*", "/templates/:path*"],
 };

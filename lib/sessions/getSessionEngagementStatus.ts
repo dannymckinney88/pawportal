@@ -1,8 +1,4 @@
-export type SessionEngagementStatus =
-  | "not_viewed"
-  | "viewed"
-  | "in_progress"
-  | "completed";
+export type SessionEngagementStatus = "not_viewed" | "viewed" | "in_progress" | "completed";
 
 type GetSessionEngagementStatusArgs = {
   firstViewedAt: string | null;
@@ -26,9 +22,7 @@ export const getSessionEngagementStatus = ({
   return "in_progress";
 };
 
-export const getSessionEngagementLabel = (
-  status: SessionEngagementStatus,
-): string => {
+export const getSessionEngagementLabel = (status: SessionEngagementStatus): string => {
   switch (status) {
     case "not_viewed":
       return "Not viewed";
@@ -41,9 +35,7 @@ export const getSessionEngagementLabel = (
   }
 };
 
-export const getSessionEngagementClasses = (
-  status: SessionEngagementStatus,
-): string => {
+export const getSessionEngagementClasses = (status: SessionEngagementStatus): string => {
   switch (status) {
     case "not_viewed":
       return "bg-secondary text-secondary-foreground";

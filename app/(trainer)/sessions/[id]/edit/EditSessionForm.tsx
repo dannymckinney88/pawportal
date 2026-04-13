@@ -42,24 +42,20 @@ export function EditSessionForm({
 
   const [summary, setSummary] = useState(session.summary);
   const [items, setItems] = useState<ItemEditorItem[]>(
-    initialItems.length > 0 ? initialItems.map(dbRowToItem) : [emptyItem()],
+    initialItems.length > 0 ? initialItems.map(dbRowToItem) : [emptyItem()]
   );
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [confirming, setConfirming] = useState(false);
 
-  const canSave =
-    summary.trim().length > 0 &&
-    items.every((item) => item.title.trim().length > 0);
+  const canSave = summary.trim().length > 0 && items.every((item) => item.title.trim().length > 0);
 
   const updateItem = (
     index: number,
     field: "title" | "description" | "link_url" | "dog_note",
-    value: string,
+    value: string
   ) => {
-    setItems((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
-    );
+    setItems((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
   };
 
   const updateStep = (itemIndex: number, stepIndex: number, value: string) => {
@@ -68,15 +64,13 @@ export function EditSessionForm({
         if (i !== itemIndex) return item;
         const steps = item.steps.map((s, si) => (si === stepIndex ? value : s));
         return { ...item, steps };
-      }),
+      })
     );
   };
 
   const addStep = (itemIndex: number) => {
     setItems((prev) =>
-      prev.map((item, i) =>
-        i === itemIndex ? { ...item, steps: [...item.steps, ""] } : item,
-      ),
+      prev.map((item, i) => (i === itemIndex ? { ...item, steps: [...item.steps, ""] } : item))
     );
   };
 
@@ -86,14 +80,13 @@ export function EditSessionForm({
         if (i !== itemIndex) return item;
         const steps = item.steps.filter((_, si) => si !== stepIndex);
         return { ...item, steps: steps.length > 0 ? steps : [""] };
-      }),
+      })
     );
   };
 
   const addItem = () => setItems((prev) => [...prev, emptyItem()]);
 
-  const removeItem = (index: number) =>
-    setItems((prev) => prev.filter((_, i) => i !== index));
+  const removeItem = (index: number) => setItems((prev) => prev.filter((_, i) => i !== index));
 
   const handleSave = async () => {
     setLoading(true);
@@ -133,8 +126,8 @@ export function EditSessionForm({
       }
     }
 
-    const itemsToUpdate = filledItems.filter(
-      (item): item is ItemEditorItem & { id: string } => Boolean(item.id),
+    const itemsToUpdate = filledItems.filter((item): item is ItemEditorItem & { id: string } =>
+      Boolean(item.id)
     );
 
     for (const item of itemsToUpdate) {
@@ -161,24 +154,20 @@ export function EditSessionForm({
     const itemsToInsert = filledItems.filter((item) => !item.id);
 
     if (itemsToInsert.length > 0) {
-      const { error: insertError } = await supabase
-        .from("homework_items")
-        .insert(
-          itemsToInsert.map((item) => {
-            const cleanedSteps = item.steps.filter(
-              (step) => step.trim().length > 0,
-            );
+      const { error: insertError } = await supabase.from("homework_items").insert(
+        itemsToInsert.map((item) => {
+          const cleanedSteps = item.steps.filter((step) => step.trim().length > 0);
 
-            return {
-              session_id: session.id,
-              title: item.title.trim(),
-              description: item.description?.trim() || null,
-              link_url: item.link_url?.trim() || null,
-              dog_note: item.dog_note?.trim() || null,
-              steps: cleanedSteps.length > 0 ? cleanedSteps : null,
-            };
-          }),
-        );
+          return {
+            session_id: session.id,
+            title: item.title.trim(),
+            description: item.description?.trim() || null,
+            link_url: item.link_url?.trim() || null,
+            dog_note: item.dog_note?.trim() || null,
+            steps: cleanedSteps.length > 0 ? cleanedSteps : null,
+          };
+        })
+      );
 
       if (insertError) {
         setError(insertError.message);
@@ -192,28 +181,24 @@ export function EditSessionForm({
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-lg mx-auto px-4 py-8">
+    <div className="bg-background min-h-screen">
+      <div className="mx-auto max-w-lg px-4 py-8">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
+        <div className="mb-6 flex items-center gap-3">
           <a
             href={`/clients/${session.client_id}`}
             className="text-hint hover:text-muted-foreground text-sm"
           >
             ← Back
           </a>
-          <h1
-            ref={headingRef}
-            tabIndex={-1}
-            className="text-xl font-bold text-foreground"
-          >
+          <h1 ref={headingRef} tabIndex={-1} className="text-foreground text-xl font-bold">
             Edit Session {session.session_number}
           </h1>
         </div>
 
         <ClientInfoBanner dogName={dog.dog_name} ownerName={dog.owner_name} />
 
-        <p className="text-xs text-hint mb-4">
+        <p className="text-hint mb-4 text-xs">
           Fields marked{" "}
           <span className="text-danger" aria-hidden="true">
             *
@@ -223,15 +208,10 @@ export function EditSessionForm({
 
         <div className="flex flex-col gap-6">
           {/* Session Summary */}
-          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-            <h2 className="text-lg font-semibold text-foreground">
-              Session Summary
-            </h2>
+          <div className="bg-card flex flex-col gap-4 rounded-2xl p-5 shadow-sm">
+            <h2 className="text-foreground text-lg font-semibold">Session Summary</h2>
             <div className="flex flex-col gap-1">
-              <label
-                htmlFor="summary"
-                className="text-sm font-medium text-label"
-              >
+              <label htmlFor="summary" className="text-label text-sm font-medium">
                 What did you cover?{" "}
                 <span className="text-danger" aria-hidden="true">
                   *
@@ -244,17 +224,17 @@ export function EditSessionForm({
                 rows={4}
                 aria-required="true"
                 aria-describedby="summary-hint"
-                className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary resize-none"
+                className="border-border focus:border-primary resize-none rounded-lg border px-4 py-3 text-sm outline-none"
               />
-              <p id="summary-hint" className="text-xs text-hint">
+              <p id="summary-hint" className="text-hint text-xs">
                 This appears on the client&apos;s recap page.
               </p>
             </div>
           </div>
 
           {/* Homework Items */}
-          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-            <h2 className="text-lg font-semibold text-foreground">Homework</h2>
+          <div className="bg-card flex flex-col gap-4 rounded-2xl p-5 shadow-sm">
+            <h2 className="text-foreground text-lg font-semibold">Homework</h2>
 
             {items.map((item, index) => (
               <HomeworkItemEditor
@@ -274,7 +254,7 @@ export function EditSessionForm({
             <button
               type="button"
               onClick={addItem}
-              className="w-full border border-dashed border-primary/50 text-primary rounded-xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-11"
+              className="border-primary/50 text-primary hover:bg-primary-subtle min-h-11 w-full rounded-xl border border-dashed py-3 text-sm font-medium"
             >
               + Add homework item
             </button>
@@ -292,16 +272,13 @@ export function EditSessionForm({
               role="alertdialog"
               aria-labelledby="confirm-save-heading"
               aria-describedby="confirm-save-desc"
-              className="bg-warning-subtle border border-warning-border rounded-2xl p-4 flex flex-col gap-3"
+              className="bg-warning-subtle border-warning-border flex flex-col gap-3 rounded-2xl border p-4"
             >
               <div>
-                <p
-                  id="confirm-save-heading"
-                  className="text-sm font-semibold text-foreground"
-                >
+                <p id="confirm-save-heading" className="text-foreground text-sm font-semibold">
                   Save changes to Session {session.session_number}?
                 </p>
-                <p id="confirm-save-desc" className="text-xs text-muted-foreground mt-1">
+                <p id="confirm-save-desc" className="text-muted-foreground mt-1 text-xs">
                   This will update the client&apos;s recap page immediately.
                 </p>
               </div>
@@ -310,7 +287,7 @@ export function EditSessionForm({
                   type="button"
                   onClick={handleSave}
                   disabled={loading}
-                  className="flex-1 bg-primary text-primary-foreground rounded-lg py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50 min-h-11"
+                  className="bg-primary text-primary-foreground hover:bg-primary-hover min-h-11 flex-1 rounded-lg py-3 text-sm font-medium disabled:opacity-50"
                 >
                   {loading ? "Saving..." : "Yes, save changes"}
                 </button>
@@ -318,7 +295,7 @@ export function EditSessionForm({
                   type="button"
                   onClick={() => setConfirming(false)}
                   disabled={loading}
-                  className="flex-1 bg-card border border-border text-secondary-foreground rounded-lg py-3 text-sm font-medium hover:bg-background disabled:opacity-50 min-h-11"
+                  className="bg-card border-border text-secondary-foreground hover:bg-background min-h-11 flex-1 rounded-lg border py-3 text-sm font-medium disabled:opacity-50"
                 >
                   Cancel
                 </button>
@@ -327,9 +304,8 @@ export function EditSessionForm({
           ) : (
             <>
               {!canSave && (
-                <p role="status" className="text-xs text-hint text-center">
-                  Add a session summary and a title for each homework item to
-                  continue.
+                <p role="status" className="text-hint text-center text-xs">
+                  Add a session summary and a title for each homework item to continue.
                 </p>
               )}
               <button
@@ -337,7 +313,7 @@ export function EditSessionForm({
                 onClick={() => setConfirming(true)}
                 disabled={!canSave}
                 aria-disabled={!canSave}
-                className="w-full bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed min-h-11"
+                className="bg-primary text-primary-foreground hover:bg-primary-hover min-h-11 w-full rounded-lg px-4 py-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
               >
                 Save Changes
               </button>

@@ -30,7 +30,7 @@ export default async function DashboardPage() {
 
   if (clientRows.length === 0) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="bg-background min-h-screen">
         <div className="mx-auto max-w-4xl px-4 py-8">
           <DashboardHeader />
           <EmptyClientsState />
@@ -56,24 +56,19 @@ export default async function DashboardPage() {
         id,
         is_checked
       )
-    `,
+    `
     )
     .in("client_id", clientIds)
     .order("created_at", { ascending: false });
 
   const sessionRows = (sessions as SessionRow[] | null) ?? [];
 
-  const clientsWithEngagement = buildClientsWithEngagement(
-    clientRows,
-    sessionRows,
-  );
+  const clientsWithEngagement = buildClientsWithEngagement(clientRows, sessionRows);
 
-  const followUpClients = clientsWithEngagement.filter(
-    (client) => client.needsFollowUp,
-  );
+  const followUpClients = clientsWithEngagement.filter((client) => client.needsFollowUp);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="mx-auto max-w-4xl px-4 py-8">
         <DashboardHeader />
 

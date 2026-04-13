@@ -8,19 +8,9 @@ import { TrainerSocialLinks } from "./components/TrainerSocialLinks";
 import { SessionViewTracker } from "./components/SessionViewTracker";
 import { HomeworkSection } from "./components/HomeworkSection";
 import { SessionMessageThread } from "@/app/components/session-messages/SessionMessageThread";
-import type {
-  Dog,
-  Trainer,
-  HomeworkItemRow,
-  PastSessionRow,
-  SessionRow,
-} from "./types";
+import type { Dog, Trainer, HomeworkItemRow, PastSessionRow, SessionRow } from "./types";
 
-export default async function Page({
-  params,
-}: {
-  params: Promise<{ token: string }>;
-}) {
+export default async function Page({ params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
   const supabase = await createClient();
 
@@ -31,12 +21,7 @@ export default async function Page({
     .single<SessionRow>();
 
   if (sessionError || !session) {
-    console.error(
-      "[SessionPage] session fetch failed:",
-      sessionError?.message,
-      "token:",
-      token,
-    );
+    console.error("[SessionPage] session fetch failed:", sessionError?.message, "token:", token);
     return notFound();
   }
 
@@ -71,9 +56,10 @@ export default async function Page({
   const dog = clientRes.data;
   const trainer = trainerRes.data;
 
-  const homeworkItems = ((hwRes.data as HomeworkItemRow[] | null) ?? []).map(
-    (item) => ({ ...item, is_checked: item.is_checked ?? false }),
-  );
+  const homeworkItems = ((hwRes.data as HomeworkItemRow[] | null) ?? []).map((item) => ({
+    ...item,
+    is_checked: item.is_checked ?? false,
+  }));
 
   const pastSessions = (pastRes.data as PastSessionRow[] | null) ?? [];
 
@@ -86,7 +72,7 @@ export default async function Page({
   });
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-8">
         <SessionViewTracker token={token} />
 
@@ -98,21 +84,13 @@ export default async function Page({
           trainerName={trainer?.name}
         />
 
-        {homeworkItems.length > 0 && (
-          <HomeworkSection sessionToken={token} items={homeworkItems} />
-        )}
+        {homeworkItems.length > 0 && <HomeworkSection sessionToken={token} items={homeworkItems} />}
 
-        <SessionMessageThread
-          sessionId={session.id}
-          sessionToken={token}
-          senderType="client"
-        />
+        <SessionMessageThread sessionId={session.id} sessionToken={token} senderType="client" />
 
-        {pastSessions.length > 0 && (
-          <PastSessionsAccordion sessions={pastSessions} />
-        )}
+        {pastSessions.length > 0 && <PastSessionsAccordion sessions={pastSessions} />}
 
-        <footer className="mt-10 flex flex-col gap-4 border-t border-border pt-6 pb-8">
+        <footer className="border-border mt-10 flex flex-col gap-4 border-t pt-6 pb-8">
           <ReviewCard googleReviewUrl={trainer?.google_review_url} />
 
           <TrainerSocialLinks

@@ -2,11 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { EditSessionForm } from "./EditSessionForm";
 
-export default async function EditSessionPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function EditSessionPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
 
@@ -25,11 +21,7 @@ export default async function EditSessionPage({
   if (!session) notFound();
 
   const [clientRes, hwRes] = await Promise.all([
-    supabase
-      .from("clients")
-      .select("dog_name, owner_name")
-      .eq("id", session.client_id)
-      .single(),
+    supabase.from("clients").select("dog_name, owner_name").eq("id", session.client_id).single(),
 
     supabase
       .from("homework_items")

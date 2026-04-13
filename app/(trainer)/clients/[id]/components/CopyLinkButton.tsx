@@ -26,7 +26,7 @@ export function CopyLinkButton({ sessionToken }: { sessionToken: string }) {
       <button
         type="button"
         onClick={handleCopy}
-        className={`text-sm font-medium px-3 py-1.5 rounded-lg border min-h-11 transition-colors ${
+        className={`min-h-11 rounded-lg border px-3 py-1.5 text-sm font-medium transition-colors ${
           state === "copied"
             ? "border-success-foreground/30 text-success-foreground bg-success"
             : state === "failed"
@@ -34,11 +34,7 @@ export function CopyLinkButton({ sessionToken }: { sessionToken: string }) {
               : "border-border text-muted-foreground hover:bg-background"
         }`}
       >
-        {state === "copied"
-          ? "Copied! ✓"
-          : state === "failed"
-            ? "Failed"
-            : "Copy link"}
+        {state === "copied" ? "Copied! ✓" : state === "failed" ? "Failed" : "Copy link"}
       </button>
       {/* Polite live region announces copy result to screen readers */}
       <span role="status" aria-live="polite" className="sr-only">

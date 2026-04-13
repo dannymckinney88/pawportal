@@ -69,8 +69,8 @@ export function TemplatePickerSheet({ open, onClose, templates, onApply }: Props
 
       const focusable = Array.from(
         dialog.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ),
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+        )
       );
       if (focusable.length === 0) return;
 
@@ -100,10 +100,8 @@ export function TemplatePickerSheet({ open, onClose, templates, onApply }: Props
       <div
         aria-hidden="true"
         onClick={onClose}
-        className={`fixed inset-0 bg-black/40 z-40 transition-opacity duration-300 ${
-          open
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
+        className={`fixed inset-0 z-40 bg-black/40 transition-opacity duration-300 ${
+          open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
 
@@ -113,81 +111,60 @@ export function TemplatePickerSheet({ open, onClose, templates, onApply }: Props
         role="dialog"
         aria-modal="true"
         aria-labelledby="template-picker-title"
-        className={`fixed bottom-0 left-0 right-0 z-50 bg-card rounded-t-2xl max-h-[70vh] flex flex-col transition-transform duration-300 ease-out ${
+        className={`bg-card fixed right-0 bottom-0 left-0 z-50 flex max-h-[70vh] flex-col rounded-t-2xl transition-transform duration-300 ease-out ${
           open ? "translate-y-0" : "translate-y-full"
         }`}
       >
         {/* Drag handle — decorative */}
         <div
           aria-hidden="true"
-          className="w-10 h-1 bg-border rounded-full mx-auto mt-3 mb-2 shrink-0"
+          className="bg-border mx-auto mt-3 mb-2 h-1 w-10 shrink-0 rounded-full"
         />
 
         {/* Header */}
-        <div className="px-4 py-3 flex items-center justify-between shrink-0">
-          <p
-            id="template-picker-title"
-            className="text-base font-semibold text-foreground"
-          >
+        <div className="flex shrink-0 items-center justify-between px-4 py-3">
+          <p id="template-picker-title" className="text-foreground text-base font-semibold">
             Add from Template
           </p>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close template picker"
-            className="min-h-11 min-w-11 flex items-center justify-center text-hint hover:text-muted-foreground"
+            className="text-hint hover:text-muted-foreground flex min-h-11 min-w-11 items-center justify-center"
           >
             ✕
           </button>
         </div>
 
         {/* Scrollable list */}
-        <div className="overflow-y-auto flex-1 px-4 pb-8">
+        <div className="flex-1 overflow-y-auto px-4 pb-8">
           {templates.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-sm text-muted-foreground">
-                No templates saved yet
-              </p>
-              <a
-                href="/templates"
-                className="mt-2 inline-block text-primary text-sm"
-              >
+            <div className="py-8 text-center">
+              <p className="text-muted-foreground text-sm">No templates saved yet</p>
+              <a href="/templates" className="text-primary mt-2 inline-block text-sm">
                 Create your first template
               </a>
             </div>
           ) : (
             templates.map((template) => {
-              const filteredSteps =
-                template.steps?.filter((s) => s.trim().length > 0) ?? [];
+              const filteredSteps = template.steps?.filter((s) => s.trim().length > 0) ?? [];
               return (
                 <button
                   key={template.id}
                   type="button"
                   onClick={() => onApply(template)}
-                  className="w-full bg-background rounded-xl p-3 mb-2 min-h-14 flex flex-col justify-center text-left active:bg-accent"
+                  className="bg-background active:bg-accent mb-2 flex min-h-14 w-full flex-col justify-center rounded-xl p-3 text-left"
                 >
-                  <span className="font-medium text-foreground text-sm">
-                    {template.title}
-                  </span>
-                  {(filteredSteps.length > 0 ||
-                    template.link_url ||
-                    template.dog_note) && (
-                    <span
-                      aria-hidden="true"
-                      className="flex items-center gap-1.5 mt-1 flex-wrap"
-                    >
+                  <span className="text-foreground text-sm font-medium">{template.title}</span>
+                  {(filteredSteps.length > 0 || template.link_url || template.dog_note) && (
+                    <span aria-hidden="true" className="mt-1 flex flex-wrap items-center gap-1.5">
                       {filteredSteps.length > 0 && (
-                        <span className="text-xs bg-primary-subtle text-primary-subtle-foreground rounded-full px-2 py-0.5">
-                          {filteredSteps.length}{" "}
-                          {filteredSteps.length === 1 ? "step" : "steps"}
+                        <span className="bg-primary-subtle text-primary-subtle-foreground rounded-full px-2 py-0.5 text-xs">
+                          {filteredSteps.length} {filteredSteps.length === 1 ? "step" : "steps"}
                         </span>
                       )}
-                      {template.link_url && (
-                        <span className="text-xs text-hint">🔗</span>
-                      )}
-                      {template.dog_note && (
-                        <span className="text-xs text-hint">🐾</span>
-                      )}
+                      {template.link_url && <span className="text-hint text-xs">🔗</span>}
+                      {template.dog_note && <span className="text-hint text-xs">🐾</span>}
                     </span>
                   )}
                 </button>

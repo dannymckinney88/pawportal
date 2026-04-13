@@ -47,7 +47,7 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
         ref={triggerRef}
         type="button"
         onClick={() => setConfirming(true)}
-        className="text-sm text-danger hover:underline"
+        className="text-danger text-sm hover:underline"
       >
         Archive client
       </button>
@@ -60,12 +60,12 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
       role="alertdialog"
       aria-labelledby="archive-confirm-title"
       aria-describedby="archive-confirm-desc"
-      className="mt-4 rounded-xl border border-warning-border bg-warning-subtle p-4"
+      className="border-warning-border bg-warning-subtle mt-4 rounded-xl border p-4"
     >
-      <p id="archive-confirm-title" className="text-sm font-medium text-foreground">
+      <p id="archive-confirm-title" className="text-foreground text-sm font-medium">
         Archive this client?
       </p>
-      <p id="archive-confirm-desc" className="mt-1 text-xs text-muted-foreground">
+      <p id="archive-confirm-desc" className="text-muted-foreground mt-1 text-xs">
         This removes them from your dashboard but keeps all session history.
       </p>
 
@@ -74,7 +74,7 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
           type="button"
           onClick={handleArchive}
           disabled={loading}
-          className="flex-1 rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 min-h-11"
+          className="bg-danger min-h-11 flex-1 rounded-lg px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
         >
           {loading ? "Archiving..." : "Yes, archive"}
         </button>
@@ -83,7 +83,7 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
           type="button"
           onClick={() => setConfirming(false)}
           disabled={loading}
-          className="flex-1 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium disabled:opacity-50 min-h-11"
+          className="border-border bg-card min-h-11 flex-1 rounded-lg border px-4 py-2 text-sm font-medium disabled:opacity-50"
         >
           Cancel
         </button>

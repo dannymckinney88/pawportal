@@ -43,20 +43,18 @@ export function SessionMessageBubble({ message, isTrainer }: Props) {
   });
 
   return (
-    <div
-      className={`flex flex-col gap-0.5 ${isOwn ? "items-end" : "items-start"}`}
-    >
+    <div className={`flex flex-col gap-0.5 ${isOwn ? "items-end" : "items-start"}`}>
       <div
         className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
           isOwn
-            ? "rounded-br-sm bg-primary text-primary-foreground"
-            : "rounded-bl-sm bg-secondary text-secondary-foreground"
+            ? "bg-primary text-primary-foreground rounded-br-sm"
+            : "bg-secondary text-secondary-foreground rounded-bl-sm"
         }`}
       >
         {message.body}
       </div>
       <p
-        className="px-1 text-[11px] text-hint"
+        className="text-hint px-1 text-[11px]"
         aria-label={`${senderLabel}, sent ${fullTimestamp}`}
       >
         <time dateTime={message.created_at} aria-hidden="true">
