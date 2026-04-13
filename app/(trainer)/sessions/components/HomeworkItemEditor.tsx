@@ -3,6 +3,8 @@
 // Shared per-item homework editor used by both the new-session form and the
 // fields simultaneously (new flow).
 
+import { Input } from "@/components/ui/input";
+
 export type ItemEditorItem = {
   id?: string;
   title: string;
@@ -26,10 +28,7 @@ type Props = {
   itemsCount: number;
   dogName: string | undefined;
 
-  onUpdate: (
-    field: "title" | "description" | "link_url" | "dog_note",
-    value: string,
-  ) => void;
+  onUpdate: (field: "title" | "description" | "link_url" | "dog_note", value: string) => void;
   onRemove: () => void;
 
   onUpdateStep: (stepIndex: number, value: string) => void;
@@ -51,16 +50,16 @@ export function HomeworkItemEditor({
   onRemoveStep,
 }: Props) {
   return (
-    <div className="flex flex-col gap-3 border border-border-subtle rounded-xl p-4">
+    <div className="border-border-subtle flex flex-col gap-2.5 rounded-xl border p-4">
       {/* Item header */}
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-label">Item {index + 1}</p>
+        <p className="text-label text-sm font-medium">Item {index + 1}</p>
         {itemsCount > 1 && (
           <button
             type="button"
             onClick={onRemove}
             aria-label={`Remove homework item ${index + 1}`}
-            className="text-danger text-sm hover:text-danger min-h-11 min-w-11 flex items-center justify-center"
+            className="text-danger hover:text-danger flex min-h-11 min-w-11 items-center justify-center text-sm"
           >
             Remove
           </button>
@@ -69,16 +68,13 @@ export function HomeworkItemEditor({
 
       {/* Title */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor={`title-${index}`}
-          className="text-sm font-medium text-label"
-        >
+        <label htmlFor={`title-${index}`} className="text-label text-sm font-medium">
           Title{" "}
           <span className="text-danger" aria-hidden="true">
             *
           </span>
         </label>
-        <input
+        <Input
           id={`title-${index}`}
           type="text"
           value={item.title}
@@ -86,53 +82,49 @@ export function HomeworkItemEditor({
           aria-required="true"
           aria-describedby={`title-hint-${index}`}
           placeholder="Loose-leash walking"
-          className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
         />
-        <p id={`title-hint-${index}`} className="text-xs text-hint">
+        <p id={`title-hint-${index}`} className="text-hint text-xs">
           A short name for this exercise or skill.
         </p>
       </div>
 
       {/* Description */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor={`description-${index}`}
-          className="text-sm font-medium text-label"
-        >
+        <label htmlFor={`description-${index}`} className="text-label text-sm font-medium">
           Description <span className="text-hint font-normal">(optional)</span>
         </label>
         <textarea
           id={`description-${index}`}
           value={item.description}
           onChange={(e) => onUpdate("description", e.target.value)}
-          rows={3}
+          rows={2}
           placeholder="General notes or context for this exercise..."
-          className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary resize-none"
+          className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
         />
       </div>
 
       {/* Steps */}
       <div className="flex flex-col gap-2">
-        <p className="text-sm font-medium text-label">
+        <p className="text-label text-sm font-medium">
           Steps <span className="text-hint font-normal">(optional)</span>
         </p>
 
         {item.steps.map((step, stepIndex) => (
           <div key={stepIndex} className="flex items-center gap-2">
             <span
-              className="w-6 shrink-0 text-center text-xs font-semibold text-hint"
+              className="text-hint w-6 shrink-0 text-center text-xs font-semibold"
               aria-hidden="true"
             >
               {stepIndex + 1}.
             </span>
 
-            <input
+            <Input
               type="text"
               value={step}
               onChange={(e) => onUpdateStep(stepIndex, e.target.value)}
               aria-label={`Item ${index + 1}, step ${stepIndex + 1}`}
               placeholder={`Step ${stepIndex + 1}`}
-              className="flex-1 border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
+              className="w-auto flex-1"
             />
 
             {item.steps.length > 1 && (
@@ -140,7 +132,7 @@ export function HomeworkItemEditor({
                 type="button"
                 onClick={() => onRemoveStep(stepIndex)}
                 aria-label={`Remove step ${stepIndex + 1} from item ${index + 1}`}
-                className="text-danger hover:text-danger min-h-11 min-w-11 flex items-center justify-center shrink-0"
+                className="text-danger hover:text-danger flex min-h-11 min-w-11 shrink-0 items-center justify-center"
               >
                 ✕
               </button>
@@ -151,7 +143,7 @@ export function HomeworkItemEditor({
         <button
           type="button"
           onClick={onAddStep}
-          className="w-full border border-dashed border-border text-muted-foreground rounded-lg py-2 text-sm hover:bg-background min-h-11"
+          className="border-border text-muted-foreground hover:bg-background min-h-11 w-full rounded-lg border border-dashed py-2 text-sm"
         >
           + Add step
         </button>
@@ -159,46 +151,36 @@ export function HomeworkItemEditor({
 
       {/* Resource link */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor={`link-${index}`}
-          className="text-sm font-medium text-label"
-        >
-          Resource link{" "}
-          <span className="text-hint font-normal">(optional)</span>
+        <label htmlFor={`link-${index}`} className="text-label text-sm font-medium">
+          Resource link <span className="text-hint font-normal">(optional)</span>
         </label>
-        <input
+        <Input
           id={`link-${index}`}
           type="text"
           value={item.link_url}
           onChange={(e) => onUpdate("link_url", e.target.value)}
           aria-describedby={`link-hint-${index}`}
           placeholder="https://..."
-          className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
         />
-        <p id={`link-hint-${index}`} className="text-xs text-hint">
+        <p id={`link-hint-${index}`} className="text-hint text-xs">
           A YouTube video, article, or any helpful URL for this exercise.
         </p>
       </div>
 
       {/* Dog-specific note */}
       <div className="flex flex-col gap-1">
-        <label
-          htmlFor={`dog_note-${index}`}
-          className="text-sm font-medium text-label"
-        >
-          Note for {dogName ?? "this dog"}{" "}
-          <span className="text-hint font-normal">(optional)</span>
+        <label htmlFor={`dog_note-${index}`} className="text-label text-sm font-medium">
+          Note for {dogName ?? "this dog"} <span className="text-hint font-normal">(optional)</span>
         </label>
-        <input
+        <Input
           id={`dog_note-${index}`}
           type="text"
           value={item.dog_note}
           onChange={(e) => onUpdate("dog_note", e.target.value)}
           aria-describedby={`dog-note-hint-${index}`}
           placeholder="Buddy tends to pull when he sees other dogs — use high-value treats"
-          className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
         />
-        <p id={`dog-note-hint-${index}`} className="text-xs text-hint">
+        <p id={`dog-note-hint-${index}`} className="text-hint text-xs">
           Personalized tip shown to the owner about their specific dog.
         </p>
       </div>

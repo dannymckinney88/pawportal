@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -75,8 +77,7 @@ export function TemplatesClient({
     }));
   };
 
-  const addStep = () =>
-    setDraft((prev) => ({ ...prev, steps: [...prev.steps, ""] }));
+  const addStep = () => setDraft((prev) => ({ ...prev, steps: [...prev.steps, ""] }));
 
   const removeStep = (i: number) => {
     setDraft((prev) => {
@@ -165,10 +166,7 @@ export function TemplatesClient({
     setError("");
     const supabase = createClient();
 
-    const { error: err } = await supabase
-      .from("homework_templates")
-      .delete()
-      .eq("id", id);
+    const { error: err } = await supabase.from("homework_templates").delete().eq("id", id);
 
     if (err) {
       setError(err.message);
@@ -188,30 +186,24 @@ export function TemplatesClient({
       {/* Page header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Templates</h1>
-          <p className="text-sm text-muted-foreground">
-            Reusable homework items
-          </p>
+          <h1 className="text-foreground text-2xl font-bold">Templates</h1>
+          <p className="text-muted-foreground text-sm">Reusable homework items</p>
         </div>
         {!isFormOpen && (
-          <button
-            type="button"
-            onClick={startCreate}
-            className="bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary-hover min-h-11"
-          >
+          <Button type="button" onClick={startCreate}>
             + New Template
-          </button>
+          </Button>
         )}
       </div>
 
       {/* Create / Edit form */}
       {isFormOpen && (
-        <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-          <h2 className="text-base font-semibold text-foreground">
+        <div className="bg-card flex flex-col gap-4 rounded-2xl p-5 shadow-sm">
+          <h2 className="text-foreground text-base font-semibold">
             {editingId ? "Edit Template" : "New Template"}
           </h2>
 
-          <p className="text-xs text-hint -mt-1">
+          <p className="text-hint -mt-1 text-xs">
             Fields marked{" "}
             <span className="text-danger" aria-hidden="true">
               *
@@ -221,34 +213,26 @@ export function TemplatesClient({
 
           {/* Title */}
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="tpl-title"
-              className="text-sm font-medium text-label"
-            >
+            <label htmlFor="tpl-title" className="text-label text-sm font-medium">
               Title{" "}
               <span className="text-danger" aria-hidden="true">
                 *
               </span>
             </label>
-            <input
+            <Input
               id="tpl-title"
               type="text"
               value={draft.title}
               onChange={(e) => updateDraft("title", e.target.value)}
               aria-required="true"
               placeholder="Loose-leash walking"
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
           {/* Description */}
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="tpl-description"
-              className="text-sm font-medium text-label"
-            >
-              Description{" "}
-              <span className="text-hint font-normal">(optional)</span>
+            <label htmlFor="tpl-description" className="text-label text-sm font-medium">
+              Description <span className="text-hint font-normal">(optional)</span>
             </label>
             <textarea
               id="tpl-description"
@@ -256,38 +240,37 @@ export function TemplatesClient({
               onChange={(e) => updateDraft("description", e.target.value)}
               rows={3}
               placeholder="General notes or context for this exercise..."
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary resize-none"
+              className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
             />
           </div>
 
           {/* Steps */}
           <div className="flex flex-col gap-2">
-            <p className="text-sm font-medium text-label">
-              Steps{" "}
-              <span className="text-hint font-normal">(optional)</span>
+            <p className="text-label text-sm font-medium">
+              Steps <span className="text-hint font-normal">(optional)</span>
             </p>
             {draft.steps.map((step, i) => (
               <div key={i} className="flex items-center gap-2">
                 <span
-                  className="text-xs font-semibold text-hint w-6 shrink-0 text-center"
+                  className="text-hint w-6 shrink-0 text-center text-xs font-semibold"
                   aria-hidden="true"
                 >
                   {i + 1}.
                 </span>
-                <input
+                <Input
                   type="text"
                   value={step}
                   onChange={(e) => updateStep(i, e.target.value)}
                   aria-label={`Step ${i + 1}`}
                   placeholder={`Step ${i + 1}`}
-                  className="flex-1 border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
+                  className="w-auto flex-1"
                 />
                 {draft.steps.length > 1 && (
                   <button
                     type="button"
                     onClick={() => removeStep(i)}
                     aria-label={`Remove step ${i + 1}`}
-                    className="text-danger hover:text-danger min-h-11 min-w-11 flex items-center justify-center shrink-0"
+                    className="text-danger hover:text-danger flex min-h-11 min-w-11 shrink-0 items-center justify-center"
                   >
                     ✕
                   </button>
@@ -297,7 +280,7 @@ export function TemplatesClient({
             <button
               type="button"
               onClick={addStep}
-              className="w-full border border-dashed border-border text-muted-foreground rounded-lg py-2 text-sm hover:bg-background min-h-11"
+              className="border-border text-muted-foreground hover:bg-background min-h-11 w-full rounded-lg border border-dashed py-2 text-sm"
             >
               + Add step
             </button>
@@ -305,44 +288,34 @@ export function TemplatesClient({
 
           {/* Resource link */}
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="tpl-link"
-              className="text-sm font-medium text-label"
-            >
-              Resource link{" "}
-              <span className="text-hint font-normal">(optional)</span>
+            <label htmlFor="tpl-link" className="text-label text-sm font-medium">
+              Resource link <span className="text-hint font-normal">(optional)</span>
             </label>
-            <input
+            <Input
               id="tpl-link"
               type="text"
               value={draft.link_url}
               onChange={(e) => updateDraft("link_url", e.target.value)}
               placeholder="https://..."
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
           {/* Dog-specific note */}
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="tpl-dog-note"
-              className="text-sm font-medium text-label"
-            >
-              Dog-specific note{" "}
-              <span className="text-hint font-normal">(optional)</span>
+            <label htmlFor="tpl-dog-note" className="text-label text-sm font-medium">
+              Dog-specific note <span className="text-hint font-normal">(optional)</span>
             </label>
-            <input
+            <Input
               id="tpl-dog-note"
               type="text"
               value={draft.dog_note}
               onChange={(e) => updateDraft("dog_note", e.target.value)}
               aria-describedby="tpl-dog-note-hint"
               placeholder="Personalized tip shown to the owner..."
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
-            <p id="tpl-dog-note-hint" className="text-xs text-hint">
-              This is pre-filled as a suggestion — trainers customize it per dog
-              when adding this template to a session.
+            <p id="tpl-dog-note-hint" className="text-hint text-xs">
+              This is pre-filled as a suggestion — trainers customize it per dog when adding this
+              template to a session.
             </p>
           </div>
 
@@ -353,27 +326,24 @@ export function TemplatesClient({
           )}
 
           <div className="flex gap-3">
-            <button
+            <Button
               type="button"
               onClick={handleSave}
               disabled={saving || !draft.title.trim()}
               aria-disabled={saving || !draft.title.trim()}
-              className="flex-1 bg-primary text-primary-foreground rounded-lg py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed min-h-11"
+              className="flex-1"
             >
-              {saving
-                ? "Saving..."
-                : editingId
-                  ? "Save Changes"
-                  : "Create Template"}
-            </button>
-            <button
+              {saving ? "Saving..." : editingId ? "Save Changes" : "Create Template"}
+            </Button>
+            <Button
               type="button"
+              variant="secondary"
               onClick={cancelForm}
               disabled={saving}
-              className="flex-1 bg-card border border-border text-secondary-foreground rounded-lg py-3 text-sm font-medium hover:bg-background disabled:opacity-50 min-h-11"
+              className="flex-1"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -381,12 +351,12 @@ export function TemplatesClient({
       {/* Template list */}
       {templates.length === 0 && !isFormOpen ? (
         <div className="bg-card rounded-2xl p-12 text-center shadow-sm">
-          <p className="text-4xl mb-4">🐾</p>
+          <p className="mb-4 text-4xl">🐾</p>
           <p className="text-muted-foreground text-sm">No templates yet</p>
           <button
             type="button"
             onClick={startCreate}
-            className="mt-4 text-primary text-sm hover:underline"
+            className="text-primary mt-4 text-sm hover:underline"
           >
             Create your first template
           </button>
@@ -395,41 +365,30 @@ export function TemplatesClient({
         <div className="flex flex-col gap-3">
           {templates.map((template) => {
             const isConfirmingDelete = confirmDeleteId === template.id;
-            const filteredSteps =
-              template.steps?.filter((s) => s.trim().length > 0) ?? [];
+            const filteredSteps = template.steps?.filter((s) => s.trim().length > 0) ?? [];
 
             return (
-              <div
-                key={template.id}
-                className="bg-card rounded-2xl p-4 shadow-sm"
-              >
+              <div key={template.id} className="bg-card rounded-2xl p-4 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
-                  <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-foreground text-sm">
-                      {template.title}
-                    </p>
-                    <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-foreground text-sm font-semibold">{template.title}</p>
+                    <div className="mt-1 flex flex-wrap items-center gap-1.5">
                       {filteredSteps.length > 0 && (
-                        <span className="text-xs bg-primary-subtle text-primary-subtle-foreground rounded-full px-2 py-0.5">
-                          {filteredSteps.length}{" "}
-                          {filteredSteps.length === 1 ? "step" : "steps"}
+                        <span className="bg-primary-subtle text-primary-subtle-foreground rounded-full px-2 py-0.5 text-xs">
+                          {filteredSteps.length} {filteredSteps.length === 1 ? "step" : "steps"}
                         </span>
                       )}
-                      {template.link_url && (
-                        <span className="text-xs text-hint">🔗 link</span>
-                      )}
-                      {template.dog_note && (
-                        <span className="text-xs text-hint">🐾 note</span>
-                      )}
+                      {template.link_url && <span className="text-hint text-xs">🔗 link</span>}
+                      {template.dog_note && <span className="text-hint text-xs">🐾 note</span>}
                     </div>
                   </div>
-                  <div className="flex items-center gap-1 shrink-0">
+                  <div className="flex shrink-0 items-center gap-1">
                     <button
                       type="button"
                       onClick={() => startEdit(template)}
                       disabled={isFormOpen}
                       aria-label={`Edit "${template.title}"`}
-                      className="text-sm text-muted-foreground hover:text-foreground min-h-11 px-2 disabled:opacity-40"
+                      className="text-muted-foreground hover:text-foreground min-h-11 px-2 text-sm disabled:opacity-40"
                     >
                       Edit
                     </button>
@@ -438,7 +397,7 @@ export function TemplatesClient({
                       onClick={() => setConfirmDeleteId(template.id)}
                       disabled={isFormOpen || isConfirmingDelete}
                       aria-label={`Delete "${template.title}"`}
-                      className="text-sm text-danger hover:text-danger min-h-11 px-2 disabled:opacity-40"
+                      className="text-danger hover:text-danger min-h-11 px-2 text-sm disabled:opacity-40"
                     >
                       Delete
                     </button>
@@ -446,7 +405,7 @@ export function TemplatesClient({
                 </div>
 
                 {template.description && (
-                  <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
+                  <p className="text-muted-foreground mt-2 line-clamp-2 text-sm">
                     {template.description}
                   </p>
                 )}
@@ -457,39 +416,44 @@ export function TemplatesClient({
                     role="alertdialog"
                     aria-labelledby={`delete-tpl-${template.id}`}
                     aria-describedby={`delete-tpl-desc-${template.id}`}
-                    className="mt-3 bg-danger-subtle border border-danger-border rounded-xl p-3 flex flex-col gap-2"
+                    className="bg-danger-subtle border-danger-border mt-3 flex flex-col gap-2 rounded-xl border p-3"
                   >
                     <p
                       id={`delete-tpl-${template.id}`}
-                      className="text-sm font-semibold text-foreground"
+                      className="text-foreground text-sm font-semibold"
                     >
                       Delete &quot;{template.title}&quot;?
                     </p>
-                    <p id={`delete-tpl-desc-${template.id}`} className="text-xs text-muted-foreground">
+                    <p
+                      id={`delete-tpl-desc-${template.id}`}
+                      className="text-muted-foreground text-xs"
+                    >
                       This cannot be undone.
                     </p>
                     {error && (
-                      <p role="alert" className="text-xs text-danger">
+                      <p role="alert" className="text-danger text-xs">
                         {error}
                       </p>
                     )}
                     <div className="flex gap-2">
-                      <button
+                      <Button
                         type="button"
+                        variant="danger"
                         onClick={() => handleDelete(template.id)}
                         disabled={deleting}
-                        className="flex-1 bg-danger text-danger-foreground rounded-lg py-2 text-sm font-medium hover:bg-danger-hover disabled:opacity-50 min-h-11"
+                        className="flex-1"
                       >
                         {deleting ? "Deleting..." : "Yes, delete"}
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         type="button"
+                        variant="secondary"
                         onClick={() => setConfirmDeleteId(null)}
                         disabled={deleting}
-                        className="flex-1 bg-card border border-border text-secondary-foreground rounded-lg py-2 text-sm font-medium hover:bg-background disabled:opacity-50 min-h-11"
+                        className="flex-1"
                       >
                         Cancel
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )}

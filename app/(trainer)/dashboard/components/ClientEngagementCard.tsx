@@ -41,7 +41,7 @@ export const ClientEngagementCard = ({
   return (
     <a
       href={`/clients/${clientId}`}
-      className="flex gap-4 rounded-2xl bg-card p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+      className="bg-card flex gap-4 rounded-2xl p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
     >
       {dogPhotoUrl ? (
         <Image
@@ -52,7 +52,7 @@ export const ClientEngagementCard = ({
           className="h-14 w-14 shrink-0 rounded-full object-cover"
         />
       ) : (
-        <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-accent text-2xl">
+        <div className="bg-accent flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl">
           🐾
         </div>
       )}
@@ -60,50 +60,55 @@ export const ClientEngagementCard = ({
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="truncate text-base font-semibold text-foreground">
-              {dogName}
-            </p>
-
-            <p className="truncate text-sm text-muted-foreground">
-              {ownerName}
-            </p>
+            <p className="text-foreground truncate text-base font-semibold">{dogName}</p>
+            <p className="text-muted-foreground truncate text-sm">{ownerName}</p>
           </div>
 
           {needsFollowUp && (
-            <span className="shrink-0 rounded-full border border-warning-border bg-warning-subtle px-2.5 py-1 text-xs font-medium text-label">
+            <span className="border-warning-border bg-warning-subtle text-label shrink-0 rounded-full border px-2.5 py-1 text-xs font-medium">
               Needs follow-up
             </span>
           )}
         </div>
 
         {latestSession ? (
-          <div className="mt-3 flex flex-col gap-1">
-            <p className="text-sm text-label">
-              Latest: Session {latestSession.sessionNumber}
+          <div className="mt-3 flex flex-col gap-1.5">
+            <p className="text-sm">
+              <span className="text-muted-foreground">Latest:</span>{" "}
+              <span className="text-label font-medium">Session {latestSession.sessionNumber}</span>
             </p>
 
-            <p className="text-sm text-muted-foreground">
-              {getSessionEngagementLabel(status!)}
-              {" • "}
-              {latestSession.homeworkCompleted}/{latestSession.homeworkTotal}{" "}
-              done
+            <p className="text-muted-foreground text-sm">
+              {getSessionEngagementLabel(status!)} {" • "}
+              {latestSession.homeworkCompleted}/{latestSession.homeworkTotal} done
             </p>
+
+            {latestSession.homeworkTotal > 0 && (
+              <div
+                className="bg-muted mt-1 h-2 w-full overflow-hidden rounded-full"
+                aria-hidden="true"
+              >
+                <div
+                  className="bg-primary h-full rounded-full"
+                  style={{
+                    width: `${(latestSession.homeworkCompleted / latestSession.homeworkTotal) * 100}%`,
+                  }}
+                />
+              </div>
+            )}
 
             {latestSession.lastViewedAt && (
-              <p className="text-sm text-muted-foreground">
+              <p className="text-hint mt-1 text-xs">
                 Last viewed{" "}
-                {new Date(latestSession.lastViewedAt).toLocaleDateString(
-                  "en-US",
-                  {
-                    month: "short",
-                    day: "numeric",
-                  },
-                )}
+                {new Date(latestSession.lastViewedAt).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })}
               </p>
             )}
           </div>
         ) : (
-          <p className="mt-2 text-sm text-muted-foreground">No sessions yet</p>
+          <p className="text-muted-foreground mt-2 text-sm">No sessions yet</p>
         )}
       </div>
     </a>

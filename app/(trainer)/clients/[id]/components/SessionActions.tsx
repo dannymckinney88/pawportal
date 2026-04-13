@@ -2,7 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export function SessionActions({
   sessionId,
@@ -36,10 +38,7 @@ export function SessionActions({
     setError("");
     const supabase = createClient();
 
-    const { error: deleteError } = await supabase
-      .from("sessions")
-      .delete()
-      .eq("id", sessionId);
+    const { error: deleteError } = await supabase.from("sessions").delete().eq("id", sessionId);
 
     if (deleteError) {
       setError(deleteError.message);
@@ -58,39 +57,38 @@ export function SessionActions({
         role="alertdialog"
         aria-labelledby={`delete-confirm-${sessionId}`}
         aria-describedby={`delete-desc-${sessionId}`}
-        className="mt-3 bg-danger-subtle border border-danger-border rounded-xl p-3 flex flex-col gap-2"
+        className="bg-danger-subtle border-danger-border mt-3 flex flex-col gap-2 rounded-xl border p-3"
       >
-        <p
-          id={`delete-confirm-${sessionId}`}
-          className="text-sm font-semibold text-foreground"
-        >
+        <p id={`delete-confirm-${sessionId}`} className="text-foreground text-sm font-semibold">
           Delete Session {sessionNumber}?
         </p>
-        <p id={`delete-desc-${sessionId}`} className="text-xs text-muted-foreground">
+        <p id={`delete-desc-${sessionId}`} className="text-muted-foreground text-xs">
           This cannot be undone. The client&apos;s recap link will stop working.
         </p>
         {error && (
-          <p role="alert" className="text-xs text-danger">
+          <p role="alert" className="text-danger text-xs">
             {error}
           </p>
         )}
         <div className="flex gap-2">
-          <button
+          <Button
             type="button"
+            variant="danger"
             onClick={handleDelete}
             disabled={deleting}
-            className="flex-1 bg-danger text-danger-foreground rounded-lg py-2 text-sm font-medium hover:bg-danger-hover disabled:opacity-50 min-h-11"
+            className="flex-1"
           >
             {deleting ? "Deleting..." : "Yes, delete"}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant="secondary"
             onClick={() => setConfirming(false)}
             disabled={deleting}
-            className="flex-1 bg-card border border-border text-secondary-foreground rounded-lg py-2 text-sm font-medium hover:bg-background disabled:opacity-50 min-h-11"
+            className="flex-1"
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -98,19 +96,19 @@ export function SessionActions({
 
   return (
     <div className="mt-3 flex gap-2">
-      <a
+      <Link
         href={`/sessions/${sessionId}/edit`}
         aria-label={`Edit Session ${sessionNumber}`}
-        className="flex-1 text-center bg-secondary text-secondary-foreground rounded-lg py-2 text-sm font-medium hover:bg-secondary-hover min-h-11 flex items-center justify-center"
+        className="bg-secondary text-secondary-foreground hover:bg-secondary-hover flex min-h-11 flex-1 items-center justify-center rounded-lg py-2 text-center text-sm font-medium"
       >
         Edit
-      </a>
+      </Link>
       <button
         ref={deleteButtonRef}
         type="button"
         aria-label={`Delete Session ${sessionNumber}`}
         onClick={() => setConfirming(true)}
-        className="flex-1 text-center bg-card border border-danger-border text-danger rounded-lg py-2 text-sm font-medium hover:bg-danger-subtle min-h-11"
+        className="bg-card border-danger-border text-danger hover:bg-danger-subtle min-h-11 flex-1 rounded-lg border py-2 text-center text-sm font-medium"
       >
         Delete
       </button>

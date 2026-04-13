@@ -44,18 +44,15 @@ export const HomeworkCard = ({
     setIsSaving(true);
 
     try {
-      const response = await fetch(
-        `/api/sessions/${sessionToken}/homework/${id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            isChecked: next,
-          }),
+      const response = await fetch(`/api/sessions/${sessionToken}/homework/${id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          isChecked: next,
+        }),
+      });
 
       const result = await response.json().catch(() => null);
 
@@ -88,28 +85,26 @@ export const HomeworkCard = ({
         {title}
       </p>
 
-      <div className="my-2 border-t border-border-subtle" />
+      <div className="border-border-subtle my-2 border-t" />
 
       {description && description.trim().length > 0 && (
-        <p className="mb-3 text-sm leading-relaxed text-text">{description}</p>
+        <p className="text-text mb-3 text-sm leading-relaxed">{description}</p>
       )}
 
       {hasSteps && (
         <div className={description?.trim() ? "mt-3" : ""}>
-          <p className="mb-2 text-xs font-medium uppercase tracking-wide text-hint">
-            Steps
-          </p>
+          <p className="text-hint mb-2 text-xs font-medium tracking-wide uppercase">Steps</p>
 
           <ol>
             {filteredSteps.map((step, index) => (
               <li
                 key={index}
-                className="flex items-start gap-3 border-b border-border-subtle py-2 last:border-0"
+                className="border-border-subtle flex items-start gap-3 border-b py-2 last:border-0"
               >
-                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary-subtle text-xs font-bold text-primary-subtle-foreground">
+                <span className="bg-primary-subtle text-primary-subtle-foreground mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold">
                   {index + 1}
                 </span>
-                <span className="text-sm text-label">{step}</span>
+                <span className="text-label text-sm">{step}</span>
               </li>
             ))}
           </ol>
@@ -121,7 +116,7 @@ export const HomeworkCard = ({
           href={link_url}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 block text-sm font-medium text-primary hover:underline"
+          className="text-primary mt-3 block text-sm font-medium hover:underline"
           aria-label={`Watch video for ${title}`}
         >
           ▶ Watch video
@@ -129,23 +124,18 @@ export const HomeworkCard = ({
       )}
 
       {dog_note && (
-        <div className="mt-3 flex items-start gap-2 border-t border-border-subtle pt-3">
-          <span className="shrink-0" aria-hidden="true">
-            🐾
-          </span>
-          <p className="text-sm italic text-accent-foreground">{dog_note}</p>
+        <div className="border-border-subtle mt-3 border-t pt-3">
+          <p className="text-muted-foreground text-sm italic">{dog_note}</p>
         </div>
       )}
 
-      <div className="mt-3 border-t border-border-subtle pt-3">
+      <div className="border-border-subtle mt-3 border-t pt-3">
         <button
           type="button"
           onClick={toggle}
           disabled={isSaving}
           aria-pressed={checked}
-          aria-label={
-            checked ? `Mark "${title}" incomplete` : `Mark "${title}" complete`
-          }
+          aria-label={checked ? `Mark "${title}" incomplete` : `Mark "${title}" complete`}
           className="flex min-h-11 w-full items-center gap-2 disabled:opacity-60"
         >
           <span
@@ -154,12 +144,7 @@ export const HomeworkCard = ({
             }`}
           >
             {checked && (
-              <svg
-                viewBox="0 0 12 12"
-                fill="none"
-                className="h-3 w-3"
-                aria-hidden="true"
-              >
+              <svg viewBox="0 0 12 12" fill="none" className="h-3 w-3" aria-hidden="true">
                 <polyline
                   points="2 6 5 9 10 3"
                   stroke="white"
@@ -173,12 +158,10 @@ export const HomeworkCard = ({
 
           <span
             className={
-              checked
-                ? "text-sm font-medium text-success-foreground"
-                : "text-sm text-muted-foreground"
+              checked ? "text-foreground text-sm font-medium" : "text-muted-foreground text-sm"
             }
           >
-            {checked ? "Done ✓" : "Mark as done"}
+            {checked ? "Done" : "Mark as done"}
           </span>
         </button>
       </div>

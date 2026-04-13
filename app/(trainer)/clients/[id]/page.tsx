@@ -14,11 +14,7 @@ import { PageHeading } from "@/app/(trainer)/components/PageHeading";
 import { SessionMessageThread } from "@/app/components/session-messages/SessionMessageThread";
 import type { ClientSessionRow } from "./types";
 
-export default async function ClientPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+export default async function ClientPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const supabase = await createClient();
 
@@ -28,11 +24,7 @@ export default async function ClientPage({
 
   if (!user) redirect("/login");
 
-  const { data: client } = await supabase
-    .from("clients")
-    .select("*")
-    .eq("id", id)
-    .single();
+  const { data: client } = await supabase.from("clients").select("*").eq("id", id).single();
 
   if (!client) redirect("/dashboard");
 
@@ -53,26 +45,24 @@ export default async function ClientPage({
         id,
         is_checked
       )
-    `,
+    `
     )
     .eq("client_id", id)
     .order("created_at", { ascending: false });
 
-  const sessionsWithMeta = enrichSessionsWithMeta(
-    (sessions as ClientSessionRow[] | null) ?? [],
-  );
+  const sessionsWithMeta = enrichSessionsWithMeta((sessions as ClientSessionRow[] | null) ?? []);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-8">
         <a
           href="/dashboard"
-          className="inline-block py-1 text-sm text-hint hover:text-muted-foreground"
+          className="text-hint hover:text-muted-foreground inline-block py-1 text-sm"
         >
           ← Back
         </a>
 
-        <div className="mt-4 flex items-center gap-5 rounded-2xl bg-card p-6 shadow-sm">
+        <div className="bg-card mt-4 flex items-center gap-5 rounded-2xl p-6 shadow-sm">
           <div className="flex shrink-0 flex-col items-center gap-3">
             {client.dog_photo_url ? (
               <Image
@@ -84,7 +74,7 @@ export default async function ClientPage({
                 priority
               />
             ) : (
-              <div className="flex h-20 w-20 items-center justify-center rounded-full bg-accent text-3xl">
+              <div className="bg-accent flex h-20 w-20 items-center justify-center rounded-full text-3xl">
                 🐾
               </div>
             )}
@@ -93,26 +83,22 @@ export default async function ClientPage({
           </div>
 
           <div>
-            <PageHeading className="text-2xl font-bold text-foreground">
+            <PageHeading className="text-foreground text-2xl font-bold">
               {client.dog_name}
             </PageHeading>
 
-            <p className="mt-0.5 text-sm text-muted-foreground">
-              {client.owner_name}
-            </p>
+            <p className="text-muted-foreground mt-0.5 text-sm">{client.owner_name}</p>
 
-            {client.phone && (
-              <p className="mt-1 text-sm text-hint">{client.phone}</p>
-            )}
+            {client.phone && <p className="text-hint mt-1 text-sm">{client.phone}</p>}
           </div>
         </div>
 
-        <div className="mt-8 flex items-center justify-between border-b border-border pb-3">
-          <h2 className="text-lg font-semibold text-foreground">Sessions</h2>
+        <div className="border-border mt-8 flex items-center justify-between border-b pb-3">
+          <h2 className="text-foreground text-lg font-semibold">Sessions</h2>
 
           <a
             href={`/sessions/new?clientId=${client.id}`}
-            className="flex min-h-11 items-center rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover flex min-h-11 items-center rounded-lg px-4 py-2 text-sm font-medium"
           >
             + New Session
           </a>
@@ -121,25 +107,19 @@ export default async function ClientPage({
         <div className="mt-4 flex flex-col gap-4">
           {sessionsWithMeta.length > 0 ? (
             sessionsWithMeta.map((session) => (
-              <div
-                key={session.id}
-                className="rounded-2xl bg-card p-5 shadow-sm"
-              >
+              <div key={session.id} className="bg-card rounded-2xl p-5 shadow-sm">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-base font-semibold text-foreground">
+                    <p className="text-foreground text-base font-semibold">
                       Session {session.session_number}
                     </p>
 
-                    <p className="mt-0.5 text-sm text-muted-foreground">
-                      {new Date(session.created_at).toLocaleDateString(
-                        "en-US",
-                        {
-                          month: "long",
-                          day: "numeric",
-                          year: "numeric",
-                        },
-                      )}
+                    <p className="text-muted-foreground mt-0.5 text-sm">
+                      {new Date(session.created_at).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
                     </p>
                   </div>
 
@@ -147,9 +127,7 @@ export default async function ClientPage({
                 </div>
 
                 {session.summary && (
-                  <p className="mt-3 line-clamp-2 text-sm text-text">
-                    {session.summary}
-                  </p>
+                  <p className="text-text mt-3 line-clamp-2 text-sm">{session.summary}</p>
                 )}
 
                 <SessionProgressMeta
@@ -164,7 +142,7 @@ export default async function ClientPage({
                     href={`/s/${session.token}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-sm text-primary hover:underline"
+                    className="text-primary/80 hover:text-primary text-sm hover:underline"
                   >
                     View client page →
                   </a>
@@ -172,7 +150,7 @@ export default async function ClientPage({
                   <CopyLinkButton sessionToken={session.token} />
                 </div>
 
-                <div className="mt-4 border-t border-border pt-4">
+                <div className="border-border mt-4 border-t pt-4">
                   <SessionActions
                     sessionId={session.id}
                     sessionNumber={session.session_number}
@@ -180,7 +158,7 @@ export default async function ClientPage({
                   />
                 </div>
 
-                <div className="border-t border-border pt-4">
+                <div className="border-border pt-4">
                   <SessionMessageThread
                     sessionId={session.id}
                     sessionToken={session.token}
@@ -190,14 +168,12 @@ export default async function ClientPage({
               </div>
             ))
           ) : (
-            <div className="rounded-2xl bg-card px-8 py-14 text-center shadow-sm">
-              <p className="mb-4 text-sm text-muted-foreground">
-                No sessions yet
-              </p>
+            <div className="bg-card rounded-2xl px-8 py-14 text-center shadow-sm">
+              <p className="text-muted-foreground mb-4 text-sm">No sessions yet</p>
 
               <a
                 href={`/sessions/new?clientId=${client.id}`}
-                className="inline-flex min-h-11 items-center rounded-lg bg-primary px-6 py-2 text-sm font-medium text-primary-foreground hover:bg-primary-hover"
+                className="bg-primary text-primary-foreground hover:bg-primary-hover inline-flex min-h-11 items-center rounded-lg px-6 py-2 text-sm font-medium"
               >
                 Create first session
               </a>
@@ -205,11 +181,11 @@ export default async function ClientPage({
           )}
         </div>
 
-        <div className="mt-8 rounded-2xl border border-danger-border bg-card p-5 shadow-sm">
-          <p className="text-sm font-medium text-foreground">Client settings</p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Archive this client to remove them from your active dashboard while
-            keeping session history.
+        <div className="border-danger-border bg-card mt-8 rounded-2xl border p-5 shadow-sm">
+          <p className="text-foreground text-sm font-medium">Client settings</p>
+          <p className="text-muted-foreground mt-1 text-sm">
+            Archive this client to remove them from your active dashboard while keeping session
+            history.
           </p>
 
           <div className="mt-4">

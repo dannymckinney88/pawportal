@@ -11,7 +11,7 @@ export function NavLinks() {
       <Link
         href="/dashboard"
         aria-current={pathname === "/dashboard" ? "page" : undefined}
-        className="text-sm font-medium text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg hover:bg-background"
+        className="text-muted-foreground hover:text-foreground hover:bg-background rounded-lg px-3 py-2 text-sm font-medium"
       >
         Clients
       </Link>
@@ -19,7 +19,7 @@ export function NavLinks() {
       <Link
         href="/templates"
         aria-current={pathname.startsWith("/templates") ? "page" : undefined}
-        className="text-sm font-medium text-muted-foreground hover:text-foreground px-3 py-2 rounded-lg hover:bg-background"
+        className="text-muted-foreground hover:text-foreground hover:bg-background rounded-lg px-3 py-2 text-sm font-medium"
       >
         Templates
       </Link>

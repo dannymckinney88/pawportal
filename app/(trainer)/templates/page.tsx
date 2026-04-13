@@ -17,12 +17,9 @@ export default async function TemplatesPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <TemplatesClient
-          initialTemplates={templates ?? []}
-          trainerId={user.id}
-        />
+    <div className="bg-background min-h-screen">
+      <div className="mx-auto max-w-4xl px-4 py-8">
+        <TemplatesClient initialTemplates={templates ?? []} trainerId={user.id} />
       </div>
     </div>
   );

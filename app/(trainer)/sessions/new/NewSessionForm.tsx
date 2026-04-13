@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 import { ClientInfoBanner } from "../components/ClientInfoBanner";
 import {
   HomeworkItemEditor,
@@ -43,7 +45,7 @@ export function NewSessionForm() {
         (item.description.trim().length === 0 &&
           item.link_url.trim().length === 0 &&
           item.dog_note.trim().length === 0 &&
-          item.steps.every((s) => s.trim().length === 0)),
+          item.steps.every((s) => s.trim().length === 0))
     );
 
   useEffect(() => {
@@ -75,11 +77,9 @@ export function NewSessionForm() {
   const updateItem = (
     index: number,
     field: "title" | "description" | "link_url" | "dog_note",
-    value: string,
+    value: string
   ) => {
-    setItems((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)),
-    );
+    setItems((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
   };
 
   const updateStep = (itemIndex: number, stepIndex: number, value: string) => {
@@ -88,15 +88,13 @@ export function NewSessionForm() {
         if (i !== itemIndex) return item;
         const steps = item.steps.map((s, si) => (si === stepIndex ? value : s));
         return { ...item, steps };
-      }),
+      })
     );
   };
 
   const addStep = (itemIndex: number) => {
     setItems((prev) =>
-      prev.map((item, i) =>
-        i === itemIndex ? { ...item, steps: [...item.steps, ""] } : item,
-      ),
+      prev.map((item, i) => (i === itemIndex ? { ...item, steps: [...item.steps, ""] } : item))
     );
   };
 
@@ -106,14 +104,13 @@ export function NewSessionForm() {
         if (i !== itemIndex) return item;
         const steps = item.steps.filter((_, si) => si !== stepIndex);
         return { ...item, steps: steps.length > 0 ? steps : [""] };
-      }),
+      })
     );
   };
 
   const addItem = () => setItems((prev) => [...prev, emptyItem()]);
 
-  const removeItem = (index: number) =>
-    setItems((prev) => prev.filter((_, i) => i !== index));
+  const removeItem = (index: number) => setItems((prev) => prev.filter((_, i) => i !== index));
 
   const applyTemplate = (template: HomeworkTemplate) => {
     const filled: ItemEditorItem = {
@@ -121,8 +118,7 @@ export function NewSessionForm() {
       description: template.description ?? "",
       link_url: template.link_url ?? "",
       dog_note: template.dog_note ?? "",
-      steps:
-        template.steps && template.steps.length > 0 ? template.steps : [""],
+      steps: template.steps && template.steps.length > 0 ? template.steps : [""],
     };
     setItems((prev) => {
       const blankIndex = prev.findIndex((item) => item.title.trim() === "");
@@ -187,7 +183,7 @@ export function NewSessionForm() {
             item.steps.filter((s) => s.trim().length > 0).length > 0
               ? item.steps.filter((s) => s.trim().length > 0)
               : null,
-        })),
+        }))
       );
 
       if (hwError) {
@@ -202,40 +198,31 @@ export function NewSessionForm() {
 
   if (!clientId) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="bg-background flex min-h-screen items-center justify-center">
         <p className="text-muted-foreground text-sm">No client selected.</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-lg mx-auto px-4 py-8">
+    <div className="bg-background min-h-screen">
+      <div className="mx-auto max-w-lg px-4 py-8">
         {/* Header */}
-        <div className="flex items-center gap-3 mb-6">
-          <a
+        <div className="mb-6 flex items-center gap-3">
+          <Link
             href={`/clients/${clientId}`}
             className="text-hint hover:text-muted-foreground text-sm"
           >
             ← Back
-          </a>
-          <h1
-            ref={headingRef}
-            tabIndex={-1}
-            className="text-xl font-bold text-foreground"
-          >
+          </Link>
+          <h1 ref={headingRef} tabIndex={-1} className="text-foreground text-xl font-bold">
             New Session
           </h1>
         </div>
 
-        {client && (
-          <ClientInfoBanner
-            dogName={client.dog_name}
-            ownerName={client.owner_name}
-          />
-        )}
+        {client && <ClientInfoBanner dogName={client.dog_name} ownerName={client.owner_name} />}
 
-        <p className="text-xs text-hint mb-4">
+        <p className="text-hint mb-4 text-xs">
           Fields marked{" "}
           <span className="text-danger" aria-hidden="true">
             *
@@ -245,15 +232,10 @@ export function NewSessionForm() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           {/* Session Summary */}
-          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-            <h2 className="text-lg font-semibold text-foreground">
-              Session Summary
-            </h2>
+          <div className="bg-card flex flex-col gap-4 rounded-2xl p-5 shadow-sm">
+            <h2 className="text-foreground text-lg font-semibold">Session Summary</h2>
             <div className="flex flex-col gap-1">
-              <label
-                htmlFor="summary"
-                className="text-sm font-medium text-label"
-              >
+              <label htmlFor="summary" className="text-label text-sm font-medium">
                 What did you cover today?{" "}
                 <span className="text-danger" aria-hidden="true">
                   *
@@ -267,26 +249,26 @@ export function NewSessionForm() {
                 aria-required="true"
                 aria-describedby="summary-hint"
                 placeholder="We worked on loose-leash walking and sit-stay. Buddy did great with focus exercises..."
-                className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary resize-none"
+                className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
               />
-              <p id="summary-hint" className="text-xs text-hint">
-                Briefly describe what you worked on. This appears on the
-                client&apos;s recap page.
+              <p id="summary-hint" className="text-hint text-xs">
+                Briefly describe what you worked on. This appears on the client&apos;s recap page.
               </p>
             </div>
           </div>
 
           {/* Homework Items */}
-          <div className="bg-card rounded-2xl p-5 shadow-sm flex flex-col gap-4">
-            <h2 className="text-lg font-semibold text-foreground">Homework</h2>
-
-            <button
-              type="button"
-              onClick={() => setSheetOpen(true)}
-              className="w-full border border-dashed border-primary/50 text-primary rounded-xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-11"
-            >
-              ＋ Add from template
-            </button>
+          <div className="bg-card flex flex-col gap-4 rounded-2xl p-5 shadow-sm">
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-foreground text-lg font-semibold">Homework</h2>
+              <button
+                type="button"
+                onClick={() => setSheetOpen(true)}
+                className="bg-primary-subtle text-primary hover:bg-primary-subtle/70 focus-visible:ring-primary/20 shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition focus-visible:ring-2 focus-visible:outline-none"
+              >
+                + From template
+              </button>
+            </div>
 
             {items.map((item, index) => (
               <HomeworkItemEditor
@@ -306,7 +288,7 @@ export function NewSessionForm() {
             <button
               type="button"
               onClick={addItem}
-              className="w-full border border-dashed border-primary/50 text-primary rounded-xl py-3 text-sm font-medium hover:bg-primary-subtle min-h-11"
+              className="border-border text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:ring-primary/20 min-h-11 w-full rounded-xl border border-dashed py-2.5 text-sm transition focus-visible:ring-2 focus-visible:outline-none"
             >
               + Add homework item
             </button>
@@ -319,20 +301,19 @@ export function NewSessionForm() {
           )}
 
           {!canSave && !loading && (
-            <p role="status" className="text-xs text-hint text-center">
-              Add a session summary to continue. Each homework item needs a
-              title.
+            <p role="status" className="text-hint text-center text-xs">
+              Add a session summary to continue. Each homework item needs a title.
             </p>
           )}
 
-          <button
+          <Button
             type="submit"
             disabled={!canSave || loading}
             aria-disabled={!canSave || loading}
-            className="w-full bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50 disabled:cursor-not-allowed min-h-11"
+            className="w-full"
           >
             {loading ? "Saving session..." : "Save Session"}
-          </button>
+          </Button>
         </form>
       </div>
 

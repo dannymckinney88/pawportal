@@ -37,16 +37,13 @@ export async function PATCH(request: Request, context: RouteContext) {
     .single();
 
   if (homeworkError || !homeworkItem) {
-    return NextResponse.json(
-      { error: "Homework item not found" },
-      { status: 404 },
-    );
+    return NextResponse.json({ error: "Homework item not found" }, { status: 404 });
   }
 
   if (homeworkItem.session_id !== session.id) {
     return NextResponse.json(
       { error: "Homework item does not belong to session" },
-      { status: 403 },
+      { status: 403 }
     );
   }
 

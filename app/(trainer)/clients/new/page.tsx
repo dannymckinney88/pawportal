@@ -4,6 +4,10 @@ import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import { PawPrint } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function NewClientPage() {
   const [ownerName, setOwnerName] = useState("");
@@ -53,9 +57,7 @@ export default function NewClientPage() {
         return;
       }
 
-      const { data: urlData } = supabase.storage
-        .from("dog_photos")
-        .getPublicUrl(fileName);
+      const { data: urlData } = supabase.storage.from("dog_photos").getPublicUrl(fileName);
 
       dog_photo_url = urlData.publicUrl;
     }
@@ -78,46 +80,49 @@ export default function NewClientPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-lg mx-auto px-4 py-8">
-        <div className="flex items-center gap-3 mb-6">
-          <a
+    <div className="bg-background min-h-screen">
+      <div className="mx-auto max-w-lg px-4 py-8">
+        <div className="mb-6 flex items-center gap-3">
+          <Link
             href="/dashboard"
-            className="text-hint hover:text-muted-foreground text-sm"
+            className="text-hint hover:text-muted-foreground focus-visible:ring-primary/20 inline-flex items-center rounded-md text-sm transition focus-visible:ring-2 focus-visible:outline-none"
           >
             ← Back
-          </a>
-          <h1 className="text-xl font-bold text-foreground">Add Client</h1>
+          </Link>
+
+          <h1 className="text-foreground text-xl font-bold">Add Client</h1>
         </div>
 
         <form
           onSubmit={handleSubmit}
-          className="bg-card rounded-2xl p-6 shadow-sm flex flex-col gap-6"
+          className="bg-card flex flex-col gap-6 rounded-2xl p-6 shadow-sm"
         >
-          {/* Dog Photo */}
-          <div className="flex flex-col items-center gap-3 pb-5 border-b border-border">
-            <div className="w-24 h-24 rounded-full bg-accent flex items-center justify-center overflow-hidden">
-              {preview ? (
-                // blob URL from createObjectURL — Next.js Image does not support blob URLs
-                <Image
-                  src={preview}
-                  alt="Dog preview"
-                  width={96}
-                  height={96}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="text-4xl">🐾</span>
-              )}
-            </div>
+          <div className="border-border flex flex-col items-center gap-3 border-b pb-5">
             <button
               type="button"
               onClick={() => photoInputRef.current?.click()}
-              className="text-sm text-primary font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+              className="focus-visible:ring-primary/20 flex cursor-pointer flex-col items-center gap-3 rounded-xl p-2 transition hover:scale-[1.02] hover:opacity-90 focus-visible:ring-2 focus-visible:outline-none"
+              aria-label="Upload dog photo"
             >
-              Upload dog photo
+              <div className="bg-accent-subtle flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border">
+                {preview ? (
+                  <Image
+                    src={preview}
+                    alt="Dog preview"
+                    width={96}
+                    height={96}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <PawPrint className="text-primary h-10 w-10" aria-hidden="true" />
+                )}
+              </div>
+
+              <span className="text-hint hover:text-foreground focus-visible:ring-primary/20 inline-flex items-center rounded-md text-sm transition focus-visible:ring-2 focus-visible:outline-none">
+                Upload dog photo
+              </span>
             </button>
-            {/* Input hidden from AT — the button above is the accessible control */}
+
             <input
               ref={photoInputRef}
               type="file"
@@ -129,12 +134,11 @@ export default function NewClientPage() {
             />
           </div>
 
-          {/* Dog Name */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="dogName" className="text-sm font-medium text-label">
-              Dog&apos;s name <span className="text-danger">*</span>
+            <label htmlFor="dogName" className="text-label text-sm font-medium">
+              Dog&apos;s name <span className="text-danger ml-1">*</span>
             </label>
-            <input
+            <Input
               id="dogName"
               type="text"
               value={dogName}
@@ -142,19 +146,14 @@ export default function NewClientPage() {
               required
               aria-required="true"
               placeholder="Buddy"
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
-          {/* Owner Name */}
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="ownerName"
-              className="text-sm font-medium text-label"
-            >
-              Owner&apos;s name <span className="text-danger">*</span>
+            <label htmlFor="ownerName" className="text-label text-sm font-medium">
+              Owner&apos;s name <span className="text-danger ml-1">*</span>
             </label>
-            <input
+            <Input
               id="ownerName"
               type="text"
               value={ownerName}
@@ -162,22 +161,20 @@ export default function NewClientPage() {
               required
               aria-required="true"
               placeholder="Jane Smith"
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
-          {/* Phone */}
           <div className="flex flex-col gap-1">
-            <label htmlFor="phone" className="text-sm font-medium text-label">
+            <label htmlFor="phone" className="text-label text-sm font-medium">
               Owner&apos;s phone
             </label>
-            <input
+            <Input
               id="phone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="(602) 555-0123"
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
+              autoComplete="tel"
             />
           </div>
 
@@ -187,13 +184,9 @@ export default function NewClientPage() {
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50"
-          >
+          <Button type="submit" disabled={loading} className="w-full">
             {loading ? "Saving..." : "Save Client"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

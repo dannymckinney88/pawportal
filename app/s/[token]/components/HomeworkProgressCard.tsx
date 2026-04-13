@@ -3,10 +3,7 @@ type HomeworkProgressCardProps = {
   totalCount: number;
 };
 
-const getProgressPercent = (
-  completedCount: number,
-  totalCount: number,
-): number => {
+const getProgressPercent = (completedCount: number, totalCount: number): number => {
   if (totalCount === 0) return 0;
 
   return Math.round((completedCount / totalCount) * 100);
@@ -15,10 +12,7 @@ const getProgressPercent = (
 /**
  * Homework progress card
  */
-export const HomeworkProgressCard = ({
-  completedCount,
-  totalCount,
-}: HomeworkProgressCardProps) => {
+export const HomeworkProgressCard = ({ completedCount, totalCount }: HomeworkProgressCardProps) => {
   const progressPercent = getProgressPercent(completedCount, totalCount);
   const isComplete = totalCount > 0 && completedCount === totalCount;
 
@@ -70,7 +64,7 @@ export const HomeworkProgressCard = ({
         </span>
       </div>
 
-      <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
+      <div className="bg-muted mt-4 h-2 overflow-hidden rounded-full">
         <div
           className={`h-full rounded-full transition-all ${
             isComplete ? "bg-success-foreground" : "bg-primary"

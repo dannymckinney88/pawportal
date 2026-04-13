@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
   const supabase = createClient();
@@ -47,7 +48,7 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
         ref={triggerRef}
         type="button"
         onClick={() => setConfirming(true)}
-        className="text-sm text-danger hover:underline"
+        className="text-danger text-sm hover:underline"
       >
         Archive client
       </button>
@@ -60,33 +61,35 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
       role="alertdialog"
       aria-labelledby="archive-confirm-title"
       aria-describedby="archive-confirm-desc"
-      className="mt-4 rounded-xl border border-warning-border bg-warning-subtle p-4"
+      className="border-warning-border bg-warning-subtle mt-4 rounded-xl border p-4"
     >
-      <p id="archive-confirm-title" className="text-sm font-medium text-foreground">
+      <p id="archive-confirm-title" className="text-foreground text-sm font-medium">
         Archive this client?
       </p>
-      <p id="archive-confirm-desc" className="mt-1 text-xs text-muted-foreground">
+      <p id="archive-confirm-desc" className="text-muted-foreground mt-1 text-xs">
         This removes them from your dashboard but keeps all session history.
       </p>
 
       <div className="mt-3 flex gap-3">
-        <button
+        <Button
           type="button"
+          variant="danger"
           onClick={handleArchive}
           disabled={loading}
-          className="flex-1 rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50 min-h-11"
+          className="flex-1"
         >
           {loading ? "Archiving..." : "Yes, archive"}
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="secondary"
           onClick={() => setConfirming(false)}
           disabled={loading}
-          className="flex-1 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium disabled:opacity-50 min-h-11"
+          className="flex-1"
         >
           Cancel
-        </button>
+        </Button>
       </div>
     </div>
   );

@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
+import { PawPrint } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -32,20 +35,21 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="bg-card p-8 rounded-2xl shadow-sm w-full max-w-md">
-        <h1 className="text-2xl font-bold text-foreground mb-2">PawPortal</h1>
+    <div className="bg-background flex min-h-screen items-center justify-center">
+      <div className="bg-card w-full max-w-md rounded-2xl p-8 shadow-sm">
+        <div className="mb-12 flex flex-col items-center gap-3">
+          <PawPrint className="text-primary h-6 w-6" aria-hidden="true" />
+          <h1 className="text-2xl font-bold">HeelFlow</h1>
+          <p className="text-muted-foreground text-sm">Training made simple between sessions</p>
+        </div>
         <p className="text-muted-foreground mb-6">Sign in to your trainer account</p>
 
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="email"
-              className="text-sm font-medium text-label"
-            >
+            <label htmlFor="email" className="text-label text-sm font-medium">
               Email
             </label>
-            <input
+            <Input
               id="email"
               type="email"
               placeholder="you@example.com"
@@ -53,18 +57,14 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               aria-required="true"
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
           <div className="flex flex-col gap-1">
-            <label
-              htmlFor="password"
-              className="text-sm font-medium text-label"
-            >
+            <label htmlFor="password" className="text-label text-sm font-medium">
               Password
             </label>
-            <input
+            <Input
               id="password"
               type="password"
               placeholder="••••••••"
@@ -72,7 +72,6 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               aria-required="true"
-              className="border border-border rounded-lg px-4 py-3 text-sm outline-none focus:border-primary"
             />
           </div>
 
@@ -82,13 +81,9 @@ export default function LoginPage() {
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-primary text-primary-foreground rounded-lg px-4 py-3 text-sm font-medium hover:bg-primary-hover disabled:opacity-50"
-          >
+          <Button type="submit" variant="cta" disabled={loading} className="w-full">
             {loading ? "Signing in..." : "Sign in"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

@@ -29,9 +29,7 @@ export function SessionMessageComposer({ onSend, senderLabel, scopeId }: Props) 
       setBody("");
       textareaRef.current?.focus();
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to send. Please try again.",
-      );
+      setError(err instanceof Error ? err.message : "Failed to send. Please try again.");
     } finally {
       setSending(false);
     }
@@ -45,12 +43,9 @@ export function SessionMessageComposer({ onSend, senderLabel, scopeId }: Props) 
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      aria-label={`Send a message as ${senderLabel}`}
-    >
+    <form onSubmit={handleSubmit} aria-label={`Send a message as ${senderLabel}`}>
       {error && (
-        <p role="alert" className="mb-2 text-xs text-danger">
+        <p role="alert" className="text-danger mb-2 text-xs">
           {error}
         </p>
       )}
@@ -60,7 +55,7 @@ export function SessionMessageComposer({ onSend, senderLabel, scopeId }: Props) 
         Your message
       </label>
 
-      <div className="flex items-end gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
         <textarea
           ref={textareaRef}
           id={composerId}
@@ -72,16 +67,16 @@ export function SessionMessageComposer({ onSend, senderLabel, scopeId }: Props) 
           placeholder="Ask a question…"
           rows={2}
           aria-required="true"
-          className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2.5 text-sm text-foreground placeholder:text-hint focus:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+          className="border-border bg-background text-foreground placeholder:text-hint focus-visible:ring-primary w-full flex-1 resize-none rounded-xl border px-3 py-2.5 text-sm focus:outline-none focus-visible:ring-2 disabled:opacity-50"
         />
 
         <button
           type="submit"
           disabled={!body.trim() || sending}
           aria-label={sending ? "Sending message…" : "Send message"}
-          className="shrink-0 min-h-11 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary-hover focus-visible:ring-2 focus-visible:ring-primary disabled:opacity-50"
+          className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary min-h-11 w-full rounded-xl px-4 py-2.5 text-sm font-medium transition focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto sm:shrink-0"
         >
-          {sending ? "…" : "Send"}
+          {sending ? "Sending…" : "Send"}
         </button>
       </div>
     </form>

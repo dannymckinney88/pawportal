@@ -84,6 +84,76 @@ We use **semantic tokens only** — never raw colors.
 
 ---
 
+## UI System Rules (IMPORTANT)
+
+### Color Hierarchy
+
+- **Primary (green)** → standard workflow actions (Save, Add, Create)
+- **CTA (amber)** → entry / conversion / high-emphasis actions (Login)
+- **Secondary (gray)** → neutral supporting actions
+- **Danger (red)** → destructive actions
+- **Accent / Accent-Subtle** → decorative surfaces and highlights
+
+> Do NOT use CTA for all buttons.
+> Workflow actions must remain primary.
+
+---
+
+### Shared UI Primitives
+
+We use small reusable primitives for repeated patterns:
+
+- `Button`
+- `Input`
+
+#### Button
+
+- Variants:
+  - `primary`
+  - `secondary`
+  - `cta`
+  - `danger`
+- Includes:
+  - hover
+  - focus-visible ring
+  - disabled states
+
+#### Input
+
+- Shared styling for all text inputs
+- Includes:
+  - muted background
+  - hover + focus states
+  - accessible placeholder styling
+
+> Only use primitives where patterns are consistent.
+> Do NOT force all actions into Button.
+
+---
+
+### Interaction Rules
+
+- Primary buttons:
+  - lift on hover (`-translate-y-0.5`)
+- Focus:
+  - always visible (`focus-visible:ring-2`)
+- Inputs:
+  - must have hover + focus states
+
+---
+
+### When NOT to use Button
+
+Keep these as text or custom actions:
+
+- Back links
+- Update photo
+- Copy link (stateful)
+- Inline row actions
+- Navigation links
+
+---
+
 ## Design System
 
 ### Layout & Spacing

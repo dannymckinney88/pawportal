@@ -20,8 +20,7 @@ export const getNeedsFollowUp = ({
   const viewedTime = firstViewedAt ? new Date(firstViewedAt).getTime() : null;
 
   const daysSinceCreated = (now - createdTime) / (1000 * 60 * 60 * 24);
-  const daysSinceViewed =
-    viewedTime !== null ? (now - viewedTime) / (1000 * 60 * 60 * 24) : null;
+  const daysSinceViewed = viewedTime !== null ? (now - viewedTime) / (1000 * 60 * 60 * 24) : null;
 
   if (status === "not_viewed" && daysSinceCreated >= DAYS_TO_FOLLOW_UP) {
     return true;
@@ -54,7 +53,7 @@ export const buildLatestSessionByClient = (sessions: SessionRow[]) => {
  */
 export const buildClientsWithEngagement = (
   clients: ClientRow[],
-  sessions: SessionRow[],
+  sessions: SessionRow[]
 ): ClientWithEngagement[] => {
   const latestSessionByClient = buildLatestSessionByClient(sessions);
 
@@ -74,9 +73,7 @@ export const buildClientsWithEngagement = (
 
     const homeworkItems = latestSession.homework_items ?? [];
     const homeworkTotal = homeworkItems.length;
-    const homeworkCompleted = homeworkItems.filter(
-      (item) => item.is_checked,
-    ).length;
+    const homeworkCompleted = homeworkItems.filter((item) => item.is_checked).length;
 
     const status = getSessionEngagementStatus({
       firstViewedAt: latestSession.first_viewed_at,

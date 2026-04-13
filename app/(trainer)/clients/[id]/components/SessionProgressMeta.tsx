@@ -24,10 +24,10 @@ export const SessionProgressMeta = ({
   const viewedLabel = lastViewedAt ?? firstViewedAt;
 
   return (
-    <div className="mt-3 flex flex-col gap-1 text-sm text-muted-foreground">
+    <div className="text-muted-foreground mt-3 flex flex-col gap-1 text-sm">
       <p>
         Homework:{" "}
-        <span className="font-medium text-foreground">
+        <span className="text-foreground font-medium">
           {homeworkCompleted}/{homeworkTotal}
         </span>
       </p>
@@ -35,9 +35,7 @@ export const SessionProgressMeta = ({
       {viewedLabel && (
         <p>
           Last viewed:{" "}
-          <span className="font-medium text-foreground">
-            {formatDate(viewedLabel)}
-          </span>
+          <span className="text-foreground font-medium">{formatDate(viewedLabel)}</span>
         </p>
       )}
     </div>

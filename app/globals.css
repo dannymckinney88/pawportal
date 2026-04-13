@@ -1,12 +1,6 @@
 @import "tailwindcss";
 
-@theme inline {
-  /* ── Semantic color tokens ───────────────────────────────────────────────── *
-   * These reference Tailwind's built-in palette variables so swapping the
-   * palette in future is a one-line change per token.
-   * Usage: bg-background, text-foreground, border-border, etc.
-   * ─────────────────────────────────────────────────────────────────────────── */
-
+@theme {
   /* Page shells */
   --color-background: var(--color-gray-50);
   --color-foreground: var(--color-gray-900);
@@ -21,42 +15,51 @@
   --color-muted: var(--color-gray-100);
   --color-muted-foreground: var(--color-gray-600);
 
-  /* Borders — border for inputs/cards, border-subtle for dividers */
+  /* Borders */
   --color-border: var(--color-gray-200);
   --color-border-subtle: var(--color-gray-100);
 
   /* Hint / placeholder text */
-  --color-hint: var(--color-gray-600);
+  --color-hint: var(--color-gray-500);
 
-  /* Primary — blue-600 */
-  --color-primary: var(--color-blue-600);
+  /* Primary — field green */
+  --color-primary: var(--color-green-700);
   --color-primary-foreground: oklch(100% 0 0);
-  --color-primary-hover: var(--color-blue-700);
-  --color-primary-subtle: var(--color-blue-50);
-  --color-primary-subtle-foreground: var(--color-blue-600);
+  --color-primary-hover: var(--color-green-800);
+  --color-primary-subtle: var(--color-green-50);
+  --color-primary-subtle-foreground: var(--color-green-700);
+  --color-primary-border: var(--color-green-400); /* ← added */
 
-  /* Secondary — neutral gray (secondary buttons, toggles) */
+  /* CTA — amber */
+  --color-cta: var(--color-amber-600);
+  --color-cta-foreground: oklch(100% 0 0);
+  --color-cta-hover: var(--color-amber-700);
+
+  /* Secondary — neutral gray */
   --color-secondary: var(--color-gray-100);
   --color-secondary-foreground: var(--color-gray-700);
   --color-secondary-hover: var(--color-gray-200);
 
-  /* Accent — blue-50 tint (client info banner, subtle highlights) */
-  --color-accent: var(--color-blue-50);
-  --color-accent-foreground: var(--color-blue-700);
+  /* Accent — amber highlights */
+  --color-accent: var(--color-amber-100);
+  --color-accent-foreground: var(--color-amber-800);
+  --color-accent-subtle: var(--color-amber-50);
+  --color-accent-subtle-foreground: var(--color-amber-700);
 
   /* Success */
   --color-success: var(--color-green-100);
-  --color-success-foreground: var(--color-green-700);
+  --color-success-foreground: var(--color-green-800); /* ← was 700 */
 
   /* Danger */
   --color-danger: var(--color-red-600);
   --color-danger-foreground: oklch(100% 0 0);
-  --color-danger-hover: var(--color-red-600);
+  --color-danger-hover: var(--color-red-700); /* ← was red-600 */
   --color-danger-subtle: var(--color-red-50);
   --color-danger-subtle-foreground: var(--color-red-700);
   --color-danger-border: var(--color-red-200);
 
-  /* Warning (save confirmation prompts) */
+  /* Warning */
   --color-warning-subtle: var(--color-yellow-50);
   --color-warning-border: var(--color-yellow-200);
+  --color-warning-foreground: var(--color-yellow-800); /* ← added */
 }
