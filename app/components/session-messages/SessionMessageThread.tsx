@@ -32,12 +32,31 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
       .order("created_at", { ascending: true });
 
     setMessages((data as SessionMessage[] | null) ?? []);
-    setLoading(false);
   }, [sessionId]);
 
   useEffect(() => {
-    fetchMessages();
-  }, [fetchMessages]);
+    let isMounted = true;
+
+    const loadMessages = async () => {
+      const supabase = createClient();
+      const { data } = await supabase
+        .from("session_messages")
+        .select("id, session_id, sender_type, body, created_at, read_at")
+        .eq("session_id", sessionId)
+        .order("created_at", { ascending: true });
+
+      if (!isMounted) return;
+
+      setMessages((data as SessionMessage[] | null) ?? []);
+      setLoading(false);
+    };
+
+    loadMessages();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [sessionId]);
 
   // Scroll the container to the bottom on load, after send, and when expanding
   useEffect(() => {
@@ -60,6 +79,7 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
 
     const { message } = await res.json();
     setMessages((prev) => [...prev, message as SessionMessage]);
+    await fetchMessages();
   };
 
   const headingId = `thread-heading-${sessionId}`;
@@ -73,7 +93,10 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
   return (
     <section aria-labelledby={headingId}>
       {isTrainer ? (
-        <p id={headingId} className="text-hint mb-2 text-xs font-semibold tracking-wide uppercase">
+        <p
+          id={headingId}
+          className="text-muted-foreground mb-2 text-xs font-semibold tracking-wide uppercase"
+        >
           Questions &amp; follow-up
         </p>
       ) : (
@@ -89,7 +112,7 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
 
       <div
         className={`border-border overflow-hidden rounded-2xl border ${
-          isTrainer ? "bg-background" : "bg-card shadow-sm"
+          isTrainer ? "bg-card" : "bg-card shadow-sm"
         }`}
       >
         {/* Message list */}
@@ -100,26 +123,28 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
           aria-label="Message thread"
           aria-live="polite"
           aria-relevant="additions"
-          className={`overflow-y-auto px-4 pt-3 pb-2 ${isTrainer ? "max-h-44" : "max-h-64"}`}
+          tabIndex={0}
+          className={`focus-visible:ring-primary/20 overflow-y-auto px-4 pt-3 pb-2 focus-visible:ring-2 focus-visible:outline-none ${isTrainer ? "max-h-72" : "min-h-36 max-h-80 sm:max-h-96"}`}
         >
           {loading ? (
-            <p className="text-muted-foreground py-3 text-center text-sm">Loading…</p>
+            <p className="text-muted-foreground py-4 text-center text-sm">Loading…</p>
           ) : messages.length === 0 ? (
             <p
-              className={`text-muted-foreground text-center text-sm ${isTrainer ? "py-3" : "py-5"}`}
+              className={`text-muted-foreground text-center text-sm ${isTrainer ? "py-4" : "py-6"}`}
             >
-              {isTrainer ? "No messages yet." : "No messages yet \u2014 ask a question below."}
+              {isTrainer
+                ? "No messages from this client yet."
+                : "No messages yet — ask a question below."}
             </p>
           ) : (
-            <div className="flex flex-col gap-2.5">
-              {/* Expand / collapse toggle for trainer */}
+            <div className="flex flex-col pb-1">
               {isTrainer && hasOverflow && (
                 <button
                   type="button"
                   onClick={() => setExpanded((v) => !v)}
                   aria-expanded={expanded}
                   aria-controls={listId}
-                  className="text-primary focus-visible:ring-primary w-full rounded py-1 text-xs hover:underline focus-visible:ring-2 focus-visible:outline-none"
+                  className="text-muted-foreground hover:text-foreground focus-visible:ring-primary/20 mb-1 w-full rounded py-1 text-xs font-medium transition hover:underline focus-visible:ring-2 focus-visible:outline-none"
                 >
                   {expanded
                     ? "Show fewer messages"
@@ -127,17 +152,20 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
                 </button>
               )}
 
-              {visibleMessages.map((msg) => (
-                <SessionMessageBubble key={msg.id} message={msg} isTrainer={isTrainer} />
+              {visibleMessages.map((msg, i) => (
+                <SessionMessageBubble
+                  key={msg.id}
+                  message={msg}
+                  isTrainer={isTrainer}
+                  prevSenderType={i > 0 ? visibleMessages[i - 1].sender_type : undefined}
+                />
               ))}
             </div>
           )}
         </div>
 
-        {/* Divider */}
         <div className="border-border border-t" aria-hidden="true" />
 
-        {/* Composer — always visible so trainer can reply without expanding */}
         <div className="p-3">
           <SessionMessageComposer
             onSend={handleSend}

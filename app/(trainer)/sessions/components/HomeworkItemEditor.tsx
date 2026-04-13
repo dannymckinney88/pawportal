@@ -3,6 +3,8 @@
 // Shared per-item homework editor used by both the new-session form and the
 // fields simultaneously (new flow).
 
+import { Input } from "@/components/ui/input";
+
 export type ItemEditorItem = {
   id?: string;
   title: string;
@@ -48,7 +50,7 @@ export function HomeworkItemEditor({
   onRemoveStep,
 }: Props) {
   return (
-    <div className="border-border-subtle flex flex-col gap-3 rounded-xl border p-4">
+    <div className="border-border-subtle flex flex-col gap-2.5 rounded-xl border p-4">
       {/* Item header */}
       <div className="flex items-center justify-between">
         <p className="text-label text-sm font-medium">Item {index + 1}</p>
@@ -72,7 +74,7 @@ export function HomeworkItemEditor({
             *
           </span>
         </label>
-        <input
+        <Input
           id={`title-${index}`}
           type="text"
           value={item.title}
@@ -80,7 +82,6 @@ export function HomeworkItemEditor({
           aria-required="true"
           aria-describedby={`title-hint-${index}`}
           placeholder="Loose-leash walking"
-          className="border-border focus:border-primary rounded-lg border px-4 py-3 text-sm outline-none"
         />
         <p id={`title-hint-${index}`} className="text-hint text-xs">
           A short name for this exercise or skill.
@@ -96,9 +97,9 @@ export function HomeworkItemEditor({
           id={`description-${index}`}
           value={item.description}
           onChange={(e) => onUpdate("description", e.target.value)}
-          rows={3}
+          rows={2}
           placeholder="General notes or context for this exercise..."
-          className="border-border focus:border-primary resize-none rounded-lg border px-4 py-3 text-sm outline-none"
+          className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
         />
       </div>
 
@@ -117,13 +118,13 @@ export function HomeworkItemEditor({
               {stepIndex + 1}.
             </span>
 
-            <input
+            <Input
               type="text"
               value={step}
               onChange={(e) => onUpdateStep(stepIndex, e.target.value)}
               aria-label={`Item ${index + 1}, step ${stepIndex + 1}`}
               placeholder={`Step ${stepIndex + 1}`}
-              className="border-border focus:border-primary flex-1 rounded-lg border px-4 py-3 text-sm outline-none"
+              className="w-auto flex-1"
             />
 
             {item.steps.length > 1 && (
@@ -153,14 +154,13 @@ export function HomeworkItemEditor({
         <label htmlFor={`link-${index}`} className="text-label text-sm font-medium">
           Resource link <span className="text-hint font-normal">(optional)</span>
         </label>
-        <input
+        <Input
           id={`link-${index}`}
           type="text"
           value={item.link_url}
           onChange={(e) => onUpdate("link_url", e.target.value)}
           aria-describedby={`link-hint-${index}`}
           placeholder="https://..."
-          className="border-border focus:border-primary rounded-lg border px-4 py-3 text-sm outline-none"
         />
         <p id={`link-hint-${index}`} className="text-hint text-xs">
           A YouTube video, article, or any helpful URL for this exercise.
@@ -172,14 +172,13 @@ export function HomeworkItemEditor({
         <label htmlFor={`dog_note-${index}`} className="text-label text-sm font-medium">
           Note for {dogName ?? "this dog"} <span className="text-hint font-normal">(optional)</span>
         </label>
-        <input
+        <Input
           id={`dog_note-${index}`}
           type="text"
           value={item.dog_note}
           onChange={(e) => onUpdate("dog_note", e.target.value)}
           aria-describedby={`dog-note-hint-${index}`}
           placeholder="Buddy tends to pull when he sees other dogs — use high-value treats"
-          className="border-border focus:border-primary rounded-lg border px-4 py-3 text-sm outline-none"
         />
         <p id={`dog-note-hint-${index}`} className="text-hint text-xs">
           Personalized tip shown to the owner about their specific dog.

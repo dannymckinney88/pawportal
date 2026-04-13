@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -188,13 +190,9 @@ export function TemplatesClient({
           <p className="text-muted-foreground text-sm">Reusable homework items</p>
         </div>
         {!isFormOpen && (
-          <button
-            type="button"
-            onClick={startCreate}
-            className="bg-primary text-primary-foreground hover:bg-primary-hover min-h-11 rounded-lg px-4 py-2 text-sm font-medium"
-          >
+          <Button type="button" onClick={startCreate}>
             + New Template
-          </button>
+          </Button>
         )}
       </div>
 
@@ -221,14 +219,13 @@ export function TemplatesClient({
                 *
               </span>
             </label>
-            <input
+            <Input
               id="tpl-title"
               type="text"
               value={draft.title}
               onChange={(e) => updateDraft("title", e.target.value)}
               aria-required="true"
               placeholder="Loose-leash walking"
-              className="border-border focus:border-primary rounded-lg border px-4 py-3 text-sm outline-none"
             />
           </div>
 
@@ -243,7 +240,7 @@ export function TemplatesClient({
               onChange={(e) => updateDraft("description", e.target.value)}
               rows={3}
               placeholder="General notes or context for this exercise..."
-              className="border-border focus:border-primary resize-none rounded-lg border px-4 py-3 text-sm outline-none"
+              className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
             />
           </div>
 
@@ -260,13 +257,13 @@ export function TemplatesClient({
                 >
                   {i + 1}.
                 </span>
-                <input
+                <Input
                   type="text"
                   value={step}
                   onChange={(e) => updateStep(i, e.target.value)}
                   aria-label={`Step ${i + 1}`}
                   placeholder={`Step ${i + 1}`}
-                  className="border-border focus:border-primary flex-1 rounded-lg border px-4 py-3 text-sm outline-none"
+                  className="w-auto flex-1"
                 />
                 {draft.steps.length > 1 && (
                   <button
@@ -294,13 +291,12 @@ export function TemplatesClient({
             <label htmlFor="tpl-link" className="text-label text-sm font-medium">
               Resource link <span className="text-hint font-normal">(optional)</span>
             </label>
-            <input
+            <Input
               id="tpl-link"
               type="text"
               value={draft.link_url}
               onChange={(e) => updateDraft("link_url", e.target.value)}
               placeholder="https://..."
-              className="border-border focus:border-primary rounded-lg border px-4 py-3 text-sm outline-none"
             />
           </div>
 
@@ -309,14 +305,13 @@ export function TemplatesClient({
             <label htmlFor="tpl-dog-note" className="text-label text-sm font-medium">
               Dog-specific note <span className="text-hint font-normal">(optional)</span>
             </label>
-            <input
+            <Input
               id="tpl-dog-note"
               type="text"
               value={draft.dog_note}
               onChange={(e) => updateDraft("dog_note", e.target.value)}
               aria-describedby="tpl-dog-note-hint"
               placeholder="Personalized tip shown to the owner..."
-              className="border-border focus:border-primary rounded-lg border px-4 py-3 text-sm outline-none"
             />
             <p id="tpl-dog-note-hint" className="text-hint text-xs">
               This is pre-filled as a suggestion — trainers customize it per dog when adding this
@@ -331,23 +326,24 @@ export function TemplatesClient({
           )}
 
           <div className="flex gap-3">
-            <button
+            <Button
               type="button"
               onClick={handleSave}
               disabled={saving || !draft.title.trim()}
               aria-disabled={saving || !draft.title.trim()}
-              className="bg-primary text-primary-foreground hover:bg-primary-hover min-h-11 flex-1 rounded-lg py-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex-1"
             >
               {saving ? "Saving..." : editingId ? "Save Changes" : "Create Template"}
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
+              variant="secondary"
               onClick={cancelForm}
               disabled={saving}
-              className="bg-card border-border text-secondary-foreground hover:bg-background min-h-11 flex-1 rounded-lg border py-3 text-sm font-medium disabled:opacity-50"
+              className="flex-1"
             >
               Cancel
-            </button>
+            </Button>
           </div>
         </div>
       )}
@@ -440,22 +436,24 @@ export function TemplatesClient({
                       </p>
                     )}
                     <div className="flex gap-2">
-                      <button
+                      <Button
                         type="button"
+                        variant="danger"
                         onClick={() => handleDelete(template.id)}
                         disabled={deleting}
-                        className="bg-danger text-danger-foreground hover:bg-danger-hover min-h-11 flex-1 rounded-lg py-2 text-sm font-medium disabled:opacity-50"
+                        className="flex-1"
                       >
                         {deleting ? "Deleting..." : "Yes, delete"}
-                      </button>
-                      <button
+                      </Button>
+                      <Button
                         type="button"
+                        variant="secondary"
                         onClick={() => setConfirmDeleteId(null)}
                         disabled={deleting}
-                        className="bg-card border-border text-secondary-foreground hover:bg-background min-h-11 flex-1 rounded-lg border py-2 text-sm font-medium disabled:opacity-50"
+                        className="flex-1"
                       >
                         Cancel
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 )}

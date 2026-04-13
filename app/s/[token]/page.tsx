@@ -73,7 +73,7 @@ export default async function Page({ params }: { params: Promise<{ token: string
 
   return (
     <div className="bg-background min-h-screen">
-      <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 py-8">
+      <div className="mx-auto flex max-w-lg flex-col gap-6 px-4 pt-4 pb-20 sm:pt-8 sm:pb-12">
         <SessionViewTracker token={token} />
 
         <ClientHero dogName={dog.dog_name} dogPhotoUrl={dog.dog_photo_url} />

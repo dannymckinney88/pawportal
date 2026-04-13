@@ -142,7 +142,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
                     href={`/s/${session.token}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-primary text-sm hover:underline"
+                    className="text-primary/80 hover:text-primary text-sm hover:underline"
                   >
                     View client page →
                   </a>
@@ -158,7 +158,7 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
                   />
                 </div>
 
-                <div className="border-border border-t pt-4">
+                <div className="border-border pt-4">
                   <SessionMessageThread
                     sessionId={session.id}
                     sessionToken={session.token}

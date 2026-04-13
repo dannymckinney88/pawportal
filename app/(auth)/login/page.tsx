@@ -4,6 +4,8 @@ import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { PawPrint } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -47,7 +49,7 @@ export default function LoginPage() {
             <label htmlFor="email" className="text-label text-sm font-medium">
               Email
             </label>
-            <input
+            <Input
               id="email"
               type="email"
               placeholder="you@example.com"
@@ -55,7 +57,6 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               aria-required="true"
-              className="bg-muted border-border text-foreground placeholder:text-hint hover:border-primary/50 focus:border-primary focus:ring-primary/20 focus:bg-background w-full rounded-lg border px-4 py-3 text-sm transition outline-none focus:ring-2"
             />
           </div>
 
@@ -63,7 +64,7 @@ export default function LoginPage() {
             <label htmlFor="password" className="text-label text-sm font-medium">
               Password
             </label>
-            <input
+            <Input
               id="password"
               type="password"
               placeholder="••••••••"
@@ -71,7 +72,6 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               aria-required="true"
-              className="bg-muted border-border text-foreground placeholder:text-hint hover:border-primary/50 focus:border-primary focus:ring-primary/20 focus:bg-background w-full rounded-lg border px-4 py-3 text-sm transition outline-none focus:ring-2"
             />
           </div>
 
@@ -81,13 +81,9 @@ export default function LoginPage() {
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-cta text-cta-foreground hover:bg-cta-hover rounded-lg px-4 py-3 text-sm font-medium hover:-translate-y-0.5 hover:shadow-md active:translate-y-0 disabled:opacity-50"
-          >
+          <Button type="submit" variant="cta" disabled={loading} className="w-full">
             {loading ? "Signing in..." : "Sign in"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

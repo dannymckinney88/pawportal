@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { PawPrint } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function NewClientPage() {
   const [ownerName, setOwnerName] = useState("");
@@ -77,9 +79,6 @@ export default function NewClientPage() {
     router.push("/dashboard");
   };
 
-  const inputClassName =
-    "w-full rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background";
-
   return (
     <div className="bg-background min-h-screen">
       <div className="mx-auto max-w-lg px-4 py-8">
@@ -105,7 +104,7 @@ export default function NewClientPage() {
               className="focus-visible:ring-primary/20 flex cursor-pointer flex-col items-center gap-3 rounded-xl p-2 transition hover:scale-[1.02] hover:opacity-90 focus-visible:ring-2 focus-visible:outline-none"
               aria-label="Upload dog photo"
             >
-              <div className="bg-accent-subtle flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-gray-200">
+              <div className="bg-accent-subtle flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-border">
                 {preview ? (
                   <Image
                     src={preview}
@@ -139,7 +138,7 @@ export default function NewClientPage() {
             <label htmlFor="dogName" className="text-label text-sm font-medium">
               Dog&apos;s name <span className="text-danger ml-1">*</span>
             </label>
-            <input
+            <Input
               id="dogName"
               type="text"
               value={dogName}
@@ -147,7 +146,6 @@ export default function NewClientPage() {
               required
               aria-required="true"
               placeholder="Buddy"
-              className={inputClassName}
             />
           </div>
 
@@ -155,7 +153,7 @@ export default function NewClientPage() {
             <label htmlFor="ownerName" className="text-label text-sm font-medium">
               Owner&apos;s name <span className="text-danger ml-1">*</span>
             </label>
-            <input
+            <Input
               id="ownerName"
               type="text"
               value={ownerName}
@@ -163,7 +161,6 @@ export default function NewClientPage() {
               required
               aria-required="true"
               placeholder="Jane Smith"
-              className={inputClassName}
             />
           </div>
 
@@ -171,14 +168,13 @@ export default function NewClientPage() {
             <label htmlFor="phone" className="text-label text-sm font-medium">
               Owner&apos;s phone
             </label>
-            <input
+            <Input
               id="phone"
               type="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="(602) 555-0123"
               autoComplete="tel"
-              className={inputClassName}
             />
           </div>
 
@@ -188,13 +184,9 @@ export default function NewClientPage() {
             </p>
           )}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary/20 min-h-11 w-full rounded-lg px-4 text-sm font-medium transition hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
-          >
+          <Button type="submit" disabled={loading} className="w-full">
             {loading ? "Saving..." : "Save Client"}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

@@ -55,7 +55,7 @@ export function SessionMessageComposer({ onSend, senderLabel, scopeId }: Props) 
         Your message
       </label>
 
-      <div className="flex items-end gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
         <textarea
           ref={textareaRef}
           id={composerId}
@@ -67,16 +67,16 @@ export function SessionMessageComposer({ onSend, senderLabel, scopeId }: Props) 
           placeholder="Ask a question…"
           rows={2}
           aria-required="true"
-          className="border-border bg-background text-foreground placeholder:text-hint focus-visible:ring-primary flex-1 resize-none rounded-xl border px-3 py-2.5 text-sm focus:outline-none focus-visible:ring-2 disabled:opacity-50"
+          className="border-border bg-background text-foreground placeholder:text-hint focus-visible:ring-primary w-full flex-1 resize-none rounded-xl border px-3 py-2.5 text-sm focus:outline-none focus-visible:ring-2 disabled:opacity-50"
         />
 
         <button
           type="submit"
           disabled={!body.trim() || sending}
           aria-label={sending ? "Sending message…" : "Send message"}
-          className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary min-h-11 shrink-0 rounded-xl px-4 py-2.5 text-sm font-medium focus-visible:ring-2 disabled:opacity-50"
+          className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary min-h-11 w-full rounded-xl px-4 py-2.5 text-sm font-medium transition focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-40 sm:w-auto sm:shrink-0"
         >
-          {sending ? "…" : "Send"}
+          {sending ? "Sending…" : "Send"}
         </button>
       </div>
     </form>

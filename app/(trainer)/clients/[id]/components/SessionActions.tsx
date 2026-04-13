@@ -2,7 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export function SessionActions({
   sessionId,
@@ -69,22 +71,24 @@ export function SessionActions({
           </p>
         )}
         <div className="flex gap-2">
-          <button
+          <Button
             type="button"
+            variant="danger"
             onClick={handleDelete}
             disabled={deleting}
-            className="bg-danger text-danger-foreground hover:bg-danger-hover min-h-11 flex-1 rounded-lg py-2 text-sm font-medium disabled:opacity-50"
+            className="flex-1"
           >
             {deleting ? "Deleting..." : "Yes, delete"}
-          </button>
-          <button
+          </Button>
+          <Button
             type="button"
+            variant="secondary"
             onClick={() => setConfirming(false)}
             disabled={deleting}
-            className="bg-card border-border text-secondary-foreground hover:bg-background min-h-11 flex-1 rounded-lg border py-2 text-sm font-medium disabled:opacity-50"
+            className="flex-1"
           >
             Cancel
-          </button>
+          </Button>
         </div>
       </div>
     );
@@ -92,13 +96,13 @@ export function SessionActions({
 
   return (
     <div className="mt-3 flex gap-2">
-      <a
+      <Link
         href={`/sessions/${sessionId}/edit`}
         aria-label={`Edit Session ${sessionNumber}`}
         className="bg-secondary text-secondary-foreground hover:bg-secondary-hover flex min-h-11 flex-1 items-center justify-center rounded-lg py-2 text-center text-sm font-medium"
       >
         Edit
-      </a>
+      </Link>
       <button
         ref={deleteButtonRef}
         type="button"

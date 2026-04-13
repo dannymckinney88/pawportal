@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 import { ClientInfoBanner } from "../../components/ClientInfoBanner";
 import {
   HomeworkItemEditor,
@@ -185,12 +187,12 @@ export function EditSessionForm({
       <div className="mx-auto max-w-lg px-4 py-8">
         {/* Header */}
         <div className="mb-6 flex items-center gap-3">
-          <a
+          <Link
             href={`/clients/${session.client_id}`}
             className="text-hint hover:text-muted-foreground text-sm"
           >
             ← Back
-          </a>
+          </Link>
           <h1 ref={headingRef} tabIndex={-1} className="text-foreground text-xl font-bold">
             Edit Session {session.session_number}
           </h1>
@@ -224,7 +226,7 @@ export function EditSessionForm({
                 rows={4}
                 aria-required="true"
                 aria-describedby="summary-hint"
-                className="border-border focus:border-primary resize-none rounded-lg border px-4 py-3 text-sm outline-none"
+                className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
               />
               <p id="summary-hint" className="text-hint text-xs">
                 This appears on the client&apos;s recap page.
@@ -283,22 +285,23 @@ export function EditSessionForm({
                 </p>
               </div>
               <div className="flex gap-3">
-                <button
+                <Button
                   type="button"
                   onClick={handleSave}
                   disabled={loading}
-                  className="bg-primary text-primary-foreground hover:bg-primary-hover min-h-11 flex-1 rounded-lg py-3 text-sm font-medium disabled:opacity-50"
+                  className="flex-1"
                 >
                   {loading ? "Saving..." : "Yes, save changes"}
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
+                  variant="secondary"
                   onClick={() => setConfirming(false)}
                   disabled={loading}
-                  className="bg-card border-border text-secondary-foreground hover:bg-background min-h-11 flex-1 rounded-lg border py-3 text-sm font-medium disabled:opacity-50"
+                  className="flex-1"
                 >
                   Cancel
-                </button>
+                </Button>
               </div>
             </div>
           ) : (
@@ -308,15 +311,15 @@ export function EditSessionForm({
                   Add a session summary and a title for each homework item to continue.
                 </p>
               )}
-              <button
+              <Button
                 type="button"
                 onClick={() => setConfirming(true)}
                 disabled={!canSave}
                 aria-disabled={!canSave}
-                className="bg-primary text-primary-foreground hover:bg-primary-hover min-h-11 w-full rounded-lg px-4 py-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full"
               >
                 Save Changes
-              </button>
+              </Button>
             </>
           )}
         </div>

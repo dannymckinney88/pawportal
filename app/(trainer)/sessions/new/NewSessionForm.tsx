@@ -2,7 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 import { ClientInfoBanner } from "../components/ClientInfoBanner";
 import {
   HomeworkItemEditor,
@@ -207,12 +209,12 @@ export function NewSessionForm() {
       <div className="mx-auto max-w-lg px-4 py-8">
         {/* Header */}
         <div className="mb-6 flex items-center gap-3">
-          <a
+          <Link
             href={`/clients/${clientId}`}
             className="text-hint hover:text-muted-foreground text-sm"
           >
             ← Back
-          </a>
+          </Link>
           <h1 ref={headingRef} tabIndex={-1} className="text-foreground text-xl font-bold">
             New Session
           </h1>
@@ -247,7 +249,7 @@ export function NewSessionForm() {
                 aria-required="true"
                 aria-describedby="summary-hint"
                 placeholder="We worked on loose-leash walking and sit-stay. Buddy did great with focus exercises..."
-                className="border-border focus:border-primary resize-none rounded-lg border px-4 py-3 text-sm outline-none"
+                className="w-full resize-none rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background"
               />
               <p id="summary-hint" className="text-hint text-xs">
                 Briefly describe what you worked on. This appears on the client&apos;s recap page.
@@ -257,15 +259,16 @@ export function NewSessionForm() {
 
           {/* Homework Items */}
           <div className="bg-card flex flex-col gap-4 rounded-2xl p-5 shadow-sm">
-            <h2 className="text-foreground text-lg font-semibold">Homework</h2>
-
-            <button
-              type="button"
-              onClick={() => setSheetOpen(true)}
-              className="border-primary/50 text-primary hover:bg-primary-subtle min-h-11 w-full rounded-xl border border-dashed py-3 text-sm font-medium"
-            >
-              ＋ Add from template
-            </button>
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="text-foreground text-lg font-semibold">Homework</h2>
+              <button
+                type="button"
+                onClick={() => setSheetOpen(true)}
+                className="bg-primary-subtle text-primary hover:bg-primary-subtle/70 focus-visible:ring-primary/20 shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition focus-visible:ring-2 focus-visible:outline-none"
+              >
+                + From template
+              </button>
+            </div>
 
             {items.map((item, index) => (
               <HomeworkItemEditor
@@ -285,7 +288,7 @@ export function NewSessionForm() {
             <button
               type="button"
               onClick={addItem}
-              className="border-primary/50 text-primary hover:bg-primary-subtle min-h-11 w-full rounded-xl border border-dashed py-3 text-sm font-medium"
+              className="border-border text-muted-foreground hover:text-foreground hover:bg-muted focus-visible:ring-primary/20 min-h-11 w-full rounded-xl border border-dashed py-2.5 text-sm transition focus-visible:ring-2 focus-visible:outline-none"
             >
               + Add homework item
             </button>
@@ -303,14 +306,14 @@ export function NewSessionForm() {
             </p>
           )}
 
-          <button
+          <Button
             type="submit"
             disabled={!canSave || loading}
             aria-disabled={!canSave || loading}
-            className="bg-primary text-primary-foreground hover:bg-primary-hover min-h-11 w-full rounded-lg px-4 py-3 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full"
           >
             {loading ? "Saving session..." : "Save Session"}
-          </button>
+          </Button>
         </form>
       </div>
 

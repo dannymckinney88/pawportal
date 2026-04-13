@@ -4,6 +4,8 @@ type Props = {
   message: SessionMessage;
   /** True when the current viewer is the trainer */
   isTrainer: boolean;
+  /** sender_type of the previous message — used to group consecutive messages */
+  prevSenderType?: string;
 };
 
 function formatShortTime(iso: string): string {
@@ -28,38 +30,43 @@ function formatShortTime(iso: string): string {
   return `${datePart} · ${timePart}`;
 }
 
-export function SessionMessageBubble({ message, isTrainer }: Props) {
+export function SessionMessageBubble({ message, isTrainer, prevSenderType }: Props) {
+  // Alignment: the current viewer's messages sit on the right
   const isOwn =
     (isTrainer && message.sender_type === "trainer") ||
     (!isTrainer && message.sender_type === "client");
 
-  const senderLabel = message.sender_type === "trainer" ? "Trainer" : "Client";
+  // Label is always based on who actually sent the message, not the viewer
+  const senderLabel =
+    message.sender_type === "trainer" ? "Trainer" : isTrainer ? "Client" : "You";
+
+  // Color is based on sender identity: trainer = green, client = muted
+  const isTrainerMessage = message.sender_type === "trainer";
+
+  // Group consecutive messages from the same sender — hide label and reduce spacing
+  const isGrouped = prevSenderType === message.sender_type;
+
   const displayTime = formatShortTime(message.created_at);
-  const fullTimestamp = new Date(message.created_at).toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-  });
 
   return (
-    <div className={`flex flex-col gap-0.5 ${isOwn ? "items-end" : "items-start"}`}>
+    <div
+      className={`flex flex-col gap-0.5 ${isOwn ? "items-end" : "items-start"} ${isGrouped ? "mt-1" : "mt-2.5"}`}
+    >
+      {!isGrouped && (
+        <span className="text-muted-foreground px-1 text-[11px] font-medium">{senderLabel}</span>
+      )}
+
       <div
-        className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
-          isOwn
-            ? "bg-primary text-primary-foreground rounded-br-sm"
-            : "bg-secondary text-secondary-foreground rounded-bl-sm"
-        }`}
+        className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm leading-snug ${
+          isOwn ? "rounded-br-sm" : "rounded-bl-sm"
+        } ${isTrainerMessage ? "bg-primary text-primary-foreground" : "bg-muted text-foreground"}`}
       >
         {message.body}
       </div>
-      <p
-        className="text-hint px-1 text-[11px]"
-        aria-label={`${senderLabel}, sent ${fullTimestamp}`}
-      >
-        <time dateTime={message.created_at} aria-hidden="true">
-          {displayTime}
-        </time>
+
+      <p className="text-muted-foreground px-1 text-[11px]">
+        <span className="sr-only">{senderLabel}, sent </span>
+        <time dateTime={message.created_at}>{displayTime}</time>
       </p>
     </div>
   );

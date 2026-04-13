@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
 
 export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
   const supabase = createClient();
@@ -70,23 +71,25 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
       </p>
 
       <div className="mt-3 flex gap-3">
-        <button
+        <Button
           type="button"
+          variant="danger"
           onClick={handleArchive}
           disabled={loading}
-          className="bg-danger min-h-11 flex-1 rounded-lg px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
+          className="flex-1"
         >
           {loading ? "Archiving..." : "Yes, archive"}
-        </button>
+        </Button>
 
-        <button
+        <Button
           type="button"
+          variant="secondary"
           onClick={() => setConfirming(false)}
           disabled={loading}
-          className="border-border bg-card min-h-11 flex-1 rounded-lg border px-4 py-2 text-sm font-medium disabled:opacity-50"
+          className="flex-1"
         >
           Cancel
-        </button>
+        </Button>
       </div>
     </div>
   );

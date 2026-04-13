@@ -124,11 +124,8 @@ export const HomeworkCard = ({
       )}
 
       {dog_note && (
-        <div className="border-border-subtle mt-3 flex items-start gap-2 border-t pt-3">
-          <span className="shrink-0" aria-hidden="true">
-            🐾
-          </span>
-          <p className="text-accent-foreground text-sm italic">{dog_note}</p>
+        <div className="border-border-subtle mt-3 border-t pt-3">
+          <p className="text-muted-foreground text-sm italic">{dog_note}</p>
         </div>
       )}
 
@@ -161,12 +158,10 @@ export const HomeworkCard = ({
 
           <span
             className={
-              checked
-                ? "text-success-foreground text-sm font-medium"
-                : "text-muted-foreground text-sm"
+              checked ? "text-foreground text-sm font-medium" : "text-muted-foreground text-sm"
             }
           >
-            {checked ? "Done ✓" : "Mark as done"}
+            {checked ? "Done" : "Mark as done"}
           </span>
         </button>
       </div>
