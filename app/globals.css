@@ -20,7 +20,7 @@
   --color-border-subtle: var(--color-gray-100);
 
   /* Hint / placeholder text */
-  --color-hint: var(--color-gray-400);
+  --color-hint: var(--color-gray-500);
 
   /* Primary — field green */
   --color-primary: var(--color-green-700);
@@ -43,6 +43,8 @@
   /* Accent — amber highlights */
   --color-accent: var(--color-amber-100);
   --color-accent-foreground: var(--color-amber-800);
+  --color-accent-subtle: var(--color-amber-50);
+  --color-accent-subtle-foreground: var(--color-amber-700);
 
   /* Success */
   --color-success: var(--color-green-100);

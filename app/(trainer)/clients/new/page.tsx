@@ -4,6 +4,8 @@ import { useState, useRef } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
+import { PawPrint } from "lucide-react";
 
 export default function NewClientPage() {
   const [ownerName, setOwnerName] = useState("");
@@ -75,13 +77,20 @@ export default function NewClientPage() {
     router.push("/dashboard");
   };
 
+  const inputClassName =
+    "w-full rounded-lg border border-border bg-muted px-4 py-3 text-sm text-foreground placeholder:text-hint outline-none transition hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-background";
+
   return (
     <div className="bg-background min-h-screen">
       <div className="mx-auto max-w-lg px-4 py-8">
         <div className="mb-6 flex items-center gap-3">
-          <a href="/dashboard" className="text-hint hover:text-muted-foreground text-sm">
+          <Link
+            href="/dashboard"
+            className="text-hint hover:text-muted-foreground focus-visible:ring-primary/20 inline-flex items-center rounded-md text-sm transition focus-visible:ring-2 focus-visible:outline-none"
+          >
             ← Back
-          </a>
+          </Link>
+
           <h1 className="text-foreground text-xl font-bold">Add Client</h1>
         </div>
 
@@ -89,30 +98,32 @@ export default function NewClientPage() {
           onSubmit={handleSubmit}
           className="bg-card flex flex-col gap-6 rounded-2xl p-6 shadow-sm"
         >
-          {/* Dog Photo */}
           <div className="border-border flex flex-col items-center gap-3 border-b pb-5">
-            <div className="bg-accent flex h-24 w-24 items-center justify-center overflow-hidden rounded-full">
-              {preview ? (
-                // blob URL from createObjectURL — Next.js Image does not support blob URLs
-                <Image
-                  src={preview}
-                  alt="Dog preview"
-                  width={96}
-                  height={96}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <span className="text-4xl">🐾</span>
-              )}
-            </div>
             <button
               type="button"
               onClick={() => photoInputRef.current?.click()}
-              className="text-primary focus-visible:ring-primary rounded text-sm font-medium hover:underline focus-visible:ring-2 focus-visible:outline-none"
+              className="focus-visible:ring-primary/20 flex cursor-pointer flex-col items-center gap-3 rounded-xl p-2 transition hover:scale-[1.02] hover:opacity-90 focus-visible:ring-2 focus-visible:outline-none"
+              aria-label="Upload dog photo"
             >
-              Upload dog photo
+              <div className="bg-accent-subtle flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-gray-200">
+                {preview ? (
+                  <Image
+                    src={preview}
+                    alt="Dog preview"
+                    width={96}
+                    height={96}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <PawPrint className="text-primary h-10 w-10" aria-hidden="true" />
+                )}
+              </div>
+
+              <span className="text-hint hover:text-foreground focus-visible:ring-primary/20 inline-flex items-center rounded-md text-sm transition focus-visible:ring-2 focus-visible:outline-none">
+                Upload dog photo
+              </span>
             </button>
-            {/* Input hidden from AT — the button above is the accessible control */}
+
             <input
               ref={photoInputRef}
               type="file"
@@ -124,10 +135,9 @@ export default function NewClientPage() {
             />
           </div>
 
-          {/* Dog Name */}
           <div className="flex flex-col gap-1">
             <label htmlFor="dogName" className="text-label text-sm font-medium">
-              Dog&apos;s name <span className="text-danger">*</span>
+              Dog&apos;s name <span className="text-danger ml-1">*</span>
             </label>
             <input
               id="dogName"
@@ -137,14 +147,13 @@ export default function NewClientPage() {
               required
               aria-required="true"
               placeholder="Buddy"
-              className="border-border focus:border-primary rounded-lg border px-4 py-3 text-sm outline-none"
+              className={inputClassName}
             />
           </div>
 
-          {/* Owner Name */}
           <div className="flex flex-col gap-1">
             <label htmlFor="ownerName" className="text-label text-sm font-medium">
-              Owner&apos;s name <span className="text-danger">*</span>
+              Owner&apos;s name <span className="text-danger ml-1">*</span>
             </label>
             <input
               id="ownerName"
@@ -154,11 +163,10 @@ export default function NewClientPage() {
               required
               aria-required="true"
               placeholder="Jane Smith"
-              className="border-border focus:border-primary rounded-lg border px-4 py-3 text-sm outline-none"
+              className={inputClassName}
             />
           </div>
 
-          {/* Phone */}
           <div className="flex flex-col gap-1">
             <label htmlFor="phone" className="text-label text-sm font-medium">
               Owner&apos;s phone
@@ -169,7 +177,8 @@ export default function NewClientPage() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="(602) 555-0123"
-              className="border-border focus:border-primary rounded-lg border px-4 py-3 text-sm outline-none"
+              autoComplete="tel"
+              className={inputClassName}
             />
           </div>
 
@@ -182,7 +191,7 @@ export default function NewClientPage() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-primary text-primary-foreground hover:bg-primary-hover w-full rounded-lg px-4 py-3 text-sm font-medium disabled:opacity-50"
+            className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary/20 min-h-11 w-full rounded-lg px-4 text-sm font-medium transition hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-none"
           >
             {loading ? "Saving..." : "Save Client"}
           </button>

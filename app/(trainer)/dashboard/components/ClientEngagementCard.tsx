@@ -61,7 +61,6 @@ export const ClientEngagementCard = ({
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="text-foreground truncate text-base font-semibold">{dogName}</p>
-
             <p className="text-muted-foreground truncate text-sm">{ownerName}</p>
           </div>
 
@@ -73,17 +72,33 @@ export const ClientEngagementCard = ({
         </div>
 
         {latestSession ? (
-          <div className="mt-3 flex flex-col gap-1">
-            <p className="text-label text-sm">Latest: Session {latestSession.sessionNumber}</p>
+          <div className="mt-3 flex flex-col gap-1.5">
+            <p className="text-sm">
+              <span className="text-muted-foreground">Latest:</span>{" "}
+              <span className="text-label font-medium">Session {latestSession.sessionNumber}</span>
+            </p>
 
             <p className="text-muted-foreground text-sm">
-              {getSessionEngagementLabel(status!)}
-              {" • "}
+              {getSessionEngagementLabel(status!)} {" • "}
               {latestSession.homeworkCompleted}/{latestSession.homeworkTotal} done
             </p>
 
+            {latestSession.homeworkTotal > 0 && (
+              <div
+                className="bg-muted mt-1 h-2 w-full overflow-hidden rounded-full"
+                aria-hidden="true"
+              >
+                <div
+                  className="bg-primary h-full rounded-full"
+                  style={{
+                    width: `${(latestSession.homeworkCompleted / latestSession.homeworkTotal) * 100}%`,
+                  }}
+                />
+              </div>
+            )}
+
             {latestSession.lastViewedAt && (
-              <p className="text-muted-foreground text-sm">
+              <p className="text-hint mt-1 text-xs">
                 Last viewed{" "}
                 {new Date(latestSession.lastViewedAt).toLocaleDateString("en-US", {
                   month: "short",
