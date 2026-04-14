@@ -1,18 +1,10 @@
 const INTENT_KEY = "heelflow:focus-intent";
 
 export type FocusIntent = {
-  /** id of the primary element to focus. */
   targetId: string;
-  /**
-   * id of the fallback element to focus when targetId is not found.
-   * Used for restore flows where the originating card may be absent.
-   */
   fallbackId?: string;
-  /**
-   * true  — keyboard-triggered navigation: apply visible landing ring.
-   * false — pointer-triggered navigation: focus silently (no ring).
-   */
   visible: boolean;
+  ts?: number;
 };
 
 /**
@@ -21,9 +13,8 @@ export type FocusIntent = {
  */
 export function setFocusIntent(intent: FocusIntent): void {
   try {
-    sessionStorage.setItem(INTENT_KEY, JSON.stringify(intent));
+    sessionStorage.setItem(INTENT_KEY, JSON.stringify({ ...intent, ts: Date.now() }));
   } catch {
-    // sessionStorage unavailable — focus restoration simply won't happen
     console.warn("[focus-intent] setFocusIntent failed — sessionStorage unavailable");
   }
 }
@@ -36,7 +27,15 @@ export function peekFocusIntent(): FocusIntent | null {
   try {
     const raw = sessionStorage.getItem(INTENT_KEY);
     if (!raw) return null;
-    return JSON.parse(raw) as FocusIntent;
+
+    const intent = JSON.parse(raw) as FocusIntent;
+
+    if (intent.ts && Date.now() - intent.ts > 3000) {
+      clearFocusIntent();
+      return null;
+    }
+
+    return intent;
   } catch {
     return null;
   }
@@ -46,6 +45,7 @@ export function peekFocusIntent(): FocusIntent | null {
  * Clear the stored focus intent.
  * Call this after successfully resolving focus, or after retries are exhausted.
  */
+
 export function clearFocusIntent(): void {
   try {
     sessionStorage.removeItem(INTENT_KEY);

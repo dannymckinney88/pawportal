@@ -1,8 +1,5 @@
-"use client";
-
-import Link from "next/link";
 import { PageHeading } from "@/app/(trainer)/components/PageHeading";
-import { setFocusIntent } from "@/lib/focus-intent";
+import { AddClientLink } from "./AddClientLink";
 
 export const DashboardHeader = () => {
   return (
@@ -18,19 +15,7 @@ export const DashboardHeader = () => {
         <p className="text-muted-foreground mt-1 text-sm">Manage your training clients</p>
       </div>
 
-      <Link
-        href="/clients/new"
-        className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary/20 flex min-h-11 items-center rounded-lg px-4 text-sm font-medium transition hover:-translate-y-0.5 hover:shadow-md focus-visible:ring-2 focus-visible:outline-none"
-        onClick={(e) => {
-          setFocusIntent(
-            e.currentTarget.matches(":focus-visible")
-              ? { targetId: "new-client-heading", visible: true }
-              : { targetId: "main-content", visible: false }
-          );
-        }}
-      >
-        + Add Client
-      </Link>
+      <AddClientLink />
     </div>
   );
 };
