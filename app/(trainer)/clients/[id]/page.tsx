@@ -55,6 +55,16 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
 
   const sessionsWithMeta = enrichSessionsWithMeta((sessions as ClientSessionRow[] | null) ?? []);
 
+  const formatPhoneNumber = (phone: string): string => {
+    const digits = phone.replace(/\D/g, "");
+
+    if (digits.length === 10) {
+      return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+    }
+
+    return phone;
+  };
+
   return (
     <div className="bg-background min-h-screen">
       <div className="mx-auto max-w-2xl px-4 py-8">
@@ -66,19 +76,22 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
             {client.dog_photo_url ? (
               <Image
                 src={client.dog_photo_url}
-                alt={client.dog_name}
+                alt=""
                 width={80}
                 height={80}
                 className="h-20 w-20 rounded-full object-cover"
                 priority
               />
             ) : (
-              <div className="bg-accent flex h-20 w-20 items-center justify-center rounded-full text-3xl">
+              <div
+                aria-hidden="true"
+                className="bg-accent flex h-20 w-20 items-center justify-center rounded-full text-3xl"
+              >
                 🐾
               </div>
             )}
 
-            <UpdateDogImage clientId={client.id} />
+            <UpdateDogImage clientId={client.id} dogName={client.dog_name} />
           </div>
 
           <div>
@@ -92,7 +105,9 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
 
             <p className="text-muted-foreground mt-0.5 text-sm">{client.owner_name}</p>
 
-            {client.phone && <p className="text-hint mt-1 text-sm">{client.phone}</p>}
+            {client.phone && (
+              <p className="text-hint mt-1 text-sm">{formatPhoneNumber(client.phone)}</p>
+            )}
           </div>
         </div>
 
@@ -101,10 +116,11 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
 
           <NewSessionLink
             clientId={client.id}
-            className="bg-primary text-primary-foreground hover:bg-primary-hover flex min-h-11 items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium"
+            aria-label={`New session for ${client.dog_name}`}
+            className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary/20 flex min-h-11 items-center gap-1 rounded-lg px-4 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
           >
             <span aria-hidden="true">+</span>
-            <span>New Session</span>
+            <span aria-hidden="true">New Session</span>
           </NewSessionLink>
         </div>
 
@@ -146,12 +162,16 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
                     href={`/s/${session.token}`}
                     target="_blank"
                     rel="noreferrer"
+                    aria-label={`View client recap page for Session ${session.session_number} (opens in a new tab)`}
                     className="text-primary/80 hover:text-primary text-sm hover:underline"
                   >
                     View client page <span aria-hidden="true"> →</span>
                   </a>
 
-                  <CopyLinkButton sessionToken={session.token} />
+                  <CopyLinkButton
+                    sessionToken={session.token}
+                    sessionNumber={session.session_number}
+                  />
                 </div>
 
                 <div className="border-border mt-4 border-t pt-4">
@@ -177,9 +197,10 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
 
               <NewSessionLink
                 clientId={client.id}
-                className="bg-primary text-primary-foreground hover:bg-primary-hover inline-flex min-h-11 items-center rounded-lg px-6 py-2 text-sm font-medium"
+                aria-label={`Create first session for ${client.dog_name}`}
+                className="bg-primary text-primary-foreground hover:bg-primary-hover focus-visible:ring-primary/20 inline-flex min-h-11 items-center rounded-lg px-6 py-2 text-sm font-medium focus-visible:ring-2 focus-visible:outline-none"
               >
-                Create first session
+                <span aria-hidden="true">Create first session</span>
               </NewSessionLink>
             </div>
           )}
@@ -187,13 +208,13 @@ export default async function ClientPage({ params }: { params: Promise<{ id: str
 
         <div className="border-danger-border bg-card mt-8 rounded-2xl border p-5 shadow-sm">
           <p className="text-foreground text-sm font-medium">Client settings</p>
-          <p className="text-muted-foreground mt-1 text-sm">
+          <p id="archive-client-desc" className="text-muted-foreground mt-1 text-sm">
             Archive this client to remove them from your active dashboard while keeping session
             history.
           </p>
 
           <div className="mt-4">
-            <ArchiveClientButton clientId={client.id} />
+            <ArchiveClientButton clientId={client.id} describedBy="archive-client-desc" />
           </div>
         </div>
       </div>

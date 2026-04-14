@@ -51,10 +51,16 @@ export function HomeworkItemEditor({
   onRemoveStep,
 }: Props) {
   return (
-    <div className="border-border-subtle flex flex-col gap-2.5 rounded-xl border p-4">
+    <div
+      role="group"
+      aria-labelledby={`item-heading-${index}`}
+      className="border-border-subtle flex flex-col gap-2.5 rounded-xl border p-4"
+    >
       {/* Item header */}
       <div className="flex items-center justify-between">
-        <p className="text-label text-sm font-medium">Item {index + 1}</p>
+        <p id={`item-heading-${index}`} className="text-label text-sm font-medium">
+          Item {index + 1}
+        </p>
         {itemsCount > 1 && (
           <Button
             type="button"
@@ -147,6 +153,7 @@ export function HomeworkItemEditor({
           type="button"
           variant="secondary"
           onClick={onAddStep}
+          aria-label={`Add step to item ${index + 1}`}
           className="w-full border-dashed"
         >
           <span aria-hidden="true">+ </span>

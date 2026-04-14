@@ -5,7 +5,13 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 
-export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
+export const ArchiveClientButton = ({
+  clientId,
+  describedBy,
+}: {
+  clientId: string;
+  describedBy?: string;
+}) => {
   const supabase = createClient();
   const router = useRouter();
 
@@ -48,6 +54,7 @@ export const ArchiveClientButton = ({ clientId }: { clientId: string }) => {
         ref={triggerRef}
         type="button"
         onClick={() => setConfirming(true)}
+        aria-describedby={describedBy}
         className="text-danger cursor-pointer text-sm hover:underline"
       >
         Archive client

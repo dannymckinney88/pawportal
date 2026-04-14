@@ -43,6 +43,7 @@ export const HomeworkProgressCard = ({ completedCount, totalCount }: HomeworkPro
         </div>
 
         <span
+          aria-hidden="true"
           className={`shrink-0 rounded-full px-2.5 py-1 text-xs font-semibold ${
             isComplete
               ? "bg-card text-success-foreground"

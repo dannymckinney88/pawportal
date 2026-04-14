@@ -89,6 +89,7 @@ export default function NewClientPage() {
           <LandingFocus />
           <Link
             href="/dashboard"
+            aria-label="Back to dashboard"
             className="text-hint hover:text-muted-foreground focus-visible:ring-primary/20 inline-flex items-center rounded-md text-sm transition focus-visible:ring-2 focus-visible:outline-none"
             onClick={(e) => {
               setFocusIntent(

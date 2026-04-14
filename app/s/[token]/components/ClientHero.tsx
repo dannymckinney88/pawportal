@@ -15,7 +15,7 @@ export function ClientHero({ dogName, dogPhotoUrl }: Props) {
         <div className="relative aspect-4/3 w-full overflow-hidden rounded-2xl">
           <Image
             src={dogPhotoUrl}
-            alt={`${dogName}`}
+            alt=""
             fill
             priority
             sizes="(max-width: 640px) 100vw, 680px"

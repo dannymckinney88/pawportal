@@ -187,6 +187,7 @@ export function EditSessionForm({
         <div className="mb-6 flex items-center gap-3">
           <Link
             href={`/clients/${session.client_id}`}
+            aria-label={`Back to ${dog.dog_name}'s page`}
             className="text-hint hover:text-muted-foreground text-sm"
             onClick={(e) => {
               setFocusIntent(

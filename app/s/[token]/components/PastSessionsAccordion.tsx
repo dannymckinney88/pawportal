@@ -31,9 +31,10 @@ export function PastSessionsAccordion({ sessions }: { sessions: PastSessionRow[]
                 onClick={() => setOpenId(isOpen ? null : session.id)}
                 aria-expanded={isOpen}
                 aria-controls={`past-session-${session.id}`}
+                aria-label={`${isOpen ? "Collapse" : "Expand"} past session from ${date}`}
                 className="hover:bg-background focus-visible:ring-primary focus-visible:bg-background flex min-h-11 w-full cursor-pointer items-center justify-between px-4 py-3 text-left focus-visible:ring-2 focus-visible:outline-none"
               >
-                <span className="text-foreground text-sm font-semibold">{date}</span>
+                <span aria-hidden="true" className="text-foreground text-sm font-semibold">{date}</span>
                 <svg
                   viewBox="0 0 24 24"
                   fill="none"

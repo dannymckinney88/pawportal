@@ -57,13 +57,16 @@ export const ClientEngagementCard = ({
       {dogPhotoUrl ? (
         <Image
           src={dogPhotoUrl}
-          alt={dogName}
+          alt=""
           width={56}
           height={56}
           className="h-14 w-14 shrink-0 rounded-full object-cover"
         />
       ) : (
-        <div className="bg-accent flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl">
+        <div
+          aria-hidden="true"
+          className="bg-accent flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-2xl"
+        >
           🐾
         </div>
       )}
