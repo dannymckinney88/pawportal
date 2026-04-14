@@ -4,7 +4,7 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-export function UpdateDogImage({ clientId }: { clientId: string }) {
+export function UpdateDogImage({ clientId, dogName }: { clientId: string; dogName: string }) {
   const supabase = createClient();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -52,6 +52,7 @@ export function UpdateDogImage({ clientId }: { clientId: string }) {
         type="button"
         onClick={() => inputRef.current?.click()}
         disabled={loading}
+        aria-label={loading ? `Uploading photo for ${dogName}` : `Update photo for ${dogName}`}
         className="text-primary focus-visible:ring-primary cursor-pointer rounded text-xs hover:underline focus-visible:ring-2 focus-visible:outline-none disabled:opacity-50"
       >
         {loading ? "Uploading..." : "Update photo"}

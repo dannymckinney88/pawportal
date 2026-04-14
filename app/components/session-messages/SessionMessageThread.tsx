@@ -91,7 +91,7 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
   const hiddenCount = messages.length - PREVIEW_COUNT;
 
   return (
-    <div>
+    <section aria-labelledby={headingId}>
       {isTrainer ? (
         <p
           id={headingId}
@@ -209,6 +209,6 @@ export function SessionMessageThread({ sessionId, sessionToken, senderType }: Pr
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 }

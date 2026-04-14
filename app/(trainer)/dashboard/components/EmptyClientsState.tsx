@@ -1,9 +1,10 @@
 import Link from "next/link";
+import { PawPrint } from "lucide-react";
 
 export const EmptyClientsState = () => {
   return (
     <div className="bg-card rounded-2xl px-8 py-16 text-center shadow-sm">
-      <p className="mb-4 text-5xl">🐾</p>
+      <PawPrint className="text-primary h-10 w-10" aria-hidden="true" />
       <p className="text-foreground mb-6 text-base font-medium">No clients yet</p>
 
       <Link

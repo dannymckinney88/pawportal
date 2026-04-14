@@ -53,7 +53,9 @@ export function SessionMessageBubble({ message, isTrainer, prevSenderType }: Pro
       className={`flex flex-col gap-0.5 ${isOwn ? "items-end" : "items-start"} ${isGrouped ? "mt-1" : "mt-2.5"}`}
     >
       {!isGrouped && (
-        <span className="text-muted-foreground px-1 text-[11px] font-medium">{senderLabel}</span>
+        <span aria-hidden="true" className="text-muted-foreground px-1 text-[11px] font-medium">
+          {senderLabel}
+        </span>
       )}
 
       <div

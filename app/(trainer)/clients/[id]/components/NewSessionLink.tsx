@@ -6,14 +6,16 @@ import type { ReactNode } from "react";
 type Props = {
   clientId: string;
   className?: string;
+  "aria-label"?: string;
   children: ReactNode;
 };
 
 /** Navigates to the new session form and sets a focus intent for the heading. */
-export function NewSessionLink({ clientId, className, children }: Props) {
+export function NewSessionLink({ clientId, className, "aria-label": ariaLabel, children }: Props) {
   return (
     <a
       href={`/sessions/new?clientId=${clientId}`}
+      aria-label={ariaLabel}
       className={className}
       onClick={(e) => {
         setFocusIntent(

@@ -29,10 +29,11 @@ export function TrainerSocialLinks({ instagramUrl, tiktokUrl }: Props) {
           href={instagramUrl}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="Follow us on Instagram (opens in a new tab)"
           className="text-hint hover:text-muted-foreground flex items-center gap-1.5 text-sm"
         >
           <InstagramIcon />
-          Instagram
+          <span aria-hidden="true">Instagram</span>
         </a>
       )}
 
@@ -41,10 +42,11 @@ export function TrainerSocialLinks({ instagramUrl, tiktokUrl }: Props) {
           href={tiktokUrl}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="Follow us on TikTok (opens in a new tab)"
           className="text-hint hover:text-muted-foreground flex items-center gap-1.5 text-sm"
         >
           <TikTokIcon />
-          TikTok
+          <span aria-hidden="true">TikTok</span>
         </a>
       )}
     </div>

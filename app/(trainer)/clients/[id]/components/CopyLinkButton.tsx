@@ -3,7 +3,13 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 
-export function CopyLinkButton({ sessionToken }: { sessionToken: string }) {
+export function CopyLinkButton({
+  sessionToken,
+  sessionNumber,
+}: {
+  sessionToken: string;
+  sessionNumber: number;
+}) {
   const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
 
   useEffect(() => {
@@ -28,6 +34,11 @@ export function CopyLinkButton({ sessionToken }: { sessionToken: string }) {
         type="button"
         variant="secondary"
         onClick={handleCopy}
+        aria-label={
+          state === "copied"
+            ? `Recap link copied for Session ${sessionNumber}`
+            : `Copy recap link for Session ${sessionNumber}`
+        }
         className={
           state === "copied"
             ? "border-success-foreground/30 bg-success text-success-foreground hover:bg-success"

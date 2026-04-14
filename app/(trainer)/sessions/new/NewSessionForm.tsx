@@ -209,6 +209,7 @@ export function NewSessionForm() {
         <div className="mb-6 flex items-center gap-3">
           <Link
             href={`/clients/${clientId}`}
+            aria-label={client ? `Back to ${client.dog_name}'s page` : "Back to client page"}
             className="text-hint hover:text-muted-foreground text-sm"
             onClick={(e) => {
               setFocusIntent(
@@ -271,6 +272,7 @@ export function NewSessionForm() {
               <button
                 type="button"
                 onClick={() => setSheetOpen(true)}
+                aria-label="Add homework item from a saved template"
                 className="bg-primary-subtle text-primary hover:bg-primary-subtle/70 focus-visible:ring-primary/20 shrink-0 rounded-lg px-3 py-1.5 text-xs font-medium transition focus-visible:ring-2 focus-visible:outline-none"
               >
                 + From template

@@ -13,6 +13,7 @@ export function ClientDetailBackLink({ clientId }: Props) {
   return (
     <a
       href="/dashboard"
+      aria-label="Back to dashboard"
       onClick={(e) => {
         setFocusIntent(
           e.currentTarget.matches(":focus-visible")
