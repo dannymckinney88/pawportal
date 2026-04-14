@@ -93,10 +93,10 @@ export const HomeworkCard = ({
 
       {hasSteps &&
         (checked ? (
-          // Completed: steps collapsed to reduce page noise
           <details className={description?.trim() ? "mt-3" : ""}>
-            <summary className="text-hint cursor-pointer text-xs font-medium tracking-wide uppercase select-none">
-              Steps ({filteredSteps.length})
+            <summary className="text-primary flex cursor-pointer items-center gap-2 text-sm font-medium select-none">
+              <span>How to practice ({filteredSteps.length})</span>
+              <span className="text-muted-foreground text-xs">▸</span>
             </summary>
 
             <ol className="mt-2">
@@ -105,7 +105,7 @@ export const HomeworkCard = ({
                   key={index}
                   className="border-border-subtle flex items-start gap-3 border-b py-2 last:border-0"
                 >
-                  <span className="bg-primary-subtle text-primary-subtle-foreground mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+                  <span className="bg-primary-subtle/60 text-primary mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
                     {index + 1}
                   </span>
                   <span className="text-label text-sm">{step}</span>
@@ -114,9 +114,10 @@ export const HomeworkCard = ({
             </ol>
           </details>
         ) : (
-          // Incomplete: steps always visible — these are the active instructions
           <div className={description?.trim() ? "mt-3" : ""}>
-            <p className="text-hint mb-2 text-xs font-medium tracking-wide uppercase">Steps</p>
+            <h4 className="text-hint mb-2 text-xs font-medium tracking-wide uppercase">
+              How to practice
+            </h4>
 
             <ol>
               {filteredSteps.map((step, index) => (
@@ -124,7 +125,7 @@ export const HomeworkCard = ({
                   key={index}
                   className="border-border-subtle flex items-start gap-3 border-b py-2 last:border-0"
                 >
-                  <span className="bg-primary-subtle text-primary-subtle-foreground mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold">
+                  <span className="bg-primary-subtle/60 text-primary mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-medium">
                     {index + 1}
                   </span>
                   <span className="text-label text-sm">{step}</span>
@@ -133,7 +134,6 @@ export const HomeworkCard = ({
             </ol>
           </div>
         ))}
-
       {link_url && (
         <a
           href={link_url}
@@ -148,6 +148,7 @@ export const HomeworkCard = ({
 
       {dog_note && (
         <div className="border-border-subtle mt-3 border-t pt-3">
+          <p className="text-hint mb-1 text-xs font-medium tracking-wide uppercase">Trainer tip</p>
           <p className="text-muted-foreground text-sm italic">{dog_note}</p>
         </div>
       )}
